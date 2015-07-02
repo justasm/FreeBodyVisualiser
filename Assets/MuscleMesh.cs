@@ -15,10 +15,12 @@ public class MuscleMesh : MonoBehaviour {
     private float[][] lineWeights;
     private Color[][] lineColors;
 
+    public Vector3 Centroid { get; private set; }
+
     private int frame;
     private float accumulator;
     private const float secondsPerAnimationFrame = 0.016f;
-    private const float minLineWidth = 0.002f;
+    private const float minLineWidth = 0.001f;
     private const float maxLineWidth = 0.01f;
 
     void Awake()
@@ -44,6 +46,18 @@ public class MuscleMesh : MonoBehaviour {
 
         AddLines(lines[0], lineWeights[0], lineColors[0]); // frame 0
         frame = 0;
+
+        Centroid = new Vector3();
+        int count = 0;
+        for (int i = 0; i < lines.Length; i++)
+        {
+            for (int j = 0; j < lines[i].Length; j++)
+            {
+                ++count;
+                Centroid += lines[i][j];
+            }
+        }
+        Centroid /= count;
     }
 	
     void Update()

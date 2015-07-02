@@ -5,9 +5,10 @@ using System.Collections;
  * Original by Veli V at http://wiki.unity3d.com/index.php?title=MouseOrbitImproved
  */
 [AddComponentMenu("Camera-Control/Mouse Orbit with zoom")]
-public class MouseOrbitImproved : MonoBehaviour
+public class MouseOrbit : MonoBehaviour
 {
-    public Transform target;
+    public MuscleMesh targetMuscleMesh;
+
     public float distance = 5.0f;
     public float xSpeed = 120.0f;
     public float ySpeed = 120.0f;
@@ -17,6 +18,8 @@ public class MouseOrbitImproved : MonoBehaviour
 
     public float distanceMin = .5f;
     public float distanceMax = 15f;
+
+    public float yOffset = 0f;
 
     float x = 0.0f;
     float y = 0.0f;
@@ -31,7 +34,7 @@ public class MouseOrbitImproved : MonoBehaviour
 
     void LateUpdate()
     {
-        if (target)
+        if (targetMuscleMesh)
         {
             if (Input.GetMouseButton(0))
             {
@@ -46,7 +49,7 @@ public class MouseOrbitImproved : MonoBehaviour
             distance = Mathf.Clamp(distance - Input.GetAxis("Mouse ScrollWheel") * 0.5f, distanceMin, distanceMax);
 
             Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
-            Vector3 position = rotation * negDistance + target.position + Vector3.up;
+            Vector3 position = rotation * negDistance + targetMuscleMesh.Centroid + Vector3.up * yOffset;
 
             transform.rotation = rotation;
             transform.position = position;
