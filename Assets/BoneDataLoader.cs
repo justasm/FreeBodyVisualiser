@@ -12,32 +12,51 @@ public class BoneDataLoader {
                 "C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\FreeBody App\\example"
                 + "\\1037_C14\\walking6\\Outputs\\";
 
-    public Quaternion[][] loadBoneRotations()
+    public static void LoadBoneRotations(out Quaternion[] originRotations, out Quaternion[][] frameRotations)
     {
-        List<Quaternion[]> rotations = new List<Quaternion[]>();
+        List<Quaternion[]> _frameRotations = new List<Quaternion[]>();
+        Quaternion[] _originRotations = new Quaternion[0];
+
+        string originRotsFileName = outputPath + "Muscle_geometry\\" + "1037_walking6_c14_new_anatomy_model_orientation.csv";
+        FloatCsvFileReader.ReadLines(originRotsFileName,
+            (floats) =>
+            {
+                _originRotations = FloatCsvFileReader.FloatsToQuats(floats);
+            });
 
         string fileName = outputPath + "Optimisation\\" + "1037_walking6_c14_new_rotations.csv";
-        
-        using (StreamReader reader = new StreamReader(fileName, Encoding.Default))
-        {
-            string line = reader.ReadLine();
-            while (null != line)
+        //                                                  "1037_walking6_c14_new_lcs_quaternion.csv";
+        FloatCsvFileReader.ReadLines(fileName,
+            (floats) =>
             {
-                float[] values = Array.ConvertAll(line.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries),
-                    new Converter<string, float>(float.Parse));
+                _frameRotations.Add(FloatCsvFileReader.FloatsToQuats(floats));
+            });
 
-                Quaternion[] frameRotations = new Quaternion[values.Length / 4];
-                for (int i = 0; i < values.Length; i += 4)
-                {
-                    frameRotations[i / 4] = new Quaternion(values[i + 0], values[i + 1], values[i + 2], values[i + 3]);
-                }
-                rotations.Add(frameRotations);
+        originRotations = _originRotations;
+        frameRotations = _frameRotations.ToArray();
+    }
 
-                line = reader.ReadLine();
-            }
+    public static void LoadBonePositions(out Vector3[] originPositions, out Vector3[][] framePositions)
+    {
+        List<Vector3[]> _framePositions = new List<Vector3[]>();
+        Vector3[] _originPositions = new Vector3[0];
+        
+        string originsFileName = outputPath + "Muscle_geometry\\" + "1037_walking6_c14_new_anatomy_model_origin.csv";
+        FloatCsvFileReader.ReadLines(originsFileName,
+            (floats) =>
+            {
+                _originPositions = FloatCsvFileReader.FloatsToVectors(floats);
+            });
 
-            reader.Close();
-        }
-        return rotations.ToArray();
+        string positionsFileName = outputPath + "Muscle_geometry\\" + "1037_walking6_c14_new_origins.csv";
+        FloatCsvFileReader.ReadLines(positionsFileName,
+            (floats) =>
+            {
+                _framePositions.Add(FloatCsvFileReader.FloatsToVectors(floats));
+            });
+
+
+        originPositions = _originPositions;
+        framePositions = _framePositions.ToArray();
     }
 }
