@@ -10,16 +10,13 @@ public class MuscleMesh : MonoBehaviour {
     private MeshFilter meshFilter;
     public Shader shader;
 
-    private MuscleDataLoader loader;
     private Vector3[][] lines;
     private float[][] lineWeights;
     private Color[][] lineColors;
 
     public Vector3 Centroid { get; private set; }
 
-    private int frame;
-    private float accumulator;
-    private const float secondsPerAnimationFrame = 0.016f;
+    public FrameController controller;
     private const float minLineWidth = 0.001f;
     private const float maxLineWidth = 0.01f;
 
@@ -32,20 +29,18 @@ public class MuscleMesh : MonoBehaviour {
 
         MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
         meshRenderer.sharedMaterial = new Material(shader);
-
-        loader = new MuscleDataLoader();
     }
 
     void Start()
     {
         int[] vertexToMuscle;
-        lines = loader.LoadMusclePaths(out vertexToMuscle);
-        float[][] muscleForce = loader.LoadMuscleActivations();
+        float[][] muscleForce;
+        MuscleDataLoader.LoadMusclePaths(out lines, out vertexToMuscle);
+        MuscleDataLoader.LoadMuscleActivations(out muscleForce);
         lineWeights = CalculateLineWeights(vertexToMuscle, muscleForce);
         lineColors = CalculateLineColors(vertexToMuscle, muscleForce);
 
-        AddLines(lines[0], lineWeights[0], lineColors[0]); // frame 0
-        frame = 0;
+        AddLines(lines[controller.frame], lineWeights[controller.frame], lineColors[controller.frame]);
 
         Centroid = new Vector3();
         int count = 0;
@@ -62,13 +57,7 @@ public class MuscleMesh : MonoBehaviour {
 	
     void Update()
     {
-        accumulator += Time.deltaTime;
-        while (accumulator >= secondsPerAnimationFrame)
-        {
-            frame = (frame + 1) % lines.Length;
-            accumulator -= secondsPerAnimationFrame;
-        }
-        UpdateLines(lines[frame], lineWeights[frame], lineColors[frame]);
+        UpdateLines(lines[controller.frame], lineWeights[controller.frame], lineColors[controller.frame]);
 	}
 
     // lines == line endpoints, not continuous, size = 2 x #lines
