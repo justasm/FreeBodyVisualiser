@@ -9,6 +9,11 @@ public class DataPathUtils {
     private const string geometryOutputSubpath = "Muscle_geometry\\";
     private const string optimisationOutputSubpath = "Optimisation\\";
 
+    private const string boneModelPath =
+                "C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\Some Matlab Code\\2015-05-08 C014 R bones\\";
+    private const string femurModelSubpath = "ZHAN0303-C014_R_Femur.stl";
+    private const string pelvisModelSubpath = "ZHAN0303-C014_Pelvis 87_001.stl";
+
     // Change below to easily configure which model is loaded
     private const string subject = "1037_C14";
     private const string trial = "walking6";
@@ -44,5 +49,15 @@ public class DataPathUtils {
     {
         return outputPath + geometryOutputSubpath +
             studyName + String.Format("_muscle_path{0}.csv", muscleIndex);
+    }
+
+    public static string GetFemurModelFile()
+    {
+        return boneModelPath + femurModelSubpath;
+    }
+
+    public static string GetPelvisModelFile()
+    {
+        return boneModelPath + pelvisModelSubpath;
     }
 }
