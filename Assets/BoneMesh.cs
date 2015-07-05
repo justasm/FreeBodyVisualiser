@@ -4,9 +4,13 @@ using System.Collections;
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
 
-public class BoneMesh : MonoBehaviour {
+public class BoneMesh : MonoBehaviour
+{
 
     private const float modelScale = 1000f;
+
+    private Mesh mesh;
+    private Material material;
 
     private MeshFilter meshFilter;
     public Shader shader;
@@ -22,11 +26,14 @@ public class BoneMesh : MonoBehaviour {
 
         MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
         meshRenderer.sharedMaterial = new Material(shader);
+
+        material = new Material(shader);
+        material.color = new Color(1f, 1f, 1f, 0.1f);
     }
 
     void Start()
     {
-        Mesh mesh = StlFileReader.LoadStlFile(DataPathUtils.getBoneModelFile(bone), processVertex);
+        mesh = StlFileReader.LoadStlFile(DataPathUtils.getBoneModelFile(bone), processVertex);
         mesh.name = "Bone";
         meshFilter.mesh = mesh;
 
@@ -44,5 +51,11 @@ public class BoneMesh : MonoBehaviour {
     {
         transform.rotation = boneData.rotations[controller.frame][(int)bone];
         transform.position = boneData.positions[controller.frame][(int)bone];
+        for (int i = 0; i < controller.frameCount; i += 38)
+        {
+            Graphics.DrawMesh(mesh,
+                Matrix4x4.TRS(boneData.positions[i][(int)bone], boneData.rotations[i][(int)bone], Vector3.one / modelScale),
+                material, 0);
+        }
     }
 }
