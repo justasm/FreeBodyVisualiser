@@ -9,10 +9,11 @@ public class BoneMesh : MonoBehaviour
 
     private const float modelScale = 1000f;
 
-    private Mesh mesh;
+    private Mesh[] meshes;
     private Material material;
 
     private MeshFilter meshFilter;
+    private MeshRenderer meshRenderer;
     public Shader shader;
 
     public enum Bone { Foot = 0, Tibia = 1, Femur = 2, Pelvis = 3, Patella = 4 };
@@ -24,7 +25,7 @@ public class BoneMesh : MonoBehaviour
     {
         meshFilter = GetComponent<MeshFilter>();
 
-        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+        meshRenderer = GetComponent<MeshRenderer>();
         meshRenderer.sharedMaterial = new Material(shader);
 
         material = new Material(shader);
@@ -33,9 +34,9 @@ public class BoneMesh : MonoBehaviour
 
     void Start()
     {
-        mesh = StlFileReader.LoadStlFile(DataPathUtils.getBoneModelFile(bone), processVertex);
-        mesh.name = "Bone";
-        meshFilter.mesh = mesh;
+        meshes = StlFileReader.LoadStlFile(DataPathUtils.getBoneModelFile(bone), processVertex);
+        meshes[0].name = "Bone";
+        meshFilter.mesh = meshes[0];
 
         transform.localScale = Vector3.one / modelScale;
     }
@@ -51,11 +52,21 @@ public class BoneMesh : MonoBehaviour
     {
         transform.rotation = boneData.rotations[controller.frame][(int)bone];
         transform.position = boneData.positions[controller.frame][(int)bone];
+
+        for (int i = 1; i < meshes.Length; i++)
+        {
+            Graphics.DrawMesh(meshes[i], Matrix4x4.TRS(transform.position, transform.rotation, transform.localScale),
+                meshRenderer.sharedMaterial, 0);
+        }
+
         for (int i = 0; i < controller.frameCount; i += 38)
         {
-            Graphics.DrawMesh(mesh,
-                Matrix4x4.TRS(boneData.positions[i][(int)bone], boneData.rotations[i][(int)bone], Vector3.one / modelScale),
-                material, 0);
+            for (int j = 0; j < meshes.Length; j++)
+            {
+                Graphics.DrawMesh(meshes[j],
+                    Matrix4x4.TRS(boneData.positions[i][(int)bone], boneData.rotations[i][(int)bone], Vector3.one / modelScale),
+                    material, 0);
+            }
         }
     }
 }

@@ -11,7 +11,7 @@ public class StlFileReader {
 
     public delegate Vector3 ProcessVertexDelegate(float x, float y, float z);
 
-    public static Mesh LoadStlFile(string filePath, ProcessVertexDelegate processVertexDelegate)
+    public static Mesh[] LoadStlFile(string filePath, ProcessVertexDelegate processVertexDelegate)
     {
         List<Mesh> meshes = new List<Mesh>();
 
@@ -77,8 +77,7 @@ public class StlFileReader {
             reader.Close();
         }
 
-        // TODO return Mesh[]
-        return meshes.ToArray()[0];
+        return meshes.ToArray();
     }
 
     private static Mesh CreateMesh(Vector3[] vertices, int[] triangles)
