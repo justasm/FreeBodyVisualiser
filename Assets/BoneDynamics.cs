@@ -16,14 +16,17 @@ public class BoneDynamics : MonoBehaviour {
 
     void Start()
     {
-        BoneDataLoader.LoadBoneRotations(out rotationOrigins, out rotations);
-        BoneDataLoader.LoadBonePositions(out positionOrigins, out positions);
+        //BoneDataLoader.LoadBoneRotations(out rotationOrigins, out rotations);
+        //BoneDataLoader.LoadBonePositions(out positionOrigins, out positions);
+
     }
 
     void Update()
     {
-        transform.rotation = Quaternion.Euler(0, 90, 0) *
-            rotationOrigins[boneIndex] * rotations[controller.frame][boneIndex];
-        transform.position = positions[controller.frame][boneIndex] - positionOrigins[boneIndex];
+        //transform.localRotation = rotations[controller.frame][boneIndex] * Quaternion.Euler(-90, 0, 0);
+
+        //transform.localRotation = rotationOrigins[boneIndex];
+        //transform.rotation = Quaternion.Inverse(rotations[controller.frame][boneIndex]);
+        //transform.position = positions[controller.frame][boneIndex] - positionOrigins[boneIndex];
     }
 }

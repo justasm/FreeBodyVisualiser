@@ -13,6 +13,9 @@ public class DataPathUtils {
                 "C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\Some Matlab Code\\2015-05-08 C014 R bones\\";
     private const string femurModelSubpath = "ZHAN0303-C014_R_Femur.stl";
     private const string pelvisModelSubpath = "ZHAN0303-C014_Pelvis 87_001.stl";
+    private const string fibulaModelSubpath = "ZHAN0303-C014_R_Fibula.stl";
+    private const string patellaModelSubpath = "ZHAN0303-C014_R_Patella.stl";
+    private const string tibiaModelSubpath = "ZHAN0303-C014_R_Tibia.stl";
 
     // Change below to easily configure which model is loaded
     private const string subject = "1037_C14";
@@ -51,13 +54,20 @@ public class DataPathUtils {
             studyName + String.Format("_muscle_path{0}.csv", muscleIndex);
     }
 
-    public static string GetFemurModelFile()
+    public static string getBoneModelFile(BoneMesh.Bone bone)
     {
-        return boneModelPath + femurModelSubpath;
-    }
-
-    public static string GetPelvisModelFile()
-    {
-        return boneModelPath + pelvisModelSubpath;
+        switch (bone)
+        {
+            case BoneMesh.Bone.Tibia:
+                return boneModelPath + tibiaModelSubpath;
+            case BoneMesh.Bone.Pelvis:
+                return boneModelPath + pelvisModelSubpath;
+            case BoneMesh.Bone.Femur:
+                return boneModelPath + femurModelSubpath;
+            case BoneMesh.Bone.Patella:
+                return boneModelPath + patellaModelSubpath;
+            default:
+                throw new System.NotImplementedException("No file for " + bone + " model data.");
+        }
     }
 }
