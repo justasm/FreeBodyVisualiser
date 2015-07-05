@@ -28,6 +28,7 @@ public class MuscleDataLoader {
             {
                 if (musclePathsPerFrame.Count <= j)
                 {
+                    // no muscles found for this frame yet
                     musclePathsPerFrame.Add(new List<Vector3>());
                 }
 
@@ -39,17 +40,22 @@ public class MuscleDataLoader {
                     segmentedLines.Add(musclePath[j][k]);
                 }
 
-                for (int k = 0; k < segmentedLines.Count; k++)
-                {
-                    _vertexToMuscle.Add(i);
-                }
-
                 musclePathsPerFrame[j].AddRange(segmentedLines);
+
+                if (0 == j)
+                {
+                    // assumes each subsequent frame has same number of vertices
+                    for (int k = 0; k < segmentedLines.Count; k++)
+                    {
+                        _vertexToMuscle.Add(i);
+                    }
+                }
             }
         }
 
+        Debug.Log("Found " + musclePathsPerFrame.Count + " frames, " +
+            musclePathsPerFrame[0].Count + " line vertices per frame.");
         frameMusclePaths = new Vector3[musclePathsPerFrame.Count][];
-        Debug.Log("Found " + frameMusclePaths.Length + " frames.");
         for (int i = 0; i < frameMusclePaths.Length; i++)
         {
             frameMusclePaths[i] = musclePathsPerFrame[i].ToArray();
@@ -142,7 +148,8 @@ public class MuscleDataLoader {
             reader.Close();
         }
 
-        Debug.Log("Activation values loaded min " + minActivationValue + " max " + maxActivationValue + ".");
+        Debug.Log("Activation values loaded, " + (frame + 1) + " frames, min " +
+            minActivationValue + " max " + maxActivationValue + ".");
         if(maxActivationValue > 1) Debug.Log("Activation values capped to 1.");
 
         activations = _activations.ToArray();

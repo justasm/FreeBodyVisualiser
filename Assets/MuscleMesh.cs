@@ -18,7 +18,7 @@ public class MuscleMesh : MonoBehaviour {
 
     public FrameController controller;
     private const float minLineWidth = 0.001f;
-    private const float maxLineWidth = 0.01f;
+    private const float maxLineWidth = 0.02f;
 
     void Awake()
     {
@@ -105,8 +105,8 @@ public class MuscleMesh : MonoBehaviour {
         }
 
         mesh.vertices = vertices;
-        mesh.RecalculateBounds();
         mesh.colors = colors;
+        mesh.RecalculateBounds();
     }
 
     void UpdateQuad(Vector3[] vertices, int start, Vector3 p1, Vector3 p2, float width)
