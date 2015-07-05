@@ -118,8 +118,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shader: {fileID: 7, guid: 0000000000000000f000000000000000, type: 0}
   bone: 2
+  boneData: {fileID: 97117140}
   controller: {fileID: 97117138}
-  alpha: 0
 --- !u!23 &45673812
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -171,6 +171,8 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 97117139}
+  - 114: {fileID: 97117141}
+  - 114: {fileID: 97117140}
   - 114: {fileID: 97117138}
   m_Layer: 0
   m_Name: Controller
@@ -204,6 +206,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 7
+--- !u!114 &97117140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 97117137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c16c537c4d294fc499efc6ade22219f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &97117141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 97117137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4262f2ce8c528448b1f8f8213aa6101, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &223350097
 GameObject:
   m_ObjectHideFlags: 0
@@ -357,8 +381,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shader: {fileID: 7, guid: 0000000000000000f000000000000000, type: 0}
   bone: 1
+  boneData: {fileID: 97117140}
   controller: {fileID: 97117138}
-  alpha: 0
 --- !u!23 &445067014
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -433,8 +457,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shader: {fileID: 7, guid: 0000000000000000f000000000000000, type: 0}
   bone: 3
+  boneData: {fileID: 97117140}
   controller: {fileID: 97117138}
-  alpha: 0
 --- !u!23 &848261705
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -685,7 +709,6 @@ GameObject:
   - 92: {fileID: 1057177646}
   - 124: {fileID: 1057177645}
   - 81: {fileID: 1057177644}
-  - 114: {fileID: 1057177650}
   - 114: {fileID: 1057177649}
   m_Layer: 0
   m_Name: Main Camera
@@ -780,17 +803,6 @@ MonoBehaviour:
   distanceMin: 1
   distanceMax: 5
   yOffset: .200000003
---- !u!114 &1057177650
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1057177643}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4262f2ce8c528448b1f8f8213aa6101, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1244148447
 GameObject:
   m_ObjectHideFlags: 0
@@ -888,8 +900,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shader: {fileID: 7, guid: 0000000000000000f000000000000000, type: 0}
   bone: 4
+  boneData: {fileID: 97117140}
   controller: {fileID: 97117138}
-  alpha: 0
 --- !u!23 &1631420825
 MeshRenderer:
   m_ObjectHideFlags: 0

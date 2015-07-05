@@ -9,7 +9,9 @@ public class StlFileReader {
     private const int vertexLimit = 65529; // technically 65534 but not divisible by 3 or 9!
     private const string asciiFileHeaderStart = "solid";
 
-    public static Mesh LoadStlFile(string filePath)
+    public delegate Vector3 ProcessVertexDelegate(float x, float y, float z);
+
+    public static Mesh LoadStlFile(string filePath, ProcessVertexDelegate processVertexDelegate)
     {
         List<Mesh> meshes = new List<Mesh>();
 
@@ -38,7 +40,8 @@ public class StlFileReader {
 
                 for (int j = 0; j < 3; j++)
                 {
-                    vertices[3 * i + j] = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                    vertices[3 * i + j] = processVertexDelegate(
+                        reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
                     triangles[3 * i + j] = 3 * i + j;
                     //normals[3 * i + j] = normal;
                 }
