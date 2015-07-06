@@ -38,7 +38,7 @@ public class BoneMesh : MonoBehaviour
         meshes[0].name = "Bone";
         meshFilter.mesh = meshes[0];
 
-        transform.localScale = boneData.scalingFactors[(int)bone] / modelScale;
+        transform.localScale = new Vector3(boneData.scalingFactors[(int)bone].x, boneData.scalingFactors[(int)bone].y, -boneData.scalingFactors[(int)bone].z) / modelScale;
     }
 
     Vector3 processVertex(float x, float y, float z)
@@ -50,8 +50,10 @@ public class BoneMesh : MonoBehaviour
 
     void Update()
     {
-        transform.rotation = boneData.rotations[controller.frame][(int)bone];
-        transform.position = boneData.positions[controller.frame][(int)bone];
+        Quaternion q = boneData.rotations[controller.frame][(int)bone];
+        Vector3 v = boneData.positions[controller.frame][(int)bone];
+        transform.rotation = new Quaternion(q.x, q.y, -q.z, -q.w);
+        transform.position = new Vector3(v.x, v.y, -v.z);
 
         for (int i = 1; i < meshes.Length; i++)
         {

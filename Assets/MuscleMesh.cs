@@ -97,7 +97,7 @@ public class MuscleMesh : MonoBehaviour {
         for (int i = 0; i < lines.Length; i += 2)
         {
             int vi = (i / 2) * 4; // vertex start index for line quad
-            UpdateQuad(vertices, vi, lines[i], lines[i + 1], lineWeights[i]);
+            UpdateQuad(vertices, vi, Vector3.Scale(lines[i], new Vector3(1, 1, -1)), Vector3.Scale(lines[i + 1], new Vector3(1, 1, -1)), lineWeights[i]);
             for (int j = 0; j < 4; j++)
             {
                 colors[vi + j] = lineColors[i];
