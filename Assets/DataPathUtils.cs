@@ -10,17 +10,18 @@ public class DataPathUtils {
     private const string optimisationOutputSubpath = "Optimisation\\";
 
     private const string boneModelPath =
-                "C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\Some Matlab Code\\2015-05-08 C014 R bones\\";
-    private const string femurModelSubpath = "ZHAN0303-C014_R_Femur.stl";
-    private const string pelvisModelSubpath = "ZHAN0303-C014_Pelvis 87_001.stl";
-    private const string fibulaModelSubpath = "ZHAN0303-C014_R_Fibula.stl";
-    private const string patellaModelSubpath = "ZHAN0303-C014_R_Patella.stl";
-    private const string tibiaModelSubpath = "ZHAN0303-C014_R_Tibia.stl";
+        //"C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\Some Matlab Code\\2015-05-08 C014 R bones\\";
+                "C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\Bone visualisation\\C12\\";
+    private const string femurModelSubpath = "ZHAN0303-C012_Femur 9_001.stl"; //"ZHAN0303-C014_R_Femur.stl";
+    private const string pelvisModelSubpath = "ZHAN0303-C012_Pelvis 9_001.stl"; //"ZHAN0303-C014_Pelvis 87_001.stl";
+    private const string fibulaModelSubpath = "ZHAN0303-C012_Smoothed_Fibula_001.stl"; //"ZHAN0303-C014_R_Fibula.stl";
+    private const string patellaModelSubpath = "ZHAN0303-C012_Patella_001.stl"; //"ZHAN0303-C014_R_Patella.stl";
+    private const string tibiaModelSubpath = "ZHAN0303-C012_Smoothed_Tibia 2_001.stl"; //"ZHAN0303-C014_R_Tibia.stl";
 
     // Change below to easily configure which model is loaded
-    private const string subject = "1037_C14";
-    private const string trial = "walking6";
-    private const string studyName = "1037_walking6_c14_new";
+    private const string subject = "1176_C12";//"1037_C14";
+    private const string trial = "walking5";//"walking6";
+    private const string studyName = "1176_walking5_c12_new";//"1037_walking6_c14_new";
 
     private static string outputPath;
 
