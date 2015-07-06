@@ -17,6 +17,7 @@ public class DataPathUtils {
     private const string fibulaModelSubpath = "ZHAN0303-C012_Smoothed_Fibula_001.stl"; //"ZHAN0303-C014_R_Fibula.stl";
     private const string patellaModelSubpath = "ZHAN0303-C012_Patella_001.stl"; //"ZHAN0303-C014_R_Patella.stl";
     private const string tibiaModelSubpath = "ZHAN0303-C012_Smoothed_Tibia 2_001.stl"; //"ZHAN0303-C014_R_Tibia.stl";
+    private const string footModelSubpath = "ZHAN0303-C012_Foot bones - in progress 12_001.stl";
 
     // Change below to easily configure which model is loaded
     private const string subject = "1176_C12";//"1037_C14";
@@ -67,6 +68,8 @@ public class DataPathUtils {
                 return boneModelPath + femurModelSubpath;
             case BoneMesh.Bone.Patella:
                 return boneModelPath + patellaModelSubpath;
+            case BoneMesh.Bone.Foot:
+                return boneModelPath + footModelSubpath;
             default:
                 throw new System.NotImplementedException("No file for " + bone + " model data.");
         }
