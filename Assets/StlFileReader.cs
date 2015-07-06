@@ -28,6 +28,8 @@ public class StlFileReader {
             {
                 reader.ReadLine(); // drop rest of name
 
+                // TODO note that this importer expects a stricter file format than is allowed by the format
+                // e.g. it is expected that the file does not have unnecessary whitespace / newlines
                 Debug.Log("Reading ASCII STL.");
                 List<Vector3> _vertices = new List<Vector3>();
                 List<int> _triangles = new List<int>();

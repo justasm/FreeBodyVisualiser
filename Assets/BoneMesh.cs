@@ -59,7 +59,7 @@ public class BoneMesh : MonoBehaviour
                 meshRenderer.sharedMaterial, 0);
         }
 
-        for (int i = 0; i < controller.frameCount; i += 38)
+        for (int i = 0; i < controller.frameCount; i += (controller.frameCount - 1) / 2)
         {
             for (int j = 0; j < meshes.Length; j++)
             {

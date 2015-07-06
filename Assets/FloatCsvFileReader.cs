@@ -5,6 +5,7 @@ using System.Text;
 using System;
 
 public class FloatCsvFileReader {
+    private static char[] csvSeparator = {','};
 
     public delegate void ReadLineFloatsDelegate(float[] floats);
 
@@ -16,7 +17,7 @@ public class FloatCsvFileReader {
             while (null != line)
             {
                 readLineFloatsDelegate(Array.ConvertAll(
-                    line.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries),
+                    line.Split(csvSeparator, StringSplitOptions.RemoveEmptyEntries),
                     new Converter<string, float>(float.Parse)));
                 line = reader.ReadLine();
             }
