@@ -4,6 +4,8 @@ using System.Collections;
 public class FrameController : MonoBehaviour {
 
     public int frame { get; private set; }
+    public float frameAlpha { get; private set; }
+    public int nextFrame { get; private set; }
     private float accumulator;
     [Range(0.016f, 1f)]
     public float secondsPerFrame = 0.016f;
@@ -14,6 +16,8 @@ public class FrameController : MonoBehaviour {
 
 	void Start () {
         frame = 0;
+        frameAlpha = 0;
+        nextFrame = 1;
 	}
 	
 	void Update () {
@@ -21,7 +25,9 @@ public class FrameController : MonoBehaviour {
         while (Mathf.Abs(accumulator) >= secondsPerFrame)
         {
             frame = (frameCount + frame + (int)Mathf.Sign(accumulator)) % frameCount;
+            nextFrame = (frameCount + frame + (int)Mathf.Sign(accumulator)) % frameCount;
             accumulator += -Mathf.Sign(accumulator) * secondsPerFrame;
         }
+        frameAlpha = Mathf.Abs(accumulator) / secondsPerFrame;
 	}
 }

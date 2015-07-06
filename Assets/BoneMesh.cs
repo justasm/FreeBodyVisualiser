@@ -50,8 +50,10 @@ public class BoneMesh : MonoBehaviour
 
     void Update()
     {
-        transform.rotation = boneData.rotations[controller.frame][(int)bone];
-        transform.position = boneData.positions[controller.frame][(int)bone];
+        transform.rotation = Quaternion.Lerp(boneData.rotations[controller.frame][(int)bone],
+            boneData.rotations[controller.nextFrame][(int)bone], controller.frameAlpha);
+        transform.position = Vector3.Lerp(boneData.positions[controller.frame][(int)bone],
+            boneData.positions[controller.nextFrame][(int)bone], controller.frameAlpha);
 
         for (int i = 1; i < meshes.Length; i++)
         {
