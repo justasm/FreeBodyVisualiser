@@ -25,9 +25,9 @@ public class FrameController : MonoBehaviour {
         while (Mathf.Abs(accumulator) >= secondsPerFrame)
         {
             frame = (frameCount + frame + (int)Mathf.Sign(accumulator)) % frameCount;
-            nextFrame = (frameCount + frame + (int)Mathf.Sign(accumulator)) % frameCount;
             accumulator += -Mathf.Sign(accumulator) * secondsPerFrame;
         }
+        nextFrame = (frameCount + frame + (int)Mathf.Sign(accumulator)) % frameCount;
 
         if (Mathf.Abs(nextFrame - frame) > 1)
         {
