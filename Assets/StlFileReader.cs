@@ -8,6 +8,8 @@ using System;
 public class StlFileReader {
     private const int vertexLimit = 65529; // technically 65534 but not divisible by 3 or 9!
     private const string asciiFileHeaderStart = "solid";
+    private const string asciiFileFooter = "endsolid";
+    private static char[] asciiVertexSeparator = {' '};
 
     public delegate Vector3 ProcessVertexDelegate(float x, float y, float z);
 
@@ -17,35 +19,67 @@ public class StlFileReader {
 
         using (BinaryReader reader = new BinaryReader(File.OpenRead(filePath), Encoding.Default))
         {
+            uint vertexCount;
+            Vector3[] vertices;
+            int[] triangles;
+
             char[] start = reader.ReadChars(asciiFileHeaderStart.Length);
-            if (start.ToString().Equals(asciiFileHeaderStart))
+            if (new String(start).Equals(asciiFileHeaderStart))
             {
-                throw new IOException("ASCII .STL files are not supported.");
-            }
+                reader.ReadLine(); // drop rest of name
 
-            reader.ReadBytes(80 - asciiFileHeaderStart.Length); // drop rest of header
-            uint triangleCount = reader.ReadUInt32();
-            uint vertexCount = triangleCount * 3;
+                Debug.Log("Reading ASCII STL.");
+                List<Vector3> _vertices = new List<Vector3>();
+                List<int> _triangles = new List<int>();
+                vertexCount = 0;
 
-            Debug.Log("Reading " + triangleCount + " triangles.");
-
-            //Vector3[] normals = new Vector3[vertexCount];
-            Vector3[] vertices = new Vector3[vertexCount];
-            int[] triangles = new int[triangleCount * 3];
-
-            for (int i = 0; i < triangleCount; i++)
-            {
-                //Vector3 normal = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-                for (int j = 0; j < 3; j++) reader.ReadSingle(); // drop normal, will calculate self
-
-                for (int j = 0; j < 3; j++)
+                string line = reader.ReadLine();
+                while (!line.Equals(asciiFileFooter))
                 {
-                    vertices[3 * i + j] = processVertexDelegate(
-                        reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-                    triangles[3 * i + j] = 3 * i + j;
-                    //normals[3 * i + j] = normal;
+                    reader.ReadLine(); // outer loop
+
+                    for (int i = 0; i < 3; i++)
+                    {
+                        String[] vs = reader.ReadLine().Split(asciiVertexSeparator);
+                        _vertices.Add(processVertexDelegate(float.Parse(vs[1]), float.Parse(vs[2]), float.Parse(vs[3])));
+                        _triangles.Add((int) vertexCount);
+                        ++vertexCount;
+                    }
+
+                    reader.ReadLine(); // endloop
+                    reader.ReadLine(); // endfacet
+
+                    line = reader.ReadLine(); // start of next facet, or endsolid
                 }
-                reader.ReadUInt16(); // drop attribute byte count
+
+                vertices = _vertices.ToArray();
+                triangles = _triangles.ToArray();
+
+            }
+            else
+            {
+                // binary format, please
+                reader.ReadBytes(80 - asciiFileHeaderStart.Length); // drop rest of header
+                uint triangleCount = reader.ReadUInt32();
+                vertexCount = triangleCount * 3;
+
+                Debug.Log("Reading " + triangleCount + " triangles from binary STL.");
+
+                vertices = new Vector3[vertexCount];
+                triangles = new int[triangleCount * 3];
+
+                for (int i = 0; i < triangleCount; i++)
+                {
+                    for (int j = 0; j < 3; j++) reader.ReadSingle(); // drop normal, will calculate self
+
+                    for (int j = 0; j < 3; j++)
+                    {
+                        vertices[3 * i + j] = processVertexDelegate(
+                            reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+                        triangles[3 * i + j] = 3 * i + j;
+                    }
+                    reader.ReadUInt16(); // drop attribute byte count
+                }
             }
 
             if (vertexCount > vertexLimit)
