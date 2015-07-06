@@ -18,9 +18,9 @@ public class StlFileReader {
         using (BinaryReader reader = new BinaryReader(File.OpenRead(filePath), Encoding.Default))
         {
             char[] start = reader.ReadChars(asciiFileHeaderStart.Length);
-            if (start.ToString().Equals(asciiFileHeaderStart))
+            if (new String(start).Equals(asciiFileHeaderStart))
             {
-                throw new IOException("ASCII .STL files are not supported.");
+                throw new IOException("ASCII .STL files are not supported, will not load " + filePath);
             }
 
             reader.ReadBytes(80 - asciiFileHeaderStart.Length); // drop rest of header
