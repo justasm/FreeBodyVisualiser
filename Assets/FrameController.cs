@@ -28,6 +28,15 @@ public class FrameController : MonoBehaviour {
             nextFrame = (frameCount + frame + (int)Mathf.Sign(accumulator)) % frameCount;
             accumulator += -Mathf.Sign(accumulator) * secondsPerFrame;
         }
-        frameAlpha = Mathf.Abs(accumulator) / secondsPerFrame;
+
+        if (Mathf.Abs(nextFrame - frame) > 1)
+        {
+            // don't lerp if frames are not sequential, e.g. last frame -> first frame
+            frameAlpha = 0;
+        }
+        else
+        {
+            frameAlpha = Mathf.Abs(accumulator) / secondsPerFrame;
+        }
 	}
 }
