@@ -7,6 +7,8 @@ public class FrameController : MonoBehaviour {
     private float accumulator;
     [Range(0.016f, 1f)]
     public float secondsPerFrame = 0.016f;
+    [Range(-1f, 1f)]
+    public float speedAlpha = 1f;
 
     public int frameCount = 0;
 
@@ -15,11 +17,11 @@ public class FrameController : MonoBehaviour {
 	}
 	
 	void Update () {
-        accumulator += Time.deltaTime;
-        while (accumulator >= secondsPerFrame)
+        accumulator += speedAlpha * Time.deltaTime;
+        while (Mathf.Abs(accumulator) >= secondsPerFrame)
         {
-            frame = (frame + 1) % frameCount;
-            accumulator -= secondsPerFrame;
+            frame = (frameCount + frame + (int)Mathf.Sign(accumulator)) % frameCount;
+            accumulator += -Mathf.Sign(accumulator) * secondsPerFrame;
         }
 	}
 }
