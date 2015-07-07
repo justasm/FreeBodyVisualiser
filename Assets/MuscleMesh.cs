@@ -14,6 +14,9 @@ public class MuscleMesh : MonoBehaviour {
     private float[][] lineWeights;
     private Color[][] lineColors;
 
+    private int[] vertexToGroup;
+    public bool[] visibility = new bool[MuscleGroup.groupNames.Count];
+
     public Vector3 Centroid { get; private set; }
 
     public FrameController controller;
@@ -41,6 +44,12 @@ public class MuscleMesh : MonoBehaviour {
         lineColors = CalculateLineColors(vertexToMuscle, muscleForce);
 
         AddLines(lines[controller.frame], lineWeights[controller.frame], lineColors[controller.frame]);
+
+        vertexToGroup = new int[vertexToMuscle.Length];
+        for (int i = 0; i < vertexToGroup.Length; i++)
+        {
+            vertexToGroup[i] = MuscleGroup.muscleToGroup[vertexToMuscle[i]];
+        }
 
         Centroid = new Vector3();
         int count = 0;
@@ -135,7 +144,7 @@ public class MuscleMesh : MonoBehaviour {
             UpdateQuad(vertices, vi, lines[i], lines[i + 1], lineWeights[i]);
             for (int j = 0; j < 4; j++)
             {
-                colors[vi + j] = lineColors[i];
+                colors[vi + j] = visibility[vertexToGroup[i]] ? Color.green : lineColors[i];
             }
         }
 
