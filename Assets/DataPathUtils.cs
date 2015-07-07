@@ -26,7 +26,7 @@ public class DataPathUtils {
 
     private static string outputPath;
 
-    public static string MuscleActivationValueFile { get; private set; }
+    public static string MuscleJointContactForceFile { get; private set; }
     public static string MuscleActivationMaxFile { get; private set; }
 
     public static string BoneRotationOriginFile { get; private set; }
@@ -37,11 +37,14 @@ public class DataPathUtils {
 
     public static string BoneScaleFile { get; private set; }
 
+    public static string JointCenterFile { get; private set; }
+    public static string JointTFContactFile { get; private set; }
+
     static DataPathUtils()
     {
         outputPath = String.Format(outputPathTemplate, subject, trial);
 
-        MuscleActivationValueFile = outputPath + optimisationOutputSubpath + studyName + "_force_gcs.csv";
+        MuscleJointContactForceFile = outputPath + optimisationOutputSubpath + studyName + "_force_gcs.csv";
         MuscleActivationMaxFile = outputPath + optimisationOutputSubpath + studyName + "_force_ub.csv";
 
         BoneRotationOriginFile = outputPath + geometryOutputSubpath + studyName + "_anatomy_model_orientation.csv";
@@ -52,6 +55,9 @@ public class DataPathUtils {
         BonePositionFile = outputPath + geometryOutputSubpath + studyName + "_origins.csv";
 
         BoneScaleFile = outputPath + geometryOutputSubpath + studyName + "_scaling_factors.csv";
+
+        JointCenterFile = outputPath + geometryOutputSubpath + studyName + "_rot_centres_gcs.csv";
+        JointTFContactFile = outputPath + geometryOutputSubpath + studyName + "_tf_contact_gcs.csv";
     }
 
     public static string GetMusclePositionFile(int muscleIndex)
