@@ -5,13 +5,13 @@ using System.Collections.Generic;
 [System.Serializable]
 public class MuscleGroup {
 
-    public static int[] muscleToGroup { get; private set; }
-    public static List<string> groupNames { get; private set; }
+    public static int[] muscleToGroupId { get; private set; }
+    public static List<MuscleGroup> groups { get; private set; }
 
     static MuscleGroup()
     {
-        muscleToGroup = new int[MuscleDataLoader.numMuscleElements];
-        groupNames = new List<string>();
+        muscleToGroupId = new int[MuscleDataLoader.numMuscleElements];
+        groups = new List<MuscleGroup>();
 
         setMuscleGroup(0, 25, "Adductors");
         setMuscleGroup(25, 29, "Biceps Femoris");
@@ -47,14 +47,20 @@ public class MuscleGroup {
 
     private static void setMuscleGroup(int rangeStart, int rangeEnd, string groupName)
     {
-        int group = groupNames.Count;
+        int groupIndex = groups.Count;
         for (int i = rangeStart; i < rangeEnd; i++)
         {
-            muscleToGroup[i] = group;
+            muscleToGroupId[i] = groupIndex;
         }
-        groupNames.Add(groupName);
+        groups.Add(new MuscleGroup(groupIndex, groupName));
     }
 
-    public int id;
-    public string name;
+    public int index { get; private set; }
+    public string name { get; private set; }
+
+    public MuscleGroup(int index, string name)
+    {
+        this.index = index;
+        this.name = name;
+    }
 }

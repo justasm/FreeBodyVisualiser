@@ -61,6 +61,7 @@ GameObject:
   - 224: {fileID: 22436372}
   - 114: {fileID: 11470620}
   - 114: {fileID: 11479260}
+  - 114: {fileID: 11442796}
   m_Layer: 5
   m_Name: Muscle Group Toggle
   m_TagString: Untagged
@@ -115,6 +116,19 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Muscle group
+--- !u!114 &11442796
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 193804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b88310f0a0eb6c74b9ff4d58cbed83a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toggle: {fileID: 11470620}
+  label: {fileID: 11415560}
 --- !u!114 &11465680
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -294,7 +308,31 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_Colors.m_HighlightedColor.r
+      value: .46274513
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Colors.m_HighlightedColor.g
+      value: .529411793
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Colors.m_HighlightedColor.b
+      value: .647058845
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Colors.m_NormalColor.r
+      value: .294117659
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Colors.m_NormalColor.g
+      value: .294117659
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Colors.m_NormalColor.b
+      value: .294117659
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 193804}

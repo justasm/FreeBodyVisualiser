@@ -15,7 +15,7 @@ public class MuscleMesh : MonoBehaviour {
     private Color[][] lineColors;
 
     private int[] vertexToGroup;
-    public bool[] visibility = new bool[MuscleGroup.groupNames.Count];
+    public bool[] visibility = new bool[MuscleGroup.groups.Count];
 
     public Vector3 Centroid { get; private set; }
 
@@ -48,7 +48,7 @@ public class MuscleMesh : MonoBehaviour {
         vertexToGroup = new int[vertexToMuscle.Length];
         for (int i = 0; i < vertexToGroup.Length; i++)
         {
-            vertexToGroup[i] = MuscleGroup.muscleToGroup[vertexToMuscle[i]];
+            vertexToGroup[i] = MuscleGroup.muscleToGroupId[vertexToMuscle[i]];
         }
 
         Centroid = new Vector3();
@@ -153,7 +153,12 @@ public class MuscleMesh : MonoBehaviour {
         mesh.RecalculateBounds();
     }
 
-    void UpdateQuad(Vector3[] vertices, int start, Vector3 p1, Vector3 p2, float width)
+    public void SetVisibility(MuscleGroup group, bool visible)
+    {
+        visibility[group.index] = visible;
+    }
+
+    static void UpdateQuad(Vector3[] vertices, int start, Vector3 p1, Vector3 p2, float width)
     {
         float halfWidth = width / 2;
 
@@ -165,8 +170,6 @@ public class MuscleMesh : MonoBehaviour {
         vertices[start + 1] = p1 - l * halfWidth;
         vertices[start + 2] = p2 + l * halfWidth;
         vertices[start + 3] = p2 - l * halfWidth;
-
-        //vertex = transform.InverseTransformPoint(vertex); // unnecessary
     }
 
     // per frame per vertex
