@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 public class MuscleDataLoader {
 
-    private const int numMuscleElements = 163; // distinct muscles
+    public const int numMuscleElements = 163; // distinct muscles
 
     public static void LoadMusclePaths(out Vector3[][] frameMusclePaths, out int[] vertexToMuscle)
     {
@@ -110,7 +110,7 @@ public class MuscleDataLoader {
     {
         List<float[]> _activations = new List<float[]>();
 
-        FloatCsvFileReader.ReadLines(DataPathUtils.MuscleActivationValueFile,
+        FloatCsvFileReader.ReadLines(DataPathUtils.MuscleJointContactForceFile,
             (values) =>
             {
                 float[] rawActivations = new float[numMuscleElements];
