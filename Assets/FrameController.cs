@@ -17,6 +17,10 @@ public class FrameController : MonoBehaviour {
 	}
 	
 	void Update () {
+        speedAlpha += Input.GetAxis("Horizontal") * Time.deltaTime;
+        if (speedAlpha < -1) speedAlpha = -1;
+        if (speedAlpha > 1) speedAlpha = 1;
+
         accumulator += speedAlpha * Time.deltaTime;
         while (Mathf.Abs(accumulator) >= secondsPerFrame)
         {

@@ -35,6 +35,8 @@ public class DataPathUtils {
     public static string BonePositionOriginFile { get; private set; }
     public static string BonePositionFile { get; private set; }
 
+    public static string BoneScaleFile { get; private set; }
+
     static DataPathUtils()
     {
         outputPath = String.Format(outputPathTemplate, subject, trial);
@@ -48,6 +50,8 @@ public class DataPathUtils {
 
         BonePositionOriginFile = outputPath + geometryOutputSubpath + studyName + "_anatomy_model_origin.csv";
         BonePositionFile = outputPath + geometryOutputSubpath + studyName + "_origins.csv";
+
+        BoneScaleFile = outputPath + geometryOutputSubpath + studyName + "_scaling_factors.csv";
     }
 
     public static string GetMusclePositionFile(int muscleIndex)
