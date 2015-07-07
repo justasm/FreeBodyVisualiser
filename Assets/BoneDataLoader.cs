@@ -46,4 +46,17 @@ public class BoneDataLoader {
         frameRotations = _frameRotations.ToArray();
         framePositions = _framePositions.ToArray();
     }
+
+    public static void LoadBoneScalingFactors(out Vector3[] scalingFactors)
+    {
+        List<Vector3> _scalingFactors = new List<Vector3>();
+
+        FloatCsvFileReader.ReadLines(DataPathUtils.BoneScaleFile,
+            (floats) =>
+            {
+                _scalingFactors.Add(FloatCsvFileReader.FloatsToVectors(floats)[0]);
+            });
+
+        scalingFactors = _scalingFactors.ToArray();
+    }
 }
