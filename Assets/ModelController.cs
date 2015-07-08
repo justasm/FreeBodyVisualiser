@@ -9,7 +9,7 @@ public class ModelController : MonoBehaviour {
     private FreeBodyModel activeModel;
 
 	void Start () {
-        LoadAndVisualiseModel("C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\FreeBody App\\example\\1037_C14\\1037_walking7_C14 - Justas.xml");
+        // LoadAndVisualiseModel("C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\FreeBody App\\example\\1037_C14\\1037_walking7_C14 - Justas.xml");
 	}
 
     void LoadAndVisualiseModel(string parameterFilePath)
