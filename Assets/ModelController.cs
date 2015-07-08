@@ -17,6 +17,7 @@ public class ModelController : MonoBehaviour {
     public Toggle muscleToggle;
     public Toggle forceToggle;
     public Toggle boneToggle;
+    public Text timeScaleField;
     public Slider timeScaleSlider;
     public Text frameValueField;
     public Slider frameSlider;
@@ -59,11 +60,20 @@ public class ModelController : MonoBehaviour {
             foreach (BoneMesh bone in boneMeshes) bone.gameObject.SetActive(on);
             });
 
-        frameController.OnFrameChanged += (frame) =>
-        {
-            frameValueField.text = frame + " / " + frameController.frameCount;
-            frameSlider.value = frame;
-        }; // TODO unsubscribe
+        frameController.OnFrameChanged +=
+            (frame) =>
+            {
+                frameValueField.text = frame + " / " + frameController.frameCount;
+                frameSlider.value = frame;
+            }; // TODO unsubscribe
+
+        timeScaleSlider.onValueChanged.AddListener((alpha) => frameController.speedAlpha = alpha);
+        frameController.OnSpeedChanged +=
+            (alpha) =>
+            {
+                timeScaleField.text = (int)(100 * alpha) + "%";
+                timeScaleSlider.value = alpha;
+            }; // TODO unsubscribe
 	}
 
     void EnableLoadButton()

@@ -6,12 +6,16 @@ public class FrameController : MonoBehaviour {
     public delegate void FrameChange(int frame);
     public event FrameChange OnFrameChanged;
 
+    public delegate void SpeedChange(float alpha);
+    public event SpeedChange OnSpeedChanged;
+
     public int frame { get; private set; }
     public float frameAlpha { get; private set; }
     public int nextFrame { get; private set; }
     private float accumulator;
     [Range(0.016f, 1f)]
     public float secondsPerFrame = 0.016f;
+    private float prevSpeedAlpha = 1f;
     [Range(-1f, 1f)]
     public float speedAlpha = 1f;
 
@@ -33,8 +37,13 @@ public class FrameController : MonoBehaviour {
         if (0 == frameCount) return;
 
         speedAlpha += Input.GetAxis("Horizontal") * Time.deltaTime;
-        if (speedAlpha < -1) speedAlpha = -1;
-        if (speedAlpha > 1) speedAlpha = 1;
+        if (speedAlpha != prevSpeedAlpha)
+        {
+            if (speedAlpha < -1) speedAlpha = -1;
+            if (speedAlpha > 1) speedAlpha = 1;
+            if (null != OnSpeedChanged) OnSpeedChanged(speedAlpha);
+        }
+        prevSpeedAlpha = speedAlpha;
 
         accumulator += speedAlpha * Time.deltaTime;
         while (Mathf.Abs(accumulator) >= secondsPerFrame)
