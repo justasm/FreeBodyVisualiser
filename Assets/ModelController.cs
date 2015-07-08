@@ -3,16 +3,22 @@ using System.Collections;
 using System.Xml;
 using System.IO;
 using System.Text;
+using UnityEngine.UI;
 
 public class ModelController : MonoBehaviour {
 
     private FreeBodyModel activeModel;
 
-    FrameController frameController;
-    BoneData boneData;
-    BoneMesh[] boneMeshes;
-    JointForceMesh jointForceMesh;
-    MuscleMesh muscleMesh;
+    public Text studyNameField;
+    public Text studySubjectField;
+    public InputField parameterFilenameField;
+    public Button parameterLoadButton;
+
+    private FrameController frameController;
+    private BoneData boneData;
+    private BoneMesh[] boneMeshes;
+    private JointForceMesh jointForceMesh;
+    private MuscleMesh muscleMesh;
 
     void Awake()
     {
@@ -24,8 +30,26 @@ public class ModelController : MonoBehaviour {
     }
 
 	void Start () {
-        LoadAndVisualiseModel("C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\FreeBody App\\example\\1037_C14\\1037_walking6_C14 - Justas.xml");
+
+        if (parameterLoadButton && parameterFilenameField)
+        {
+            parameterFilenameField.text = "C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\" +
+                "FreeBody App\\example\\1037_C14\\1037_walking6_C14 - Justas.xml";
+            parameterLoadButton.onClick.AddListener(() =>
+            {
+                if (0 == parameterFilenameField.text.Length) return;
+                LoadAndVisualiseModel(parameterFilenameField.text);
+                // TODO async above, more sane button behaviour
+                parameterLoadButton.enabled = false;
+                Invoke("EnableLoadButton", 0.5f);
+            });
+        }
 	}
+
+    void EnableLoadButton()
+    {
+        parameterLoadButton.enabled = true;
+    }
 
     void LoadAndVisualiseModel(string parameterFilePath)
     {
@@ -56,5 +80,11 @@ public class ModelController : MonoBehaviour {
         Debug.Log(activeModel.sex + " subject, " + activeModel.height + "m, " + activeModel.mass + "kg");
         Debug.Log("Anatomy path: " + activeModel.anatomyDatasetPath);
         Debug.Log("Anatomy file: " + activeModel.anatomyDatasetFileName);
+
+        if (studyNameField) studyNameField.text = activeModel.studyName;
+        if (studySubjectField)
+        {
+            studySubjectField.text = activeModel.sex + " " + activeModel.height + "m " + activeModel.mass + "kg";
+        }
     }
 }
