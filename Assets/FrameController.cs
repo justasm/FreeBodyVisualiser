@@ -3,6 +3,9 @@ using System.Collections;
 
 public class FrameController : MonoBehaviour {
 
+    public delegate void FrameChange(int frame);
+    public event FrameChange OnFrameChanged;
+
     public int frame { get; private set; }
     public float frameAlpha { get; private set; }
     public int nextFrame { get; private set; }
@@ -38,6 +41,8 @@ public class FrameController : MonoBehaviour {
         {
             frame = (frameCount + frame + (int)Mathf.Sign(accumulator)) % frameCount;
             accumulator += -Mathf.Sign(accumulator) * secondsPerFrame;
+
+            if (null != OnFrameChanged) OnFrameChanged(frame);
         }
         nextFrame = (frameCount + frame + (int)Mathf.Sign(accumulator)) % frameCount;
 

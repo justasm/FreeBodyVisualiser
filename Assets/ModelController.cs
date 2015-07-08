@@ -17,6 +17,9 @@ public class ModelController : MonoBehaviour {
     public Toggle muscleToggle;
     public Toggle forceToggle;
     public Toggle boneToggle;
+    public Slider timeScaleSlider;
+    public Text frameValueField;
+    public Slider frameSlider;
 
     private FrameController frameController;
     private BoneData boneData;
@@ -49,11 +52,18 @@ public class ModelController : MonoBehaviour {
             });
         }
 
+        // TODO remove if checks, no need for ambiguity
         if (muscleToggle) muscleToggle.onValueChanged.AddListener((on) => muscleMesh.gameObject.SetActive(on));
         if (forceToggle) forceToggle.onValueChanged.AddListener((on) => jointForceMesh.gameObject.SetActive(on));
         if(boneToggle) boneToggle.onValueChanged.AddListener((on) => {
             foreach (BoneMesh bone in boneMeshes) bone.gameObject.SetActive(on);
             });
+
+        frameController.OnFrameChanged += (frame) =>
+        {
+            frameValueField.text = frame + " / " + frameController.frameCount;
+            frameSlider.value = frame;
+        }; // TODO unsubscribe
 	}
 
     void EnableLoadButton()
@@ -95,6 +105,11 @@ public class ModelController : MonoBehaviour {
         if (studySubjectField)
         {
             studySubjectField.text = activeModel.sex + " " + activeModel.height + "m " + activeModel.mass + "kg";
+        }
+        if (frameSlider)
+        {
+            frameSlider.minValue = activeModel.startFrame - 1;
+            frameSlider.maxValue = activeModel.endFrame;
         }
     }
 }
