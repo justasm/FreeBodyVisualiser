@@ -55,14 +55,18 @@ public class JointForceMesh : MonoBehaviour {
         // draw contact forces for all joints for which data is available
         for (int i = 0; i < contactForces.Length; i++)
         {
-            float mag = contactForces[i][controller.frame].magnitude;
+            Vector3 v = Vector3.Lerp(contactForces[i][controller.frame],
+                contactForces[i][controller.nextFrame], controller.frameAlpha);
+            float mag = v.magnitude;
             if (0 == mag) continue;
-            Vector3 n = contactForces[i][controller.frame].normalized;
+            Vector3 n = v.normalized;
             Quaternion rot = Quaternion.FromToRotation(Vector3.up, n);
+            Vector3 pos = Vector3.Lerp(jointPositions[i][controller.frame],
+                jointPositions[i][controller.nextFrame], controller.frameAlpha);
 
             Graphics.DrawMesh(cylinderMesh,
                         Matrix4x4.TRS(
-                            jointPositions[i][controller.frame] + n * arrowTipScale,
+                            pos + n * arrowTipScale,
                             rot,
                             new Vector3(
                                 arrowBodyScale,
@@ -73,7 +77,7 @@ public class JointForceMesh : MonoBehaviour {
 
             Graphics.DrawMesh(cylinderMesh,
                         Matrix4x4.TRS(
-                            jointPositions[i][controller.frame] - n * arrowTipScale,
+                            pos - n * arrowTipScale,
                             rot,
                             new Vector3(
                                 arrowBodyScale,
@@ -84,14 +88,14 @@ public class JointForceMesh : MonoBehaviour {
 
             Graphics.DrawMesh(coneMesh,
                         Matrix4x4.TRS(
-                            jointPositions[i][controller.frame] + n * arrowTipScale,
+                            pos + n * arrowTipScale,
                             rot,
                             new Vector3(1, -1, 1) * arrowTipScale),
                         redMaterial, 0);
 
             Graphics.DrawMesh(coneMesh,
                         Matrix4x4.TRS(
-                            jointPositions[i][controller.frame] - n * arrowTipScale,
+                            pos - n * arrowTipScale,
                             rot,
                             Vector3.one * arrowTipScale),
                         redMaterial, 0);
