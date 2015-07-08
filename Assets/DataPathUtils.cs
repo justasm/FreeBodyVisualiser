@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 
 public class DataPathUtils {
-
     private static string boneModelPath;
     private const string anatomyFileTypeSuffix = ".xml";
     private const string anatomyFileSuffix = "_dataset" + anatomyFileTypeSuffix;
@@ -14,6 +13,7 @@ public class DataPathUtils {
     private const string fibulaModelSuffix = "_Fibula.stl";
     private const string patellaModelSuffix = "_Patella.stl";
     private const string tibiaModelSuffix = "_Tibia.stl";
+    private const string footModelSuffix = "_Foot.stl";
 
     private static Dictionary<BoneMesh.Bone, string> boneToFilename;
 
@@ -69,6 +69,7 @@ public class DataPathUtils {
             boneFilePrefix + "_bones" + System.IO.Path.DirectorySeparatorChar;
 
         boneToFilename = new Dictionary<BoneMesh.Bone, string>();
+        boneToFilename[BoneMesh.Bone.Foot] = boneModelPath + boneFilePrefix + footModelSuffix;
         boneToFilename[BoneMesh.Bone.Tibia] = boneModelPath + boneFilePrefix + tibiaModelSuffix;
         boneToFilename[BoneMesh.Bone.Patella] = boneModelPath + boneFilePrefix + patellaModelSuffix;
         boneToFilename[BoneMesh.Bone.Femur] = boneModelPath + boneFilePrefix + femurModelSuffix;

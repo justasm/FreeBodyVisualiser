@@ -45,7 +45,7 @@ public class ModelController : MonoBehaviour {
         if (parameterLoadButton && parameterFilenameField)
         {
             parameterFilenameField.text = "C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\" +
-                "FreeBody App\\example\\1037_C14\\1037_walking6_C14 - Justas.xml";
+                "FreeBody App\\example\\1176_C12\\1176_walking5_C12 - Justas.xml";
             parameterLoadButton.onClick.AddListener(() =>
             {
                 if (0 == parameterFilenameField.text.Length) return;
