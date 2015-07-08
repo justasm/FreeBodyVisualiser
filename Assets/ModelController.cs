@@ -14,6 +14,10 @@ public class ModelController : MonoBehaviour {
     public InputField parameterFilenameField;
     public Button parameterLoadButton;
 
+    public Toggle muscleToggle;
+    public Toggle forceToggle;
+    public Toggle boneToggle;
+
     private FrameController frameController;
     private BoneData boneData;
     private BoneMesh[] boneMeshes;
@@ -44,6 +48,12 @@ public class ModelController : MonoBehaviour {
                 Invoke("EnableLoadButton", 0.5f);
             });
         }
+
+        if (muscleToggle) muscleToggle.onValueChanged.AddListener((on) => muscleMesh.gameObject.SetActive(on));
+        if (forceToggle) forceToggle.onValueChanged.AddListener((on) => jointForceMesh.gameObject.SetActive(on));
+        if(boneToggle) boneToggle.onValueChanged.AddListener((on) => {
+            foreach (BoneMesh bone in boneMeshes) bone.gameObject.SetActive(on);
+            });
 	}
 
     void EnableLoadButton()
