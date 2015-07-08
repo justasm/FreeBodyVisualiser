@@ -1,15 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 public class DataPathUtils {
-    private const string boneModelPath =
-                "C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\Some Matlab Code\\2015-05-08 C014 R bones\\";
-    private const string femurModelSubpath = "ZHAN0303-C014_R_Femur.stl";
-    private const string pelvisModelSubpath = "ZHAN0303-C014_Pelvis 87_001.stl";
-    private const string fibulaModelSubpath = "ZHAN0303-C014_R_Fibula.stl";
-    private const string patellaModelSubpath = "ZHAN0303-C014_R_Patella.stl";
-    private const string tibiaModelSubpath = "ZHAN0303-C014_R_Tibia.stl";
+
+    private static string boneModelPath;
+    private const string anatomyFileTypeSuffix = ".xml";
+    private const string anatomyFileSuffix = "_dataset" + anatomyFileTypeSuffix;
+
+    private const string femurModelSuffix = "_Femur.stl";
+    private const string pelvisModelSuffix = "_Pelvis.stl";
+    private const string fibulaModelSuffix = "_Fibula.stl";
+    private const string patellaModelSuffix = "_Patella.stl";
+    private const string tibiaModelSuffix = "_Tibia.stl";
+
+    private static Dictionary<BoneMesh.Bone, string> boneToFilename;
 
     private static string geoPathPrefix;
 
@@ -29,8 +35,10 @@ public class DataPathUtils {
 
     public static void UpdatePaths(FreeBodyModel model)
     {
-        geoPathPrefix = model.geometryOutputPath + "\\" + model.studyName;
-        string optPathPrefix = model.optimisationOutputPath + "\\" + model.studyName;
+        geoPathPrefix = model.geometryOutputPath +
+            System.IO.Path.DirectorySeparatorChar + model.studyName;
+        string optPathPrefix = model.optimisationOutputPath +
+            System.IO.Path.DirectorySeparatorChar + model.studyName;
 
         MuscleJointContactForceFile = optPathPrefix + "_force_gcs.csv";
         MuscleActivationMaxFile = optPathPrefix + "_force_ub.csv";
@@ -46,6 +54,25 @@ public class DataPathUtils {
 
         JointCenterFile = geoPathPrefix + "_rot_centres_gcs.csv";
         JointTFContactFile = geoPathPrefix + "_tf_contact_gcs.csv";
+
+        string boneFilePrefix = model.anatomyDatasetFileName;
+        // TODO more rigorous error checking
+        if (boneFilePrefix.EndsWith(anatomyFileSuffix))
+        {
+            boneFilePrefix = boneFilePrefix.Remove(boneFilePrefix.Length - anatomyFileSuffix.Length);
+        }
+        else if (boneFilePrefix.EndsWith(anatomyFileTypeSuffix))
+        {
+            boneFilePrefix = boneFilePrefix.Remove(boneFilePrefix.Length - anatomyFileTypeSuffix.Length);
+        }
+        boneModelPath = model.anatomyDatasetPath + System.IO.Path.DirectorySeparatorChar +
+            boneFilePrefix + "_bones" + System.IO.Path.DirectorySeparatorChar;
+
+        boneToFilename = new Dictionary<BoneMesh.Bone, string>();
+        boneToFilename[BoneMesh.Bone.Tibia] = boneModelPath + boneFilePrefix + tibiaModelSuffix;
+        boneToFilename[BoneMesh.Bone.Patella] = boneModelPath + boneFilePrefix + patellaModelSuffix;
+        boneToFilename[BoneMesh.Bone.Femur] = boneModelPath + boneFilePrefix + femurModelSuffix;
+        boneToFilename[BoneMesh.Bone.Pelvis] = boneModelPath + boneFilePrefix + pelvisModelSuffix;
     }
 
     public static string GetMusclePositionFile(int muscleIndex)
@@ -55,18 +82,6 @@ public class DataPathUtils {
 
     public static string getBoneModelFile(BoneMesh.Bone bone)
     {
-        switch (bone)
-        {
-            case BoneMesh.Bone.Tibia:
-                return boneModelPath + tibiaModelSubpath;
-            case BoneMesh.Bone.Pelvis:
-                return boneModelPath + pelvisModelSubpath;
-            case BoneMesh.Bone.Femur:
-                return boneModelPath + femurModelSubpath;
-            case BoneMesh.Bone.Patella:
-                return boneModelPath + patellaModelSubpath;
-            default:
-                throw new System.NotImplementedException("No file for " + bone + " model data.");
-        }
+        return boneToFilename[bone];
     }
 }
