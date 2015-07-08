@@ -31,7 +31,7 @@ public class MuscleMesh : MonoBehaviour {
         meshRenderer.sharedMaterial = new Material(shader);
     }
 
-    void Start()
+    public void Reload()
     {
         int[] vertexToMuscle;
         float[][] muscleForce;
@@ -57,12 +57,14 @@ public class MuscleMesh : MonoBehaviour {
 	
     void Update()
     {
+        if (null == lines) return;
         UpdateLines(lines[controller.frame], lineWeights[controller.frame], lineColors[controller.frame]);
 	}
 
     // lines == line endpoints, not continuous, size = 2 x #lines
     void AddLines(Vector3[] lines, float[] lineWeights, Color[] lineColors)
     {
+        mesh.Clear();
         Debug.Log("Adding " + lines.Length / 2 + " lines.");
 
         Vector3[] vertices = new Vector3[lines.Length * 2];

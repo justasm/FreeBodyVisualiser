@@ -3,12 +3,6 @@ using System.Collections;
 using System;
 
 public class DataPathUtils {
-    private const string outputPathTemplate =
-                "C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\FreeBody App\\example"
-                + "\\{0}\\{1}\\Outputs\\";
-    private const string geometryOutputSubpath = "Muscle_geometry\\";
-    private const string optimisationOutputSubpath = "Optimisation\\";
-
     private const string boneModelPath =
                 "C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\Some Matlab Code\\2015-05-08 C014 R bones\\";
     private const string femurModelSubpath = "ZHAN0303-C014_R_Femur.stl";
@@ -17,12 +11,7 @@ public class DataPathUtils {
     private const string patellaModelSubpath = "ZHAN0303-C014_R_Patella.stl";
     private const string tibiaModelSubpath = "ZHAN0303-C014_R_Tibia.stl";
 
-    // Change below to easily configure which model is loaded
-    private const string subject = "1037_C14";
-    private const string trial = "walking6";
-    private const string studyName = "1037_walking6_c14_new";
-
-    private static string outputPath;
+    private static string geoPathPrefix;
 
     public static string MuscleJointContactForceFile { get; private set; }
     public static string MuscleActivationMaxFile { get; private set; }
@@ -38,30 +27,30 @@ public class DataPathUtils {
     public static string JointCenterFile { get; private set; }
     public static string JointTFContactFile { get; private set; }
 
-    static DataPathUtils()
+    public static void UpdatePaths(FreeBodyModel model)
     {
-        outputPath = String.Format(outputPathTemplate, subject, trial);
+        geoPathPrefix = model.geometryOutputPath + "\\" + model.studyName;
+        string optPathPrefix = model.optimisationOutputPath + "\\" + model.studyName;
 
-        MuscleJointContactForceFile = outputPath + optimisationOutputSubpath + studyName + "_force_gcs.csv";
-        MuscleActivationMaxFile = outputPath + optimisationOutputSubpath + studyName + "_force_ub.csv";
+        MuscleJointContactForceFile = optPathPrefix + "_force_gcs.csv";
+        MuscleActivationMaxFile = optPathPrefix + "_force_ub.csv";
 
-        BoneRotationOriginFile = outputPath + geometryOutputSubpath + studyName + "_anatomy_model_orientation.csv";
-        BoneRotationFile = outputPath + optimisationOutputSubpath + studyName + "_lcs_quaternion.csv";
+        BoneRotationOriginFile = geoPathPrefix + "_anatomy_model_orientation.csv";
+        BoneRotationFile = optPathPrefix + "_lcs_quaternion.csv";
         // not _rotations.csv?
 
-        BonePositionOriginFile = outputPath + geometryOutputSubpath + studyName + "_anatomy_model_origin.csv";
-        BonePositionFile = outputPath + geometryOutputSubpath + studyName + "_origins.csv";
+        BonePositionOriginFile = geoPathPrefix + "_anatomy_model_origin.csv";
+        BonePositionFile = geoPathPrefix + "_origins.csv";
 
-        BoneScaleFile = outputPath + geometryOutputSubpath + studyName + "_scaling_factors.csv";
+        BoneScaleFile = geoPathPrefix + "_scaling_factors.csv";
 
-        JointCenterFile = outputPath + geometryOutputSubpath + studyName + "_rot_centres_gcs.csv";
-        JointTFContactFile = outputPath + geometryOutputSubpath + studyName + "_tf_contact_gcs.csv";
+        JointCenterFile = geoPathPrefix + "_rot_centres_gcs.csv";
+        JointTFContactFile = geoPathPrefix + "_tf_contact_gcs.csv";
     }
 
     public static string GetMusclePositionFile(int muscleIndex)
     {
-        return outputPath + geometryOutputSubpath +
-            studyName + String.Format("_muscle_path{0}.csv", muscleIndex);
+        return geoPathPrefix + String.Format("_muscle_path{0}.csv", muscleIndex);
     }
 
     public static string getBoneModelFile(BoneMesh.Bone bone)

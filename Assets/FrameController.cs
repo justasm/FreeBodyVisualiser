@@ -15,8 +15,16 @@ public class FrameController : MonoBehaviour {
 	void Start () {
         frame = 0;
 	}
+
+    public void UpdateFrameCount(FreeBodyModel model)
+    {
+        frameCount = model.endFrame - model.startFrame + 1;
+        frame = 0;
+    }
 	
 	void Update () {
+        if (0 == frameCount) return;
+
         speedAlpha += Input.GetAxis("Horizontal") * Time.deltaTime;
         if (speedAlpha < -1) speedAlpha = -1;
         if (speedAlpha > 1) speedAlpha = 1;

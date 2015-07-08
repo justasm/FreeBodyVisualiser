@@ -9,7 +9,7 @@ public class BoneData : MonoBehaviour {
     public Vector3[][] positions { get; private set; }
     public Vector3[] scalingFactors { get; private set; }
 
-    void Awake()
+    public void Reload()
     {
         Quaternion[] _rotationOrigins;
         Vector3[] _positionOrigins;

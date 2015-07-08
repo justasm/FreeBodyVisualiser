@@ -8,13 +8,46 @@ public class ModelController : MonoBehaviour {
 
     private FreeBodyModel activeModel;
 
+    FrameController frameController;
+    BoneData boneData;
+    BoneMesh[] boneMeshes;
+    JointForceMesh jointForceMesh;
+    MuscleMesh muscleMesh;
+
+    void Awake()
+    {
+        frameController = GetComponent<FrameController>();
+        boneData = GetComponent<BoneData>();
+        boneMeshes = FindObjectsOfType<BoneMesh>();
+        jointForceMesh = FindObjectOfType<JointForceMesh>();
+        muscleMesh = FindObjectOfType<MuscleMesh>();
+    }
+
 	void Start () {
-        LoadAndVisualiseModel("C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\FreeBody App\\example\\1037_C14\\1037_walking7_C14 - Justas.xml");
+        LoadAndVisualiseModel("C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\FreeBody App\\example\\1037_C14\\1037_walking6_C14 - Justas.xml");
 	}
 
     void LoadAndVisualiseModel(string parameterFilePath)
     {
+        // TODO cancel any existing load
+        // TODO thread / yield loading routines
+        // TODO display loading UI
+        // TODO separate bone, joint force and muscle force loading
+
         ModelParameterLoader.LoadModel(parameterFilePath, out activeModel);
+
+        DataPathUtils.UpdatePaths(activeModel);
+        frameController.UpdateFrameCount(activeModel);
+
+        boneData.Reload();
+        for (int i = 0; i < boneMeshes.Length; i++)
+        {
+            boneMeshes[i].Reload();
+        }
+
+        jointForceMesh.Reload();
+
+        muscleMesh.Reload();
 
         Debug.Log("Study: " + activeModel.studyName + " by " + activeModel.responsiblePerson);
         Debug.Log("Geometry: " + activeModel.geometryOutputPath);

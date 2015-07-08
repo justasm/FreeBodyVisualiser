@@ -29,17 +29,7 @@ public class JointForceMesh : MonoBehaviour {
     Vector3[] hipContactForces;
     Vector3[][] contactForces;
 
-	void Start () {
-        JointForceDataLoader.LoadJointPositions(out anklePositions, out kneePositions,
-            out lateralTfPositions, out medialTfPositions, out hipPositions);
-        jointPositions = new Vector3[][] { anklePositions, lateralTfPositions,
-            medialTfPositions, hipPositions };
-
-        JointForceDataLoader.LoadJointContactForces(out ankleContactForces,
-            out lateralTfContactForces, out medialTfContactForces, out hipContactForces);
-        contactForces = new Vector3[][] { ankleContactForces, lateralTfContactForces,
-            medialTfContactForces, hipContactForces };
-
+	void Awake () {
         //sphereMesh = new Mesh();
         //PrimitiveUtils.GenerateSphere(sphereMesh);
         coneMesh = new Mesh();
@@ -50,8 +40,22 @@ public class JointForceMesh : MonoBehaviour {
         redMaterial = new Material(shader);
         redMaterial.color = new Color(1f, 0f, 0f, .7f);
 	}
+
+    public void Reload()
+    {
+        JointForceDataLoader.LoadJointPositions(out anklePositions, out kneePositions,
+            out lateralTfPositions, out medialTfPositions, out hipPositions);
+        jointPositions = new Vector3[][] { anklePositions, lateralTfPositions,
+            medialTfPositions, hipPositions };
+
+        JointForceDataLoader.LoadJointContactForces(out ankleContactForces,
+            out lateralTfContactForces, out medialTfContactForces, out hipContactForces);
+        contactForces = new Vector3[][] { ankleContactForces, lateralTfContactForces,
+            medialTfContactForces, hipContactForces };
+    }
 	
 	void Update () {
+        if (null == contactForces) return;
         // draw contact forces for all joints for which data is available
         for (int i = 0; i < contactForces.Length; i++)
         {

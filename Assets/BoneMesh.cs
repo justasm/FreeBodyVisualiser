@@ -32,16 +32,17 @@ public class BoneMesh : MonoBehaviour
         material.color = new Color(1f, 1f, 1f, 0.1f);
     }
 
-    void Start()
+    public void Reload()
     {
-        meshes = StlFileReader.LoadStlFile(DataPathUtils.getBoneModelFile(bone), processVertex);
-        meshes[0].name = "Bone";
+        // TODO clean up existing meshes?
+        meshes = StlFileReader.LoadStlFile(DataPathUtils.getBoneModelFile(bone), ProcessVertex);
+        meshes[0].name = bone.ToString();
         meshFilter.mesh = meshes[0];
 
         transform.localScale = boneData.scalingFactors[(int)bone] / modelScale;
     }
 
-    Vector3 processVertex(float x, float y, float z)
+    Vector3 ProcessVertex(float x, float y, float z)
     {
         Vector3 v = new Vector3(-y, z, -x);
         v = Quaternion.Inverse(boneData.rotationOrigins[(int)bone]) * (v - modelScale * boneData.positionOrigins[(int)bone]);
@@ -50,6 +51,8 @@ public class BoneMesh : MonoBehaviour
 
     void Update()
     {
+        if (null == boneData.positions) return;
+
         transform.rotation = boneData.rotations[controller.frame][(int)bone];
         transform.position = boneData.positions[controller.frame][(int)bone];
 
