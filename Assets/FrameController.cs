@@ -15,9 +15,9 @@ public class FrameController : MonoBehaviour {
     private float accumulator;
     [Range(0.016f, 1f)]
     public float secondsPerFrame = 0.016f;
-    private float prevSpeedAlpha = 1f;
     [Range(-1f, 1f)]
-    public float speedAlpha = 1f;
+    public float speedAlpha = 0.5f;
+    private float prevSpeedAlpha = 0f;
 
     public int frameCount = 0;
 
@@ -27,14 +27,14 @@ public class FrameController : MonoBehaviour {
         nextFrame = 1;
 	}
 
-    public void UpdateFrameCount(FreeBodyModel model)
+    public void UpdateFrameData(FreeBodyModel model)
     {
+        secondsPerFrame = 1f / model.framesPerSecond;
         frameCount = model.endFrame - model.startFrame + 1;
         frame = 0;
     }
 	
 	void Update () {
-        if (0 == frameCount) return;
 
         speedAlpha += Input.GetAxis("Horizontal") * Time.deltaTime;
         if (speedAlpha != prevSpeedAlpha)
@@ -44,6 +44,8 @@ public class FrameController : MonoBehaviour {
             if (null != OnSpeedChanged) OnSpeedChanged(speedAlpha);
         }
         prevSpeedAlpha = speedAlpha;
+
+        if (0 == frameCount) return;
 
         accumulator += speedAlpha * Time.deltaTime;
         while (Mathf.Abs(accumulator) >= secondsPerFrame)

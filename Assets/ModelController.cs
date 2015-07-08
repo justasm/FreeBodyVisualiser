@@ -91,7 +91,7 @@ public class ModelController : MonoBehaviour {
         ModelParameterLoader.LoadModel(parameterFilePath, out activeModel);
 
         DataPathUtils.UpdatePaths(activeModel);
-        frameController.UpdateFrameCount(activeModel);
+        frameController.UpdateFrameData(activeModel);
 
         boneData.Reload();
         for (int i = 0; i < boneMeshes.Length; i++)
@@ -114,7 +114,8 @@ public class ModelController : MonoBehaviour {
         if (studyNameField) studyNameField.text = activeModel.studyName;
         if (studySubjectField)
         {
-            studySubjectField.text = activeModel.sex + " " + activeModel.height + "m " + activeModel.mass + "kg";
+            studySubjectField.text = activeModel.framesPerSecond + "Hz  |  " + activeModel.sex + " " +
+                activeModel.height + "m " + activeModel.mass + "kg";
         }
         if (frameSlider)
         {

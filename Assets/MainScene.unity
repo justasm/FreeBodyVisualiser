@@ -274,8 +274,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   secondsPerFrame: .0160000008
-  speedAlpha: 1
-  frameCount: 77
+  speedAlpha: .5
+  frameCount: 0
 --- !u!4 &97117139
 Transform:
   m_ObjectHideFlags: 0
