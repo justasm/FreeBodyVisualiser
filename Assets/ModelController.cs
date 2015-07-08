@@ -44,11 +44,14 @@ public class ModelController : MonoBehaviour {
 
         if (parameterLoadButton && parameterFilenameField)
         {
+            //parameterFilenameField.text = "C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\" +
+            //    "FreeBody App\\example\\1176_C12\\1176_walking5_C12 - Justas.xml";
             parameterFilenameField.text = "C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\" +
-                "FreeBody App\\example\\1176_C12\\1176_walking5_C12 - Justas.xml";
+                "FreeBody App\\example\\1037_C14\\1037_walking6_C14 - Justas.xml";
             parameterLoadButton.onClick.AddListener(() =>
             {
                 if (0 == parameterFilenameField.text.Length) return;
+                StartCoroutine(PreventSpamClick());
                 StartCoroutine(LoadAndVisualiseModel(parameterFilenameField.text));
             });
         }
@@ -76,9 +79,15 @@ public class ModelController : MonoBehaviour {
             }; // TODO unsubscribe
 	}
 
-    IEnumerator LoadAndVisualiseModel(string parameterFilePath)
+    IEnumerator PreventSpamClick()
     {
         parameterLoadButton.enabled = false;
+        yield return new WaitForSeconds(1);
+        parameterLoadButton.enabled = true;
+    }
+
+    IEnumerator LoadAndVisualiseModel(string parameterFilePath)
+    {
         // TODO cancel any existing load
         // TODO separate bone, joint force and muscle force loading
 
@@ -161,8 +170,6 @@ public class ModelController : MonoBehaviour {
             frameSlider.maxValue = activeModel.endFrame;
         }
 
-        parameterLoadButton.enabled = true;
-
         logField.text = logField.text + "\n<color=green>Complete.</color>";
         yield return new WaitForSeconds(3);
         /*float fadeOutDuration = 1f;
@@ -172,6 +179,6 @@ public class ModelController : MonoBehaviour {
             yield return 0;
         }*/
         logField.gameObject.SetActive(false);
-        logField.materialForRendering.color = Color.white;
+        //logField.materialForRendering.color = Color.white;
     }
 }
