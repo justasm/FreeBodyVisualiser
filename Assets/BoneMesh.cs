@@ -39,7 +39,7 @@ public class BoneMesh : MonoBehaviour
         meshes[0].name = bone.ToString();
         meshFilter.mesh = meshes[0];
 
-        transform.localScale = boneData.scalingFactors[(int)bone] / modelScale;
+        transform.localScale = Vector3.one / modelScale;
     }
 
     Vector3 ProcessVertex(float x, float y, float z)
