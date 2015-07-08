@@ -14,6 +14,7 @@ public class ModelController : MonoBehaviour {
     public InputField parameterFilenameField;
     public Button parameterLoadButton;
 
+    public Text logField;
     public Toggle muscleToggle;
     public Toggle forceToggle;
     public Toggle boneToggle;
@@ -39,6 +40,8 @@ public class ModelController : MonoBehaviour {
 
 	void Start () {
 
+        logField.gameObject.SetActive(false);
+
         if (parameterLoadButton && parameterFilenameField)
         {
             parameterFilenameField.text = "C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\" +
@@ -46,10 +49,7 @@ public class ModelController : MonoBehaviour {
             parameterLoadButton.onClick.AddListener(() =>
             {
                 if (0 == parameterFilenameField.text.Length) return;
-                LoadAndVisualiseModel(parameterFilenameField.text);
-                // TODO async above, more sane button behaviour
-                parameterLoadButton.enabled = false;
-                Invoke("EnableLoadButton", 0.5f);
+                StartCoroutine(LoadAndVisualiseModel(parameterFilenameField.text));
             });
         }
 
@@ -76,40 +76,78 @@ public class ModelController : MonoBehaviour {
             }; // TODO unsubscribe
 	}
 
-    void EnableLoadButton()
+    IEnumerator LoadAndVisualiseModel(string parameterFilePath)
     {
-        parameterLoadButton.enabled = true;
-    }
-
-    void LoadAndVisualiseModel(string parameterFilePath)
-    {
+        parameterLoadButton.enabled = false;
         // TODO cancel any existing load
-        // TODO thread / yield loading routines
-        // TODO display loading UI
         // TODO separate bone, joint force and muscle force loading
 
-        ModelParameterLoader.LoadModel(parameterFilePath, out activeModel);
+        logField.text = "Loading XML data.";
+        logField.gameObject.SetActive(true);
+        yield return 0;
 
+        try
+        {
+            ModelParameterLoader.LoadModel(parameterFilePath, out activeModel);
+        }
+        catch (DirectoryNotFoundException e)
+        {
+            Debug.LogError(e);
+            logField.text = logField.text + "\n<color=red>Failed to find directory.</color>";
+        }
+        catch (FileNotFoundException e)
+        {
+            Debug.LogError(e);
+            logField.text = logField.text + "\n<color=red>Failed to find XML file.</color>";
+        }
+        catch (IOException e)
+        {
+            Debug.LogError(e);
+            logField.text = logField.text + "\n<color=red>Failed to load XML file.</color>";
+        }
         DataPathUtils.UpdatePaths(activeModel);
         frameController.UpdateFrameData(activeModel);
 
-        boneData.Reload();
-        for (int i = 0; i < boneMeshes.Length; i++)
-        {
-            boneMeshes[i].Reload();
-        }
-
-        jointForceMesh.Reload();
-
+        logField.text = logField.text + "\nLoading muscle force data.";
+        yield return 0;
         muscleMesh.Reload();
 
-        Debug.Log("Study: " + activeModel.studyName + " by " + activeModel.responsiblePerson);
-        Debug.Log("Geometry: " + activeModel.geometryOutputPath);
-        Debug.Log("Optimisation: " + activeModel.optimisationOutputPath);
-        Debug.Log("Frames " + activeModel.startFrame + " to " + activeModel.endFrame + " FPS: " + activeModel.framesPerSecond);
-        Debug.Log(activeModel.sex + " subject, " + activeModel.height + "m, " + activeModel.mass + "kg");
-        Debug.Log("Anatomy path: " + activeModel.anatomyDatasetPath);
-        Debug.Log("Anatomy file: " + activeModel.anatomyDatasetFileName);
+        logField.text = logField.text + "\nLoading contact force data.";
+        yield return 0;
+        jointForceMesh.Reload();
+
+        logField.text = logField.text + "\nLoading bone data.";
+        yield return 0;
+        try
+        {
+            boneData.Reload();
+        }
+        catch (IOException e)
+        {
+            Debug.LogError(e);
+            logField.text = logField.text + "\n<color=red>Failed to load bone data.</color>";
+        }
+
+        for (int i = 0; i < boneMeshes.Length; i++)
+        {
+            logField.text = logField.text + "\nLoading bone " + boneMeshes[i].bone;
+            yield return 0;
+            try
+            {
+                boneMeshes[i].Reload();
+            }
+            catch (DirectoryNotFoundException e)
+            {
+                Debug.LogError(e);
+                logField.text = logField.text + "\n<color=red>Failed to load bones, directory missing.</color>";
+                break;
+            }
+            catch (IOException e)
+            {
+                Debug.LogError(e);
+                logField.text = logField.text + "\n<color=red>Failed to load " + boneMeshes[i].bone + "</color>";
+            }
+        }
 
         if (studyNameField) studyNameField.text = activeModel.studyName;
         if (studySubjectField)
@@ -122,5 +160,18 @@ public class ModelController : MonoBehaviour {
             frameSlider.minValue = activeModel.startFrame - 1;
             frameSlider.maxValue = activeModel.endFrame;
         }
+
+        parameterLoadButton.enabled = true;
+
+        logField.text = logField.text + "\n<color=green>Complete.</color>";
+        yield return new WaitForSeconds(3);
+        /*float fadeOutDuration = 1f;
+        for (float timer = 0; timer < fadeOutDuration; timer += Time.deltaTime)
+        {
+            logField.materialForRendering.color = new Color(1f, 1f, 1f, 1f - (timer / fadeOutDuration));
+            yield return 0;
+        }*/
+        logField.gameObject.SetActive(false);
+        logField.materialForRendering.color = Color.white;
     }
 }

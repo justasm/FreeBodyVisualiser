@@ -326,6 +326,7 @@ MonoBehaviour:
   studySubjectField: {fileID: 329484767}
   parameterFilenameField: {fileID: 868384399}
   parameterLoadButton: {fileID: 1029094065}
+  logField: {fileID: 435303075}
   muscleToggle: {fileID: 60606226}
   forceToggle: {fileID: 1265400796}
   boneToggle: {fileID: 617298462}
@@ -621,6 +622,82 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 352842870}
+--- !u!1 &435303073
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 435303074}
+  - 222: {fileID: 435303076}
+  - 114: {fileID: 435303075}
+  m_Layer: 5
+  m_Name: Log
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &435303074
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 435303073}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 657677968}
+  m_RootOrder: 14
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: .798337996, y: 0}
+  m_AnchoredPosition: {x: 4.00000763, y: 232}
+  m_SizeDelta: {x: -8, y: 392}
+  m_Pivot: {x: .5, y: .5}
+--- !u!114 &435303075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 435303073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: .196078435, g: .196078435, b: .196078435, a: 1}
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: d848018702b7df74fb8fd651838e7bc9, type: 3}
+    m_FontSize: 12
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 6
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 'Log
+
+    1
+
+    2
+
+    3
+
+    4
+
+    5'
+--- !u!222 &435303076
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 435303073}
 --- !u!1 &445067012
 GameObject:
   m_ObjectHideFlags: 0
@@ -974,6 +1051,7 @@ RectTransform:
   - {fileID: 2128835204}
   - {fileID: 823865867}
   - {fileID: 1645040152}
+  - {fileID: 435303074}
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_AnchorMin: {x: 0, y: 0}

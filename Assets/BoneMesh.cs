@@ -51,7 +51,7 @@ public class BoneMesh : MonoBehaviour
 
     void Update()
     {
-        if (null == boneData.positions) return;
+        if (null == meshes || 0 == meshes.Length || null == boneData.positions) return;
 
         transform.rotation = Quaternion.Lerp(boneData.rotations[controller.frame][(int)bone],
             boneData.rotations[controller.nextFrame][(int)bone], controller.frameAlpha);
