@@ -7,7 +7,7 @@ public class BoneData : MonoBehaviour {
     public Quaternion[][] rotations { get; private set; }
     public Vector3[] positionOrigins { get; private set; }
     public Vector3[][] positions { get; private set; }
-    public Vector3[] scalingFactors { get; private set; }
+    //public Vector3[] scalingFactors { get; private set; }
 
     void Awake()
     {
@@ -23,8 +23,8 @@ public class BoneData : MonoBehaviour {
         rotations = _rotations;
         positions = _positions;
 
-        Vector3[] _scalingFactors;
-        BoneDataLoader.LoadBoneScalingFactors(out _scalingFactors);
-        scalingFactors = _scalingFactors;
+        //Vector3[] _scalingFactors;
+        //BoneDataLoader.LoadBoneScalingFactors(out _scalingFactors);
+        //scalingFactors = _scalingFactors;
     }
 }

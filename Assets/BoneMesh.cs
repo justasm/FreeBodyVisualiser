@@ -38,7 +38,7 @@ public class BoneMesh : MonoBehaviour
         meshes[0].name = "Bone";
         meshFilter.mesh = meshes[0];
 
-        transform.localScale = boneData.scalingFactors[(int)bone] / modelScale;
+        transform.localScale = Vector3.one / modelScale;
     }
 
     Vector3 processVertex(float x, float y, float z)
