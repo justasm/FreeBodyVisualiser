@@ -58,8 +58,41 @@ public class MuscleMesh : MonoBehaviour {
     void Update()
     {
         if (null == lines) return;
-        UpdateLines(lines[controller.frame], lineWeights[controller.frame], lineColors[controller.frame]);
+        UpdateLines(
+            Lerp(lines[controller.frame], lines[controller.nextFrame], controller.frameAlpha),
+            Lerp(lineWeights[controller.frame], lineWeights[controller.nextFrame], controller.frameAlpha),
+            Lerp(lineColors[controller.frame], lineColors[controller.nextFrame], controller.frameAlpha));
 	}
+
+    Vector3[] Lerp(Vector3[] v1, Vector3[] v2, float t)
+    {
+        Vector3[] v = new Vector3[v1.Length];
+        for (int i = 0; i < v.Length; i++)
+        {
+            v[i] = Vector3.Lerp(v1[i], v2[i], t);
+        }
+        return v;
+    }
+
+    float[] Lerp(float[] f1, float[] f2, float t)
+    {
+        float[] f = new float[f1.Length];
+        for (int i = 0; i < f.Length; i++)
+        {
+            f[i] = f1[i] + (f2[i] - f1[i]) * t;
+        }
+        return f;
+    }
+
+    Color[] Lerp(Color[] c1, Color[] c2, float t)
+    {
+        Color[] c = new Color[c1.Length];
+        for (int i = 0; i < c.Length; i++)
+        {
+            c[i] = Color.Lerp(c1[i], c2[i], t);
+        }
+        return c;
+    }
 
     // lines == line endpoints, not continuous, size = 2 x #lines
     void AddLines(Vector3[] lines, float[] lineWeights, Color[] lineColors)
