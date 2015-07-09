@@ -4,6 +4,7 @@ using System.Xml;
 using System.IO;
 using System.Text;
 using UnityEngine.UI;
+using System.IO.IsolatedStorage;
 
 public class ModelController : MonoBehaviour {
 
@@ -44,10 +45,6 @@ public class ModelController : MonoBehaviour {
 
         if (parameterLoadButton && parameterFilenameField)
         {
-            //parameterFilenameField.text = "C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\" +
-            //    "FreeBody App\\example\\1176_C12\\1176_walking5_C12 - Justas.xml";
-            parameterFilenameField.text = "C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\" +
-                "FreeBody App\\example\\1037_C14\\1037_walking6_C14 - Justas.xml";
             parameterLoadButton.onClick.AddListener(() =>
             {
                 if (0 == parameterFilenameField.text.Length) return;
@@ -77,6 +74,50 @@ public class ModelController : MonoBehaviour {
                 timeScaleField.text = (int)(100 * alpha) + "%";
                 timeScaleSlider.value = alpha;
             }; // TODO unsubscribe
+
+        //string defaultPath = "C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\" +
+        //        "FreeBody App\\example\\1176_C12\\1176_walking5_C12 - Justas.xml";
+        string defaultPath = "C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\" +
+                "FreeBody App\\example\\1037_C14\\1037_walking6_C14 - Justas.xml";
+        string autoloadPath = "";
+
+        string[] args = System.Environment.GetCommandLineArgs();
+        if (null != args)
+        {
+            int i = 1; // first argument will always be program
+            while (i < args.Length)
+            {
+                switch (args[i])
+                {
+                    case "-fb-default-xml-path":
+                        if (i + 1 < args.Length)
+                        {
+                            ++i;
+                            defaultPath = args[i];
+                        }
+                        else
+                        {
+                            Debug.LogError("Argument " + args[i] + " needs a parameter.");
+                        }
+                        break;
+                    case "-fb-autoload-xml-path":
+                        if (i + 1 < args.Length)
+                        {
+                            ++i;
+                            autoloadPath = args[i];
+                        }
+                        else
+                        {
+                            Debug.LogError("Argument " + args[i] + " needs a parameter.");
+                        }
+                        break;
+                }
+                ++i;
+            }
+        }
+
+        parameterFilenameField.text = defaultPath;
+        if (autoloadPath.Length > 0) StartCoroutine(LoadAndVisualiseModel(autoloadPath));
 	}
 
     IEnumerator PreventSpamClick()
