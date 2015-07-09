@@ -156,6 +156,11 @@ public class ModelController : MonoBehaviour {
             Debug.LogWarning(e);
             logField.text = logField.text + "\n<color=red>Failed to load XML file.</color>";
         }
+        catch (IsolatedStorageException e)
+        {
+            Debug.LogWarning(e);
+            logField.text = logField.text + ".. <color=red>Failed to find XML file.</color>";
+        }
         DataPathUtils.UpdatePaths(activeModel);
         frameController.UpdateFrameData(activeModel);
 
@@ -175,6 +180,11 @@ public class ModelController : MonoBehaviour {
             logField.text = logField.text + ".. Done.";
         }
         catch (IOException e)
+        {
+            Debug.LogWarning(e);
+            logField.text = logField.text + ".. <color=red>Failed.</color>";
+        }
+        catch (IsolatedStorageException e)
         {
             Debug.LogWarning(e);
             logField.text = logField.text + ".. <color=red>Failed.</color>";
