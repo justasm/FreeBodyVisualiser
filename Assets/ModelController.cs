@@ -23,6 +23,8 @@ public class ModelController : MonoBehaviour {
     public Slider timeScaleSlider;
     public Text frameValueField;
     public Slider frameSlider;
+    public GameObject muscleVisibilityToggle;
+    public Transform muscleVisibilityContentPanel;
 
     private FrameController frameController;
     private BoneData boneData;
@@ -70,6 +72,19 @@ public class ModelController : MonoBehaviour {
                 timeScaleField.text = (int)(100 * alpha) + "%";
                 timeScaleSlider.value = alpha;
             }; // TODO unsubscribe
+
+        for (int i = 0; i < MuscleGroup.groups.Count; i++)
+        {
+            MuscleGroup group = MuscleGroup.groups[i];
+            GameObject newMuscleGroupToggle = Instantiate(muscleVisibilityToggle) as GameObject;
+
+            MuscleGroupToggle muscleGroupToggle = newMuscleGroupToggle.GetComponent<MuscleGroupToggle>();
+            muscleGroupToggle.label.text = group.name;
+            muscleGroupToggle.toggle.isOn = muscleMesh.visibility[group.index];
+            muscleGroupToggle.toggle.onValueChanged.AddListener((enabled) => muscleMesh.SetVisibility(group, enabled));
+
+            newMuscleGroupToggle.transform.SetParent(muscleVisibilityContentPanel);
+        }
 
 #if UNITY_EDITOR
         //string defaultPath = "C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\" +

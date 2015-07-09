@@ -1,10 +1,25 @@
 fileFormatVersion: 2
 guid: ebd766fcd39c88d419a9a375c1141691
-timeCreated: 1436291748
+timeCreated: 1436477382
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - studyNameField: {instanceID: 0}
+  - studySubjectField: {instanceID: 0}
+  - parameterFilenameField: {instanceID: 0}
+  - parameterLoadButton: {instanceID: 0}
+  - logField: {instanceID: 0}
+  - muscleToggle: {instanceID: 0}
+  - forceToggle: {instanceID: 0}
+  - boneToggle: {instanceID: 0}
+  - timeScaleField: {instanceID: 0}
+  - timeScaleSlider: {instanceID: 0}
+  - frameValueField: {instanceID: 0}
+  - frameSlider: {instanceID: 0}
+  - muscleVisibilityToggle: {fileID: 193804, guid: db9f6c2736ab56947b655bd921c7b2a4,
+      type: 2}
+  - muscleVisibilityContentPanel: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -32,6 +32,8 @@ public class MuscleMesh : MonoBehaviour {
 
         MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
         meshRenderer.sharedMaterial = new Material(shader);
+
+        for (int i = 0; i < visibility.Length; i++) visibility[i] = true;
     }
 
     public void Reload()
@@ -141,10 +143,10 @@ public class MuscleMesh : MonoBehaviour {
         for (int i = 0; i < lines.Length; i += 2)
         {
             int vi = (i / 2) * 4; // vertex start index for line quad
-            UpdateQuad(vertices, vi, lines[i], lines[i + 1], lineWeights[i]);
+            UpdateQuad(vertices, vi, lines[i], lines[i + (visibility[vertexToGroup[i]] ? 1 : 0)], lineWeights[i]);
             for (int j = 0; j < 4; j++)
             {
-                colors[vi + j] = visibility[vertexToGroup[i]] ? Color.green : lineColors[i];
+                colors[vi + j] = lineColors[i];
             }
         }
 
