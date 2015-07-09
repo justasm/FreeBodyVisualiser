@@ -91,13 +91,14 @@ public class ModelController : MonoBehaviour {
         // TODO cancel any existing load
         // TODO separate bone, joint force and muscle force loading
 
-        logField.text = "Loading XML data.";
+        logField.text = "Loading XML data";
         logField.gameObject.SetActive(true);
         yield return 0;
 
         try
         {
             ModelParameterLoader.LoadModel(parameterFilePath, out activeModel);
+            logField.text = logField.text + ".. Done.";
         }
         catch (DirectoryNotFoundException e)
         {
@@ -117,24 +118,25 @@ public class ModelController : MonoBehaviour {
         DataPathUtils.UpdatePaths(activeModel);
         frameController.UpdateFrameData(activeModel);
 
-        logField.text = logField.text + "\nLoading muscle force data.";
+        logField.text = logField.text + "\nLoading muscle force data";
         yield return 0;
         muscleMesh.Reload();
 
-        logField.text = logField.text + "\nLoading contact force data.";
+        logField.text = logField.text + ".. Done.\nLoading contact force data";
         yield return 0;
         jointForceMesh.Reload();
 
-        logField.text = logField.text + "\nLoading bone data.";
+        logField.text = logField.text + ".. Done.\nLoading bone data";
         yield return 0;
         try
         {
             boneData.Reload();
+            logField.text = logField.text + ".. Done.";
         }
         catch (IOException e)
         {
             Debug.LogError(e);
-            logField.text = logField.text + "\n<color=red>Failed to load bone data.</color>";
+            logField.text = logField.text + ".. <color=red>Failed.</color>";
         }
 
         for (int i = 0; i < boneMeshes.Length; i++)
@@ -144,17 +146,18 @@ public class ModelController : MonoBehaviour {
             try
             {
                 boneMeshes[i].Reload();
+                logField.text = logField.text + ".. Done.";
             }
             catch (DirectoryNotFoundException e)
             {
                 Debug.LogError(e);
-                logField.text = logField.text + "\n<color=red>Failed to load bones, directory missing.</color>";
+                logField.text = logField.text + ".. <color=red>Failed, directory missing.</color>";
                 break;
             }
             catch (IOException e)
             {
                 Debug.LogError(e);
-                logField.text = logField.text + "\n<color=red>Failed to load " + boneMeshes[i].bone + "</color>";
+                logField.text = logField.text + ".. <color=red>Failed.</color>";
             }
         }
 
