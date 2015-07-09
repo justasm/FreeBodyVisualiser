@@ -75,10 +75,14 @@ public class ModelController : MonoBehaviour {
                 timeScaleSlider.value = alpha;
             }; // TODO unsubscribe
 
+#if UNITY_EDITOR
         //string defaultPath = "C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\" +
         //        "FreeBody App\\example\\1176_C12\\1176_walking5_C12 - Justas.xml";
         string defaultPath = "C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\" +
                 "FreeBody App\\example\\1037_C14\\1037_walking6_C14 - Justas.xml";
+#else
+        string defaultPath = "";
+#endif
         string autoloadPath = "";
 
         string[] args = System.Environment.GetCommandLineArgs();
