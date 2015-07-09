@@ -102,17 +102,17 @@ public class ModelController : MonoBehaviour {
         }
         catch (DirectoryNotFoundException e)
         {
-            Debug.LogError(e);
+            Debug.LogWarning(e);
             logField.text = logField.text + "\n<color=red>Failed to find directory.</color>";
         }
         catch (FileNotFoundException e)
         {
-            Debug.LogError(e);
+            Debug.LogWarning(e);
             logField.text = logField.text + "\n<color=red>Failed to find XML file.</color>";
         }
         catch (IOException e)
         {
-            Debug.LogError(e);
+            Debug.LogWarning(e);
             logField.text = logField.text + "\n<color=red>Failed to load XML file.</color>";
         }
         DataPathUtils.UpdatePaths(activeModel);
@@ -135,7 +135,7 @@ public class ModelController : MonoBehaviour {
         }
         catch (IOException e)
         {
-            Debug.LogError(e);
+            Debug.LogWarning(e);
             logField.text = logField.text + ".. <color=red>Failed.</color>";
         }
 
@@ -150,13 +150,13 @@ public class ModelController : MonoBehaviour {
             }
             catch (DirectoryNotFoundException e)
             {
-                Debug.LogError(e);
+                Debug.LogWarning(e);
                 logField.text = logField.text + ".. <color=red>Failed, directory missing.</color>";
                 break;
             }
             catch (IOException e)
             {
-                Debug.LogError(e);
+                Debug.LogWarning(e);
                 logField.text = logField.text + ".. <color=red>Failed.</color>";
             }
         }
