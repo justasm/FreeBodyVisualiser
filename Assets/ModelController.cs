@@ -43,20 +43,16 @@ public class ModelController : MonoBehaviour {
 
         logField.gameObject.SetActive(false);
 
-        if (parameterLoadButton && parameterFilenameField)
+        parameterLoadButton.onClick.AddListener(() =>
         {
-            parameterLoadButton.onClick.AddListener(() =>
-            {
-                if (0 == parameterFilenameField.text.Length) return;
-                StartCoroutine(PreventSpamClick());
-                StartCoroutine(LoadAndVisualiseModel(parameterFilenameField.text));
-            });
-        }
+            if (0 == parameterFilenameField.text.Length) return;
+            StartCoroutine(PreventSpamClick());
+            StartCoroutine(LoadAndVisualiseModel(parameterFilenameField.text));
+        });
 
-        // TODO remove if checks, no need for ambiguity
-        if (muscleToggle) muscleToggle.onValueChanged.AddListener((on) => muscleMesh.gameObject.SetActive(on));
-        if (forceToggle) forceToggle.onValueChanged.AddListener((on) => jointForceMesh.gameObject.SetActive(on));
-        if(boneToggle) boneToggle.onValueChanged.AddListener((on) => {
+        muscleToggle.onValueChanged.AddListener((on) => muscleMesh.gameObject.SetActive(on));
+        forceToggle.onValueChanged.AddListener((on) => jointForceMesh.gameObject.SetActive(on));
+        boneToggle.onValueChanged.AddListener((on) => {
             foreach (BoneMesh bone in boneMeshes) bone.gameObject.SetActive(on);
             });
 
@@ -211,17 +207,11 @@ public class ModelController : MonoBehaviour {
             }
         }
 
-        if (studyNameField) studyNameField.text = activeModel.studyName;
-        if (studySubjectField)
-        {
-            studySubjectField.text = activeModel.framesPerSecond + "Hz  |  " + activeModel.sex + " " +
+        studyNameField.text = activeModel.studyName;
+        studySubjectField.text = activeModel.framesPerSecond + "Hz  |  " + activeModel.sex + " " +
                 activeModel.height + "m " + activeModel.mass + "kg";
-        }
-        if (frameSlider)
-        {
-            frameSlider.minValue = activeModel.startFrame - 1;
-            frameSlider.maxValue = activeModel.endFrame;
-        }
+        frameSlider.minValue = activeModel.startFrame - 1;
+        frameSlider.maxValue = activeModel.endFrame;
 
         logField.text = logField.text + "\n<color=green>Complete.</color>";
         yield return new WaitForSeconds(3);
