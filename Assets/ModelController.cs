@@ -25,6 +25,8 @@ public class ModelController : MonoBehaviour {
     public Slider frameSlider;
     public GameObject muscleVisibilityToggle;
     public Transform muscleVisibilityContentPanel;
+    public Button muscleVisibilityAllOn;
+    public Button muscleVisibilityAllOff;
 
     private FrameController frameController;
     private BoneData boneData;
@@ -85,6 +87,22 @@ public class ModelController : MonoBehaviour {
 
             newMuscleGroupToggle.transform.SetParent(muscleVisibilityContentPanel);
         }
+        muscleVisibilityAllOn.onClick.AddListener(
+            () => 
+            {
+                for (int i = 0; i < muscleVisibilityContentPanel.childCount; i++)
+                {
+                    muscleVisibilityContentPanel.GetChild(i).GetComponent<MuscleGroupToggle>().toggle.isOn = true;
+                }
+            });
+        muscleVisibilityAllOff.onClick.AddListener(
+            () =>
+            {
+                for (int i = 0; i < muscleVisibilityContentPanel.childCount; i++)
+                {
+                    muscleVisibilityContentPanel.GetChild(i).GetComponent<MuscleGroupToggle>().toggle.isOn = false;
+                }
+            });
 
 #if UNITY_EDITOR
         //string defaultPath = "C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\" +
