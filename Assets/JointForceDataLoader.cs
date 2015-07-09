@@ -22,7 +22,7 @@ public class JointForceDataLoader {
         FloatCsvFileReader.ReadLines(DataPathUtils.JointCenterFile,
             (floats) =>
             {
-                Vector3[] vecs = FloatCsvFileReader.FloatsToVectors(floats);
+                Vector3[] vecs = FloatCsvFileReader.FloatsRhsToLhsVectors(floats);
                 _anklePositions.Add(vecs[0]);
                 _kneePositions.Add(vecs[1]);
                 _hipPositions.Add(vecs[2]);
@@ -30,7 +30,7 @@ public class JointForceDataLoader {
         FloatCsvFileReader.ReadLines(DataPathUtils.JointTFContactFile,
             (floats) =>
             {
-                Vector3[] vecs = FloatCsvFileReader.FloatsToVectors(floats);
+                Vector3[] vecs = FloatCsvFileReader.FloatsRhsToLhsVectors(floats);
                 _lateralTfPositions.Add(vecs[0]);
                 _medialTfPositions.Add(vecs[1]);
             });
@@ -57,7 +57,7 @@ public class JointForceDataLoader {
             (values) =>
             {
                 Array.Copy(values, contactForceStartIndex, temp, 0, numContactForceFloats);
-                Vector3[] vecs = FloatCsvFileReader.FloatsToVectors(temp);
+                Vector3[] vecs = FloatCsvFileReader.FloatsRhsToLhsVectors(temp);
                 _ankleContactForces.Add(vecs[0]);
                 _lateralTfContactForces.Add(vecs[1]);
                 _medialTfContactForces.Add(vecs[2]);

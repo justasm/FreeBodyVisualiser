@@ -100,7 +100,7 @@ public class MuscleDataLoader {
             float[] values = Array.ConvertAll(line.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries),
                 new Converter<string, float>(float.Parse));
 
-            frames.Add(FloatCsvFileReader.FloatsToVectors(values));
+            frames.Add(FloatCsvFileReader.FloatsRhsToLhsVectors(values));
 
             line = reader.ReadLine();
         }

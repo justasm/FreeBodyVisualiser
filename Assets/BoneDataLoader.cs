@@ -15,12 +15,12 @@ public class BoneDataLoader {
         FloatCsvFileReader.ReadLines(DataPathUtils.BoneRotationOriginFile,
             (floats) =>
             {
-                _originRotations = FloatCsvFileReader.FloatsWxyzToQuats(floats);
+                _originRotations = FloatCsvFileReader.FloatsWxyzToLhsQuats(floats);
             });
         FloatCsvFileReader.ReadLines(DataPathUtils.BonePositionOriginFile,
             (floats) =>
             {
-                _originPositions = FloatCsvFileReader.FloatsToVectors(floats);
+                _originPositions = FloatCsvFileReader.FloatsRhsToLhsVectors(floats);
             });
 
         originRotations = _originRotations;
@@ -35,12 +35,12 @@ public class BoneDataLoader {
         FloatCsvFileReader.ReadLines(DataPathUtils.BoneRotationFile,
             (floats) =>
             {
-                _frameRotations.Add(FloatCsvFileReader.FloatsWxyzToQuats(floats));
+                _frameRotations.Add(FloatCsvFileReader.FloatsWxyzToLhsQuats(floats));
             });
         FloatCsvFileReader.ReadLines(DataPathUtils.BonePositionFile,
             (floats) =>
             {
-                _framePositions.Add(FloatCsvFileReader.FloatsToVectors(floats));
+                _framePositions.Add(FloatCsvFileReader.FloatsRhsToLhsVectors(floats));
             });
 
         frameRotations = _frameRotations.ToArray();

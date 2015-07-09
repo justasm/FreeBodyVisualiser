@@ -35,30 +35,33 @@ public class BoneMesh : MonoBehaviour
     public void Reload()
     {
         // TODO clean up existing meshes?
-        meshes = StlFileReader.LoadStlFile(DataPathUtils.getBoneModelFile(bone), ProcessVertex);
+        meshes = StlFileReader.LoadStlFile(DataPathUtils.getBoneModelFile(bone), ProcessVertex, GetTriangle);
         meshes[0].name = bone.ToString();
         meshFilter.mesh = meshes[0];
 
-        transform.localScale = new Vector3(1, 1, -1) / modelScale;
+        transform.localScale = Vector3.one / modelScale;
     }
 
     Vector3 ProcessVertex(float x, float y, float z)
     {
-        Vector3 v = new Vector3(-y, z, -x);
+        Vector3 v = new Vector3(-y, z, x);
         v = Quaternion.Inverse(boneData.rotationOrigins[(int)bone]) * (v - modelScale * boneData.positionOrigins[(int)bone]);
         return v;
+    }
+
+    int GetTriangle(int start, int i)
+    {
+        return start + 2 - i; // reverse default triangle order as ProcessVertex flips handedness
     }
 
     void Update()
     {
         if (null == meshes || 0 == meshes.Length || null == boneData.positions) return;
 
-        Quaternion q = Quaternion.Lerp(boneData.rotations[controller.frame][(int)bone],
+        transform.rotation = Quaternion.Lerp(boneData.rotations[controller.frame][(int)bone],
             boneData.rotations[controller.nextFrame][(int)bone], controller.frameAlpha);
-        Vector3 v = Vector3.Lerp(boneData.positions[controller.frame][(int)bone],
+        transform.position = Vector3.Lerp(boneData.positions[controller.frame][(int)bone],
             boneData.positions[controller.nextFrame][(int)bone], controller.frameAlpha);
-        transform.rotation = new Quaternion(q.x, q.y, -q.z, -q.w);
-        transform.position = new Vector3(v.x, v.y, -v.z);
 
         for (int i = 1; i < meshes.Length; i++)
         {

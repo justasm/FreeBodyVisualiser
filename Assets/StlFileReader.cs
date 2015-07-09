@@ -12,8 +12,10 @@ public class StlFileReader {
     private static char[] asciiVertexSeparator = {' '};
 
     public delegate Vector3 ProcessVertexDelegate(float x, float y, float z);
+    public delegate int GetTriangleDelegate(int start, int i);
 
-    public static Mesh[] LoadStlFile(string filePath, ProcessVertexDelegate processVertexDelegate)
+    public static Mesh[] LoadStlFile(string filePath,
+        ProcessVertexDelegate processVertexDelegate, GetTriangleDelegate getTriangleDelegate)
     {
         List<Mesh> meshes = new List<Mesh>();
 
@@ -44,9 +46,9 @@ public class StlFileReader {
                     {
                         String[] vs = reader.ReadLine().Split(asciiVertexSeparator);
                         _vertices.Add(processVertexDelegate(float.Parse(vs[1]), float.Parse(vs[2]), float.Parse(vs[3])));
-                        _triangles.Add((int) vertexCount);
-                        ++vertexCount;
+                        _triangles.Add(getTriangleDelegate((int)vertexCount, i));
                     }
+                    vertexCount += 3;
 
                     reader.ReadLine(); // endloop
                     reader.ReadLine(); // endfacet
@@ -78,7 +80,7 @@ public class StlFileReader {
                     {
                         vertices[3 * i + j] = processVertexDelegate(
                             reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-                        triangles[3 * i + j] = 3 * i + j;
+                        triangles[3 * i + j] = getTriangleDelegate(3 * i, j);
                     }
                     reader.ReadUInt16(); // drop attribute byte count
                 }

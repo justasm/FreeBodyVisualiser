@@ -36,13 +36,23 @@ public class FloatCsvFileReader {
         return vectors;
     }
 
-    public static Quaternion[] FloatsWxyzToQuats(float[] floats)
+    public static Vector3[] FloatsRhsToLhsVectors(float[] floats)
+    {
+        Vector3[] vectors = new Vector3[floats.Length / 3];
+        for (int i = 0; i < floats.Length; i += 3)
+        {
+            vectors[i / 3] = new Vector3(floats[i + 0], floats[i + 1], -floats[i + 2]);
+        }
+        return vectors;
+    }
+
+    public static Quaternion[] FloatsWxyzToLhsQuats(float[] floats)
     {
         Quaternion[] quats = new Quaternion[floats.Length / 4];
         for (int i = 0; i < floats.Length; i += 4)
         {
             // note the order of components
-            quats[i / 4] = new Quaternion(floats[i + 1], floats[i + 2], floats[i + 3], floats[i + 0]);
+            quats[i / 4] = new Quaternion(floats[i + 1], floats[i + 2], -floats[i + 3], -floats[i + 0]);
         }
         return quats;
     }
