@@ -116,7 +116,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ea68b88ef2469d4aae48ca7b10b2892, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shader: {fileID: 30, guid: 0000000000000000f000000000000000, type: 0}
+  shader: {fileID: 7, guid: 0000000000000000f000000000000000, type: 0}
+  transparentShader: {fileID: 30, guid: 0000000000000000f000000000000000, type: 0}
   bone: 2
   boneData: {fileID: 97117140}
   controller: {fileID: 97117138}
@@ -727,7 +728,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ea68b88ef2469d4aae48ca7b10b2892, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shader: {fileID: 30, guid: 0000000000000000f000000000000000, type: 0}
+  shader: {fileID: 7, guid: 0000000000000000f000000000000000, type: 0}
+  transparentShader: {fileID: 30, guid: 0000000000000000f000000000000000, type: 0}
   bone: 1
   boneData: {fileID: 97117140}
   controller: {fileID: 97117138}
@@ -1402,7 +1404,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ea68b88ef2469d4aae48ca7b10b2892, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shader: {fileID: 30, guid: 0000000000000000f000000000000000, type: 0}
+  shader: {fileID: 7, guid: 0000000000000000f000000000000000, type: 0}
+  transparentShader: {fileID: 30, guid: 0000000000000000f000000000000000, type: 0}
   bone: 3
   boneData: {fileID: 97117140}
   controller: {fileID: 97117138}
@@ -1924,7 +1927,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ea68b88ef2469d4aae48ca7b10b2892, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shader: {fileID: 30, guid: 0000000000000000f000000000000000, type: 0}
+  shader: {fileID: 7, guid: 0000000000000000f000000000000000, type: 0}
+  transparentShader: {fileID: 30, guid: 0000000000000000f000000000000000, type: 0}
   bone: 0
   boneData: {fileID: 97117140}
   controller: {fileID: 97117138}
@@ -2600,7 +2604,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ea68b88ef2469d4aae48ca7b10b2892, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shader: {fileID: 30, guid: 0000000000000000f000000000000000, type: 0}
+  shader: {fileID: 7, guid: 0000000000000000f000000000000000, type: 0}
+  transparentShader: {fileID: 30, guid: 0000000000000000f000000000000000, type: 0}
   bone: 4
   boneData: {fileID: 97117140}
   controller: {fileID: 97117138}

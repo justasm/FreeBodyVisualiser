@@ -15,6 +15,7 @@ public class BoneMesh : MonoBehaviour
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
     public Shader shader;
+    public Shader transparentShader;
 
     public enum Bone { Foot = 0, Tibia = 1, Femur = 2, Pelvis = 3, Patella = 4 };
     public Bone bone;
@@ -28,7 +29,7 @@ public class BoneMesh : MonoBehaviour
         meshRenderer = GetComponent<MeshRenderer>();
         meshRenderer.sharedMaterial = new Material(shader);
 
-        material = new Material(shader);
+        material = new Material(transparentShader);
         material.color = new Color(1f, 1f, 1f, 0.1f);
     }
 
