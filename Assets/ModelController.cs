@@ -154,6 +154,11 @@ public class ModelController : MonoBehaviour {
                 logField.text = logField.text + ".. <color=red>Failed, directory missing.</color>";
                 break;
             }
+            catch (IsolatedStorageException e)
+            {
+                Debug.LogWarning(e);
+                logField.text = logField.text + ".. <color=red>Failed.</color>";
+            }
             catch (IOException e)
             {
                 Debug.LogWarning(e);
