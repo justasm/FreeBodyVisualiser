@@ -14,14 +14,17 @@ public class MuscleMesh : MonoBehaviour {
     private float[][] lineWeights;
     private Color[][] lineColors;
 
+    private int[] vertexToMuscle;
     private int[] vertexToGroup;
     public bool[] visibility = new bool[MuscleGroup.groups.Count];
+    public Color[] groupColor = new Color[MuscleGroup.groups.Count];
 
     public Vector3 Centroid { get; private set; }
 
     public FrameController controller;
     private const float minLineWidth = 0.001f;
     private const float maxLineWidth = 0.02f;
+    private const float defaultLineWidth = minLineWidth + 0.2f * (maxLineWidth - minLineWidth);
 
     void Awake()
     {
@@ -36,26 +39,27 @@ public class MuscleMesh : MonoBehaviour {
         for (int i = 0; i < visibility.Length; i++) visibility[i] = true;
     }
 
-    public void Reload()
+    public void ReloadMusclePaths()
     {
-        int[] vertexToMuscle;
-        float[][] muscleForce;
         MuscleDataLoader.LoadMusclePaths(out lines, out vertexToMuscle);
-        MuscleDataLoader.LoadMuscleActivations(out muscleForce);
-        lineWeights = CalculateLineWeights(vertexToMuscle, muscleForce);
-        lineColors = CalculateLineColors(vertexToMuscle, muscleForce);
 
-        AddLines(lines[controller.frame], lineWeights[controller.frame], lineColors[controller.frame]);
+        int vertices = vertexToMuscle.Length;
+        int frames = lines.Length;
 
-        vertexToGroup = new int[vertexToMuscle.Length];
-        for (int i = 0; i < vertexToGroup.Length; i++)
+        vertexToGroup = new int[vertices];
+        for (int i = 0; i < vertices; i++)
         {
             vertexToGroup[i] = MuscleGroup.muscleToGroupId[vertexToMuscle[i]];
         }
 
+        lineWeights = GetLineWeights(vertices, frames);
+        lineColors = GetLineColors(vertexToGroup, frames);
+
+        AddLines(lines[controller.frame], lineWeights[controller.frame], lineColors[controller.frame]);
+
         Centroid = new Vector3();
         int count = 0;
-        for (int i = 0; i < lines.Length; i++)
+        for (int i = 0; i < frames; i++)
         {
             for (int j = 0; j < lines[i].Length; j++)
             {
@@ -64,6 +68,16 @@ public class MuscleMesh : MonoBehaviour {
             }
         }
         Centroid /= count;
+    }
+
+    // assumes lines[][] and vertexToMuscle[] are already populated
+    public void ReloadMuscleActivations()
+    {
+        float[][] muscleForce;
+        MuscleDataLoader.LoadMuscleActivations(out muscleForce);
+
+        lineWeights = CalculateLineWeights(vertexToMuscle, muscleForce);
+        lineColors = CalculateLineColors(vertexToMuscle, muscleForce);
     }
 	
     void Update()
@@ -172,6 +186,37 @@ public class MuscleMesh : MonoBehaviour {
         vertices[start + 1] = p1 - l * halfWidth;
         vertices[start + 2] = p2 + l * halfWidth;
         vertices[start + 3] = p2 - l * halfWidth;
+    }
+
+    // Returns uniform lineweight, per frame per vertex
+    static float[][] GetLineWeights(int vertices, int frames)
+    {
+        float[][] lineWeights = new float[frames][];
+        for (int i = 0; i < lineWeights.Length; i++)
+        {
+            lineWeights[i] = new float[vertices];
+            for (int j = 0; j < vertices; j++)
+            {
+                lineWeights[i][j] = defaultLineWidth;
+            }
+        }
+        return lineWeights;
+    }
+
+    Color[][] GetLineColors(int[] vertexToGroup, int frames)
+    {
+        Color[][] lineColors = new Color[frames][];
+
+        for (int i = 0; i < lineColors.Length; i++)
+        {
+            lineColors[i] = new Color[vertexToGroup.Length];
+            for (int j = 0; j < vertexToGroup.Length; j++)
+            {
+                lineColors[i][j] = groupColor[vertexToGroup[j]];
+            }
+        }
+
+        return lineColors;
     }
 
     // per frame per vertex

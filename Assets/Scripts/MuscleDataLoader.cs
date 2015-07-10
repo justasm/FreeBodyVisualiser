@@ -131,6 +131,14 @@ public class MuscleDataLoader {
             while (null != line)
             {
                 ++frame;
+
+                if (frame >= _activations.Count)
+                {
+                    // we have too many frames!
+                    line = reader.ReadLine();
+                    continue;
+                }
+
                 double[] values = Array.ConvertAll(line.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries),
                     new Converter<string, double>(double.Parse));
 
@@ -148,6 +156,11 @@ public class MuscleDataLoader {
                 line = reader.ReadLine();
             }
             reader.Close();
+
+            if (frame >= _activations.Count)
+            {
+                throw new FrameMismatchException(_activations.Count, frame + 1);
+            }
         }
 
         Debug.Log("Activation values loaded, " + (frame + 1) + " frames, min " +

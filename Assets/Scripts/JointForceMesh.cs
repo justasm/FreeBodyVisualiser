@@ -41,20 +41,29 @@ public class JointForceMesh : MonoBehaviour {
         redMaterial.color = new Color(1f, 0f, 0f, .7f);
 	}
 
-    public void Reload()
+    public void ReloadJointPositions()
     {
         JointForceDataLoader.LoadJointPositions(out anklePositions, out kneePositions,
             out lateralTfPositions, out medialTfPositions, out hipPositions);
         jointPositions = new Vector3[][] { anklePositions, lateralTfPositions,
             medialTfPositions, hipPositions };
+    }
 
+    // assumes jointPositions[][] is already populated
+    public void ReloadJointContactForces()
+    {
         JointForceDataLoader.LoadJointContactForces(out ankleContactForces,
             out lateralTfContactForces, out medialTfContactForces, out hipContactForces);
+        if (anklePositions.Length != ankleContactForces.Length)
+        {
+            throw new FrameMismatchException(ankleContactForces.Length, anklePositions.Length);
+        }
         contactForces = new Vector3[][] { ankleContactForces, lateralTfContactForces,
             medialTfContactForces, hipContactForces };
     }
 	
 	void Update () {
+        // TODO visualise joint positions idependent of contact forces
         if (null == contactForces) return;
         // draw contact forces for all joints for which data is available
         for (int i = 0; i < contactForces.Length; i++)

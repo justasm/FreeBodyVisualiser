@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using UnityEngine.UI;
 using System.IO.IsolatedStorage;
+using System;
 
 public class ModelController : MonoBehaviour {
 
@@ -163,92 +164,94 @@ public class ModelController : MonoBehaviour {
     IEnumerator LoadAndVisualiseModel(string parameterFilePath)
     {
         // TODO cancel any existing load
-        // TODO separate bone, joint force and muscle force loading
 
-        logField.text = "Loading XML data";
+        logField.text = "Loading study XML file";
         logField.gameObject.SetActive(true);
         yield return 0;
 
-        try
-        {
-            ModelParameterLoader.LoadModel(parameterFilePath, out activeModel);
-            logField.text = logField.text + ".. Done.";
-        }
-        catch (DirectoryNotFoundException e)
-        {
-            Debug.LogWarning(e);
-            logField.text = logField.text + "\n<color=red>Failed to find directory.</color>";
-        }
-        catch (FileNotFoundException e)
-        {
-            Debug.LogWarning(e);
-            logField.text = logField.text + "\n<color=red>Failed to find XML file.</color>";
-        }
-        catch (IOException e)
-        {
-            Debug.LogWarning(e);
-            logField.text = logField.text + "\n<color=red>Failed to load XML file.</color>";
-        }
-        catch (IsolatedStorageException e)
-        {
-            Debug.LogWarning(e);
-            logField.text = logField.text + ".. <color=red>Failed to find XML file.</color>";
-        }
+        #region load xml parameters
+        LoadCatchErrors(() => ModelParameterLoader.LoadModel(parameterFilePath, out activeModel));
         DataPathUtils.UpdatePaths(activeModel);
         frameController.UpdateFrameData(activeModel);
+        #endregion
 
-        logField.text = logField.text + "\nLoading muscle force data";
+        #region load muscle positions
+        appendToLog("\nLoading muscle positions");
         yield return 0;
-        muscleMesh.Reload();
+        bool musclePathsLoaded = false;
+        LoadCatchErrors(
+            () =>
+            {
+                muscleMesh.ReloadMusclePaths();
+                musclePathsLoaded = true;
+            });
+        #endregion
 
-        logField.text = logField.text + ".. Done.\nLoading contact force data";
-        yield return 0;
-        jointForceMesh.Reload();
-
-        logField.text = logField.text + ".. Done.\nLoading bone data";
-        yield return 0;
-        try
+        #region load muscle activations
+        if (!musclePathsLoaded)
         {
-            boneData.Reload();
-            logField.text = logField.text + ".. Done.";
+            appendToLog("\n<color=blue>Muscle positions are missing, will not load activations.</color>");
         }
-        catch (IOException e)
+        else
         {
-            Debug.LogWarning(e);
-            logField.text = logField.text + ".. <color=red>Failed.</color>";
-        }
-        catch (IsolatedStorageException e)
-        {
-            Debug.LogWarning(e);
-            logField.text = logField.text + ".. <color=red>Failed.</color>";
-        }
-
-        for (int i = 0; i < boneMeshes.Length; i++)
-        {
-            logField.text = logField.text + "\nLoading bone " + boneMeshes[i].SelectedBone;
+            appendToLog("\nLoading muscle activations");
             yield return 0;
-            try
+            LoadCatchErrors(muscleMesh.ReloadMuscleActivations);
+        }
+        #endregion
+
+        #region load joint positions
+        appendToLog("\nLoading joint positions");
+        yield return 0;
+        bool jointPositionsLoaded = false;
+        LoadCatchErrors(
+            () =>
             {
-                boneMeshes[i].Reload();
-                logField.text = logField.text + ".. Done.";
-            }
-            catch (DirectoryNotFoundException e)
+                jointForceMesh.ReloadJointPositions();
+                jointPositionsLoaded = true;
+            });
+        #endregion
+
+        #region load joint contact forces
+        if (!jointPositionsLoaded)
+        {
+            appendToLog("\n<color=blue>Joint positions are missing, will not load contact forces.</color>");
+        }
+        else
+        {
+            appendToLog("\nLoading joint contact forces");
+            yield return 0;
+            LoadCatchErrors(jointForceMesh.ReloadJointContactForces);
+        }
+        #endregion
+
+        #region load bone dynamics
+        appendToLog("\nLoading bone data");
+        yield return 0;
+        bool boneDynamicsLoaded = false;
+        LoadCatchErrors(
+            () =>
             {
-                Debug.LogWarning(e);
-                logField.text = logField.text + ".. <color=red>Failed, directory missing.</color>";
-                break;
-            }
-            catch (IsolatedStorageException e)
+                boneData.Reload();
+                boneDynamicsLoaded = true;
+            });
+        #endregion
+
+        #region load bone geometry
+        if (!boneDynamicsLoaded)
+        {
+            appendToLog("\n<color=blue>Bone data is missing, will not load bone geometry.</color>");
+        }
+        else
+        {
+            for (int i = 0; i < boneMeshes.Length; i++)
             {
-                Debug.LogWarning(e);
-                logField.text = logField.text + ".. <color=red>Failed.</color>";
-            }
-            catch (IOException e)
-            {
-                Debug.LogWarning(e);
-                logField.text = logField.text + ".. <color=red>Failed.</color>";
+                appendToLog("\nLoading bone " + boneMeshes[i].SelectedBone);
+                yield return 0;
+                LoadCatchErrors(boneMeshes[i].Reload);
             }
         }
+        #endregion
 
         studyNameField.text = activeModel.studyName;
         studySubjectField.text = activeModel.framesPerSecond + "Hz  |  " + activeModel.sex + " " +
@@ -256,8 +259,8 @@ public class ModelController : MonoBehaviour {
         frameSlider.minValue = activeModel.startFrame - 1;
         frameSlider.maxValue = activeModel.endFrame;
 
-        logField.text = logField.text + "\n<color=green>Complete.</color>";
-        yield return new WaitForSeconds(3);
+        appendToLog("\n<color=green>Complete.</color>");
+        yield return new WaitForSeconds(4);
         /*float fadeOutDuration = 1f;
         for (float timer = 0; timer < fadeOutDuration; timer += Time.deltaTime)
         {
@@ -266,5 +269,54 @@ public class ModelController : MonoBehaviour {
         }*/
         logField.gameObject.SetActive(false);
         //logField.materialForRendering.color = Color.white;
+    }
+
+    void appendToLog(string text)
+    {
+        logField.text = logField.text + text;
+    }
+
+    delegate void LoadStuffDelegate();
+    void LoadCatchErrors(LoadStuffDelegate loadStuff)
+    {
+        try
+        {
+            loadStuff();
+            appendToLog(".. Done.");
+        }
+        catch (DirectoryNotFoundException e)
+        {
+            Debug.LogWarning(e);
+            appendToLog(".. <color=red>Failed, directory missing.</color>");
+        }
+        catch (FileNotFoundException e)
+        {
+            Debug.LogWarning(e);
+            appendToLog(".. <color=red>Failed, file missing.</color>");
+        }
+        catch (IOException e)
+        {
+            OnGenericFailure(e);
+        }
+        catch (IsolatedStorageException e)
+        {
+            OnGenericFailure(e);
+        }
+        catch (FrameMismatchException e)
+        {
+            Debug.LogWarning(e);
+            appendToLog(".. <color=red>Failed, frame count does not match (" +
+                e.frames1 + " vs " + e.frames2 + ").</color>");
+        }
+        catch (Exception e)
+        {
+            OnGenericFailure(e);
+        }
+    }
+
+    void OnGenericFailure(Exception e)
+    {
+        Debug.LogWarning(e);
+        appendToLog(".. <color=red>Failed.</color>");
     }
 }
