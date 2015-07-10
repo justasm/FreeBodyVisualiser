@@ -17,8 +17,16 @@ public class BoneMesh : MonoBehaviour
     public Shader shader;
     public Shader transparentShader;
 
-    public enum Bone { Foot = 0, Tibia = 1, Femur = 2, Pelvis = 3, Patella = 4 };
-    public Bone bone;
+    public enum Bone { Foot = 0, Tibia = 1, Femur = 2, Pelvis = 3, Patella = 4, Fibula = 5 };
+    static int BoneToIndex(Bone bone)
+    {
+        if (Bone.Fibula == bone) return (int) Bone.Tibia; // tibia and fibula share same transforms
+        return (int) bone;
+    }
+    [SerializeField]
+    private Bone bone;
+    public Bone SelectedBone { get { return bone; } }
+    private int boneIndex;
     public BoneData boneData;
     public FrameController controller;
 
@@ -31,6 +39,8 @@ public class BoneMesh : MonoBehaviour
 
         material = new Material(transparentShader);
         material.color = new Color(1f, 1f, 1f, 0.1f);
+
+        boneIndex = BoneToIndex(bone);
     }
 
     public void Reload()
@@ -46,7 +56,7 @@ public class BoneMesh : MonoBehaviour
     Vector3 ProcessVertex(float x, float y, float z)
     {
         Vector3 v = new Vector3(-y, z, x);
-        v = Quaternion.Inverse(boneData.rotationOrigins[(int)bone]) * (v - modelScale * boneData.positionOrigins[(int)bone]);
+        v = Quaternion.Inverse(boneData.rotationOrigins[boneIndex]) * (v - modelScale * boneData.positionOrigins[boneIndex]);
         return v;
     }
 
@@ -59,10 +69,10 @@ public class BoneMesh : MonoBehaviour
     {
         if (null == meshes || 0 == meshes.Length || null == boneData.positions) return;
 
-        transform.rotation = Quaternion.Lerp(boneData.rotations[controller.frame][(int)bone],
-            boneData.rotations[controller.nextFrame][(int)bone], controller.frameAlpha);
-        transform.position = Vector3.Lerp(boneData.positions[controller.frame][(int)bone],
-            boneData.positions[controller.nextFrame][(int)bone], controller.frameAlpha);
+        transform.rotation = Quaternion.Lerp(boneData.rotations[controller.frame][boneIndex],
+            boneData.rotations[controller.nextFrame][boneIndex], controller.frameAlpha);
+        transform.position = Vector3.Lerp(boneData.positions[controller.frame][boneIndex],
+            boneData.positions[controller.nextFrame][boneIndex], controller.frameAlpha);
 
         for (int i = 1; i < meshes.Length; i++)
         {
@@ -75,7 +85,7 @@ public class BoneMesh : MonoBehaviour
             for (int j = 0; j < meshes.Length; j++)
             {
                 Graphics.DrawMesh(meshes[j],
-                    Matrix4x4.TRS(boneData.positions[i][(int)bone], boneData.rotations[i][(int)bone], Vector3.one / modelScale),
+                    Matrix4x4.TRS(boneData.positions[i][boneIndex], boneData.rotations[i][boneIndex], Vector3.one / modelScale),
                     material, 0);
             }
         }

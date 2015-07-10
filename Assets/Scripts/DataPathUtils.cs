@@ -71,6 +71,7 @@ public class DataPathUtils {
         boneToFilename = new Dictionary<BoneMesh.Bone, string>();
         boneToFilename[BoneMesh.Bone.Foot] = boneModelPath + boneFilePrefix + footModelSuffix;
         boneToFilename[BoneMesh.Bone.Tibia] = boneModelPath + boneFilePrefix + tibiaModelSuffix;
+        boneToFilename[BoneMesh.Bone.Fibula] = boneModelPath + boneFilePrefix + fibulaModelSuffix;
         boneToFilename[BoneMesh.Bone.Patella] = boneModelPath + boneFilePrefix + patellaModelSuffix;
         boneToFilename[BoneMesh.Bone.Femur] = boneModelPath + boneFilePrefix + femurModelSuffix;
         boneToFilename[BoneMesh.Bone.Pelvis] = boneModelPath + boneFilePrefix + pelvisModelSuffix;

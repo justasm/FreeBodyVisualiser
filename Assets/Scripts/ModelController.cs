@@ -225,7 +225,7 @@ public class ModelController : MonoBehaviour {
 
         for (int i = 0; i < boneMeshes.Length; i++)
         {
-            logField.text = logField.text + "\nLoading bone " + boneMeshes[i].bone;
+            logField.text = logField.text + "\nLoading bone " + boneMeshes[i].SelectedBone;
             yield return 0;
             try
             {
