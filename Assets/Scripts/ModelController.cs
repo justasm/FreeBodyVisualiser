@@ -145,6 +145,11 @@ public class ModelController : MonoBehaviour {
                             Debug.LogError("Argument " + args[i] + " needs a parameter.");
                         }
                         break;
+                    default:
+                        if (i > 1) break;
+                        defaultPath = args[i];
+                        autoloadPath = args[i];
+                        break;
                 }
                 ++i;
             }
