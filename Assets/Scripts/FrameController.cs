@@ -30,7 +30,13 @@ public class FrameController : MonoBehaviour {
     public void UpdateFrameData(FreeBodyModel model)
     {
         secondsPerFrame = 1f / model.framesPerSecond;
-        frameCount = model.endFrame - model.startFrame + 1;
+        SetFrameCount(model.endFrame - model.startFrame + 1);
+    }
+
+    public void SetFrameCount(int newFrameCount)
+    {
+        if (frameCount == newFrameCount) return;
+        frameCount = newFrameCount;
         frame = 0;
     }
 	

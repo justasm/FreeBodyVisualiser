@@ -174,6 +174,11 @@ public class MuscleMesh : MonoBehaviour {
         visibility[group.index] = visible;
     }
 
+    public int GetFrameCount()
+    {
+        return lines.Length;
+    }
+
     static void UpdateQuad(Vector3[] vertices, int start, Vector3 p1, Vector3 p2, float width)
     {
         float halfWidth = width / 2;

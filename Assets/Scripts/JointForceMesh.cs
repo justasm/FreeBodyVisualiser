@@ -118,4 +118,9 @@ public class JointForceMesh : MonoBehaviour {
         //            Matrix4x4.TRS(anklePositions[controller.frame], Quaternion.identity, Vector3.one / 10f),
         //            redMaterial, 0);
 	}
+
+    public int GetFrameCount()
+    {
+        return anklePositions.Length; // arbitrarily picked one of the position sequences
+    }
 }

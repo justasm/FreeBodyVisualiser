@@ -187,6 +187,13 @@ public class ModelController : MonoBehaviour {
             });
         #endregion
 
+        if (muscleMesh.GetFrameCount() != frameController.frameCount)
+        {
+            appendToLog("\n<color=blue>Muscle frame count (" + muscleMesh.GetFrameCount() +
+                ") does not match frame count specified in XML file (" + frameController.frameCount + ").</color>");
+            frameController.SetFrameCount(Mathf.Min(muscleMesh.GetFrameCount(), frameController.frameCount));
+        }
+
         #region load muscle activations
         if (!musclePathsLoaded)
         {
@@ -211,6 +218,13 @@ public class ModelController : MonoBehaviour {
                 jointPositionsLoaded = true;
             });
         #endregion
+
+        if (jointForceMesh.GetFrameCount() != frameController.frameCount)
+        {
+            appendToLog("\n<color=blue>Joint frame count (" + jointForceMesh.GetFrameCount() +
+                ") does not match frame count specified in XML file (" + frameController.frameCount + ").</color>");
+            frameController.SetFrameCount(Mathf.Min(jointForceMesh.GetFrameCount(), frameController.frameCount));
+        }
 
         #region load joint contact forces
         if (!jointPositionsLoaded)
