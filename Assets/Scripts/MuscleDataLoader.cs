@@ -136,6 +136,8 @@ public class MuscleDataLoader {
 
                 for (int i = 0; i < numMuscleElements; i++)
                 {
+                    // TODO fix case if number of frames don't match up
+                    // throws ArgumentOutOfRangeException
                     if (values[i] != 0) _activations[frame][i] = (float)(_activations[frame][i] / values[i]);
                     maxActivationValue = Math.Max(maxActivationValue, _activations[frame][i]);
                     minActivationValue = Math.Min(minActivationValue, _activations[frame][i]);
