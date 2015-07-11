@@ -5,7 +5,7 @@ public class PrimitiveUtils {
 
     /*
      * Originally by Bérenger http://wiki.unity3d.com/index.php/ProceduralPrimitives
-     * Algorithm by Jonathan http://stackoverflow.com/questions/4081898/procedurally-generate-a-sphere-mesh
+     * CC BY-SA 3.0 http://creativecommons.org/licenses/by-sa/3.0/
      */
     public static void GenerateSphere(Mesh mesh, float radius = 1f, int nbLong = 24, int nbLat = 16)
     {
@@ -107,6 +107,7 @@ public class PrimitiveUtils {
 
     /*
      * Originally by Bérenger http://wiki.unity3d.com/index.php/ProceduralPrimitives
+     * CC BY-SA 3.0 http://creativecommons.org/licenses/by-sa/3.0/
      */
     public static void GenerateCone(Mesh mesh, float height = 1f, float bottomRadius = .5f, float topRadius = 0f, int nbSides = 18)
     {

@@ -2,7 +2,9 @@
 using System.Collections;
 
 /*
- * Original by Veli V at http://wiki.unity3d.com/index.php?title=MouseOrbitImproved
+ * Original by Veli V
+ * http://wiki.unity3d.com/index.php?title=MouseOrbitImproved
+ * CC BY-SA 3.0 http://creativecommons.org/licenses/by-sa/3.0/
  */
 [AddComponentMenu("Camera-Control/Mouse Orbit with zoom")]
 public class MouseOrbit : MonoBehaviour

@@ -1,11 +1,13 @@
 ﻿using System.IO;
 using System.Text;
 
-/**
- * Original at http://stackoverflow.com/a/27571627/1200090
- */
 public static class BinaryReaderExtension {
 
+    /**
+     * Original snippet at StackOverflow http://stackoverflow.com/a/27571627/1200090
+     * by user TermWay http://stackoverflow.com/users/985714/termway
+     * CC BY-SA 3.0 http://creativecommons.org/licenses/by-sa/3.0/
+     */
     public static string ReadLine(this BinaryReader reader)
     {
         if (reader.IsEndOfStream())
