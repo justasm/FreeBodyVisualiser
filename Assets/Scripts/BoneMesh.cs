@@ -77,7 +77,7 @@ public class BoneMesh : MonoBehaviour
         for (int i = 1; i < meshes.Length; i++)
         {
             Graphics.DrawMesh(meshes[i], Matrix4x4.TRS(transform.position, transform.rotation, transform.localScale),
-                meshRenderer.sharedMaterial, 0);
+                meshRenderer.sharedMaterial, 0, null, 0, null, true, false);
         }
 
         for (int i = 0; i < controller.frameCount; i += (controller.frameCount - 1) / 2)
@@ -86,7 +86,7 @@ public class BoneMesh : MonoBehaviour
             {
                 Graphics.DrawMesh(meshes[j],
                     Matrix4x4.TRS(boneData.positions[i][boneIndex], boneData.rotations[i][boneIndex], Vector3.one / modelScale),
-                    material, 0);
+                    material, 0, null, 0, null, true, false);
             }
         }
     }
