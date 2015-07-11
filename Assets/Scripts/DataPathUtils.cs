@@ -33,6 +33,9 @@ public class DataPathUtils {
     public static string JointCenterFile { get; private set; }
     public static string JointTFContactFile { get; private set; }
 
+    public static string MarkerDynamicFile { get; private set; }
+    public static string MarkerVirtualStaticFile { get; private set; }
+
     public static void UpdatePaths(FreeBodyModel model)
     {
         geoPathPrefix = model.geometryOutputPath +
@@ -54,6 +57,9 @@ public class DataPathUtils {
 
         JointCenterFile = geoPathPrefix + "_rot_centres_gcs.csv";
         JointTFContactFile = geoPathPrefix + "_tf_contact_gcs.csv";
+
+        MarkerDynamicFile = geoPathPrefix + "_dynamic_marker.csv";
+        MarkerVirtualStaticFile = geoPathPrefix + "_virtual_static_marker.csv";
 
         string boneFilePrefix = model.anatomyDatasetFileName;
         // TODO more rigorous error checking

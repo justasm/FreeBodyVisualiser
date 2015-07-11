@@ -34,6 +34,7 @@ public class ModelController : MonoBehaviour {
     private BoneMesh[] boneMeshes;
     private JointForceMesh jointForceMesh;
     private MuscleMesh muscleMesh;
+    private MarkerMesh markerMesh;
 
     void Awake()
     {
@@ -42,6 +43,7 @@ public class ModelController : MonoBehaviour {
         boneMeshes = FindObjectsOfType<BoneMesh>();
         jointForceMesh = FindObjectOfType<JointForceMesh>();
         muscleMesh = FindObjectOfType<MuscleMesh>();
+        markerMesh = FindObjectOfType<MarkerMesh>();
     }
 
 	void Start () {
@@ -192,7 +194,7 @@ public class ModelController : MonoBehaviour {
             });
         #endregion
 
-        if (muscleMesh.GetFrameCount() != frameController.frameCount)
+        if (musclePathsLoaded && muscleMesh.GetFrameCount() != frameController.frameCount)
         {
             appendToLog("\n<color=blue>Muscle frame count (" + muscleMesh.GetFrameCount() +
                 ") does not match frame count specified in XML file (" + frameController.frameCount + ").</color>");
@@ -224,7 +226,7 @@ public class ModelController : MonoBehaviour {
             });
         #endregion
 
-        if (jointForceMesh.GetFrameCount() != frameController.frameCount)
+        if (jointPositionsLoaded && jointForceMesh.GetFrameCount() != frameController.frameCount)
         {
             appendToLog("\n<color=blue>Joint frame count (" + jointForceMesh.GetFrameCount() +
                 ") does not match frame count specified in XML file (" + frameController.frameCount + ").</color>");
@@ -243,6 +245,25 @@ public class ModelController : MonoBehaviour {
             LoadCatchErrors(jointForceMesh.ReloadJointContactForces);
         }
         #endregion
+
+        #region load marker positions
+        appendToLog("\nLoading marker positions");
+        yield return 0;
+        bool markerPositionsLoaded = false;
+        LoadCatchErrors(
+            () =>
+            {
+                markerMesh.ReloadMarkers(activeModel);
+                markerPositionsLoaded = true;
+            });
+        #endregion
+
+        if (markerPositionsLoaded && markerMesh.GetFrameCount() != frameController.frameCount)
+        {
+            appendToLog("\n<color=blue>Marker frame count (" + markerMesh.GetFrameCount() +
+                ") does not match frame count specified in XML file (" + frameController.frameCount + ").</color>");
+            frameController.SetFrameCount(Mathf.Min(markerMesh.GetFrameCount(), frameController.frameCount));
+        }
 
         #region load bone dynamics
         appendToLog("\nLoading bone data");
