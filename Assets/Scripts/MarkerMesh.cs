@@ -41,7 +41,7 @@ public class MarkerMesh : MonoBehaviour {
                     dynamicMarkerPositions[controller.nextFrame][i], controller.frameAlpha);
                 Graphics.DrawMesh(sphereMesh,
                             Matrix4x4.TRS(v, Quaternion.identity, Vector3.one * markerScale),
-                            material, 0);
+                            material, 0, null, 0, null, false, false);
             }
         }
 
@@ -53,7 +53,7 @@ public class MarkerMesh : MonoBehaviour {
                     staticMarkerPositions[controller.nextFrame][i], controller.frameAlpha);
                 Graphics.DrawMesh(sphereMesh,
                             Matrix4x4.TRS(v, Quaternion.identity, Vector3.one * markerScale),
-                            material, 0);
+                            material, 0, null, 0, null, false, false);
             }
         }
     }

@@ -86,7 +86,7 @@ public class JointForceMesh : MonoBehaviour {
                                 mag * contactForceScale,
                                 arrowBodyScale)
                         ),
-                        redMaterial, 0);
+                        redMaterial, 0, null, 0, null, false, false);
 
             Graphics.DrawMesh(cylinderMesh,
                         Matrix4x4.TRS(
@@ -97,21 +97,21 @@ public class JointForceMesh : MonoBehaviour {
                                 -mag * contactForceScale,
                                 arrowBodyScale)
                         ),
-                        redMaterial, 0);
+                        redMaterial, 0, null, 0, null, false, false);
 
             Graphics.DrawMesh(coneMesh,
                         Matrix4x4.TRS(
                             pos + n * arrowTipScale,
                             rot,
                             new Vector3(1, -1, 1) * arrowTipScale),
-                        redMaterial, 0);
+                        redMaterial, 0, null, 0, null, false, false);
 
             Graphics.DrawMesh(coneMesh,
                         Matrix4x4.TRS(
                             pos - n * arrowTipScale,
                             rot,
                             Vector3.one * arrowTipScale),
-                        redMaterial, 0);
+                        redMaterial, 0, null, 0, null, false, false);
         }
 
         //Graphics.DrawMesh(sphereMesh,
