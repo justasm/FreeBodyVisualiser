@@ -24,6 +24,9 @@ public class MarkerMesh : MonoBehaviour {
 
         material = new Material(shader);
         material.color = new Color(0f, 1f, 0f, .7f);
+
+        ShowStaticMarkers = true;
+        ShowDynamicMarkers = false;
     }
 
     public void ReloadMarkers(FreeBodyModel model)
