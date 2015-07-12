@@ -26,6 +26,8 @@ public class ModelController : MonoBehaviour {
     public Slider markerSizeSlider;
     public Toggle dynamicMarkerToggle;
     public Toggle staticMarkerToggle;
+    public Text forceSizeField;
+    public Slider forceSizeSlider;
 
     public GameObject bonesGroup;
 
@@ -77,6 +79,13 @@ public class ModelController : MonoBehaviour {
             {
                 markerMesh.SetSizeMultiplier(value);
                 markerSizeField.text = (int)(100 * value) + "%";
+            });
+
+        forceSizeSlider.onValueChanged.AddListener(
+            (value) =>
+            {
+                jointForceMesh.SetSizeMultiplier(value);
+                forceSizeField.text = (int)(100 * value) + "%";
             });
 
         dynamicMarkerToggle.isOn = markerMesh.ShowDynamicMarkers;

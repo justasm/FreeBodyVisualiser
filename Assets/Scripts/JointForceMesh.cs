@@ -6,6 +6,7 @@ public class JointForceMesh : MonoBehaviour {
     private const float arrowBodyScale = .02f;
     private const float arrowTipScale = .08f;
     private const float contactForceScale = 1 / 10000f;
+    private float sizeMultiplier = 1f;
 
     //private Mesh sphereMesh;
     private Mesh coneMesh;
@@ -40,6 +41,11 @@ public class JointForceMesh : MonoBehaviour {
         redMaterial = new Material(shader);
         redMaterial.color = new Color(1f, 0f, 0f, .7f);
 	}
+
+    public void SetSizeMultiplier(float multiplier)
+    {
+        sizeMultiplier = multiplier;
+    }
 
     public void ReloadJointPositions()
     {
@@ -79,38 +85,38 @@ public class JointForceMesh : MonoBehaviour {
 
             Graphics.DrawMesh(cylinderMesh,
                         Matrix4x4.TRS(
-                            pos + n * arrowTipScale,
+                            pos + n * arrowTipScale * sizeMultiplier,
                             rot,
                             new Vector3(
                                 arrowBodyScale,
                                 mag * contactForceScale,
-                                arrowBodyScale)
+                                arrowBodyScale) * sizeMultiplier
                         ),
                         redMaterial, 0, null, 0, null, false, false);
 
             Graphics.DrawMesh(cylinderMesh,
                         Matrix4x4.TRS(
-                            pos - n * arrowTipScale,
+                            pos - n * arrowTipScale * sizeMultiplier,
                             rot,
                             new Vector3(
                                 arrowBodyScale,
                                 -mag * contactForceScale,
-                                arrowBodyScale)
+                                arrowBodyScale) * sizeMultiplier
                         ),
                         redMaterial, 0, null, 0, null, false, false);
 
             Graphics.DrawMesh(coneMesh,
                         Matrix4x4.TRS(
-                            pos + n * arrowTipScale,
+                            pos + n * arrowTipScale * sizeMultiplier,
                             rot,
-                            new Vector3(1, -1, 1) * arrowTipScale),
+                            new Vector3(1, -1, 1) * arrowTipScale * sizeMultiplier),
                         redMaterial, 0, null, 0, null, false, false);
 
             Graphics.DrawMesh(coneMesh,
                         Matrix4x4.TRS(
-                            pos - n * arrowTipScale,
+                            pos - n * arrowTipScale * sizeMultiplier,
                             rot,
-                            Vector3.one * arrowTipScale),
+                            Vector3.one * arrowTipScale * sizeMultiplier),
                         redMaterial, 0, null, 0, null, false, false);
         }
 

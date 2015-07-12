@@ -17,6 +17,7 @@ public class UIController : MonoBehaviour {
     public GameObject boneControlPanel;
     public GameObject muscleActivationControlPanel;
     public GameObject muscleControlPanel;
+    public GameObject forceControlPanel;
 
     public Transform muscleVisibilityContentPanel;
     public Button muscleVisibilityAllOn;
@@ -61,6 +62,7 @@ public class UIController : MonoBehaviour {
                 muscleControlPanel.SetActive(on);
                 muscleActivationControlPanel.SetActive(on);
             });
+        forceControlToggle.onValueChanged.AddListener((on) => forceControlPanel.SetActive(on));
         markerControlToggle.onValueChanged.AddListener((on) => markerControlPanel.SetActive(on));
         boneControlToggle.onValueChanged.AddListener((on) => boneControlPanel.SetActive(on));
 
