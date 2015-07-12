@@ -4,6 +4,7 @@
     public string geometryOutputPath;
     public string optimisationOutputPath;
     public int framesPerSecond;
+    public float markerRadiusMetres;
     public int startFrame;
     public int endFrame;
     public string sex;

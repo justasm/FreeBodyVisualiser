@@ -14,7 +14,7 @@ public class MarkerMesh : MonoBehaviour {
     private Vector3[][] dynamicMarkerPositions;
     private Vector3[][] staticMarkerPositions;
 
-    private float markerScale = 1 / 100f;
+    private float markerScale = 1 / 100f; // by default, if present uses that defined in XML parameter file
 
     void Awake()
     {
@@ -27,8 +27,8 @@ public class MarkerMesh : MonoBehaviour {
 
     public void ReloadMarkers(FreeBodyModel model)
     {
-        // TODO use model marker size
         MarkerDataLoader.LoadMarkerPositions(out dynamicMarkerPositions, out staticMarkerPositions);
+        if(0 != model.markerRadiusMetres) markerScale = model.markerRadiusMetres * 2;
     }
 
     void Update()

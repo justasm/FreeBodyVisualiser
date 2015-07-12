@@ -7,7 +7,8 @@ using System.Collections;
 public class BoneMesh : MonoBehaviour
 {
 
-    private const float modelScale = 1000f;
+    private const float modelScale = 0.001f;
+    private const float invModelScale = 1000f;
 
     private Mesh[] meshes;
     private Material material;
@@ -50,13 +51,13 @@ public class BoneMesh : MonoBehaviour
         meshes[0].name = bone.ToString();
         meshFilter.mesh = meshes[0];
 
-        transform.localScale = Vector3.one / modelScale;
+        transform.localScale = Vector3.one * modelScale;
     }
 
     Vector3 ProcessVertex(float x, float y, float z)
     {
         Vector3 v = new Vector3(-y, z, x);
-        v = Quaternion.Inverse(boneData.rotationOrigins[boneIndex]) * (v - modelScale * boneData.positionOrigins[boneIndex]);
+        v = Quaternion.Inverse(boneData.rotationOrigins[boneIndex]) * (v - invModelScale * boneData.positionOrigins[boneIndex]);
         return v;
     }
 
@@ -85,7 +86,7 @@ public class BoneMesh : MonoBehaviour
             for (int j = 0; j < meshes.Length; j++)
             {
                 Graphics.DrawMesh(meshes[j],
-                    Matrix4x4.TRS(boneData.positions[i][boneIndex], boneData.rotations[i][boneIndex], Vector3.one / modelScale),
+                    Matrix4x4.TRS(boneData.positions[i][boneIndex], boneData.rotations[i][boneIndex], Vector3.one * modelScale),
                     material, 0, null, 0, null, true, false);
             }
         }

@@ -41,9 +41,14 @@ public class ModelParameterLoader {
                             case "universal_physical_parameters":
                                 while (reader.MoveToNextAttribute())
                                 {
-                                    if ("frames_per_second".Equals(reader.Name))
+                                    switch (reader.Name)
                                     {
-                                        model.framesPerSecond = int.Parse(reader.Value);
+                                        case "frames_per_second":
+                                            model.framesPerSecond = int.Parse(reader.Value);
+                                            break;
+                                        case "radius_per_marker_metres":
+                                            model.markerRadiusMetres = float.Parse(reader.Value);
+                                            break;
                                     }
                                 }
                                 break;
