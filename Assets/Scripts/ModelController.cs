@@ -21,10 +21,13 @@ public class ModelController : MonoBehaviour {
     public Toggle forceToggle;
     public Toggle boneToggle;
     public Toggle markerToggle;
+
+    public GameObject bonesGroup;
+
     public GameObject muscleVisibilityToggle;
     public Transform muscleVisibilityContentPanel;
-    public Button muscleVisibilityAllOn;
-    public Button muscleVisibilityAllOff;
+    public GameObject boneVisibilityToggle;
+    public Transform boneVisibilityContentPanel;
 
     private FrameController frameController;
     private BoneData boneData;
@@ -56,9 +59,7 @@ public class ModelController : MonoBehaviour {
 
         muscleToggle.onValueChanged.AddListener((on) => muscleMesh.gameObject.SetActive(on));
         forceToggle.onValueChanged.AddListener((on) => jointForceMesh.gameObject.SetActive(on));
-        boneToggle.onValueChanged.AddListener((on) => {
-            foreach (BoneMesh bone in boneMeshes) bone.gameObject.SetActive(on);
-            });
+        boneToggle.onValueChanged.AddListener((on) => bonesGroup.SetActive(on));
         markerToggle.onValueChanged.AddListener((on) => markerMesh.gameObject.SetActive(on));
 
         for (int i = 0; i < MuscleGroup.groups.Count; i++)
@@ -66,29 +67,13 @@ public class ModelController : MonoBehaviour {
             MuscleGroup group = MuscleGroup.groups[i];
             GameObject newMuscleGroupToggle = Instantiate(muscleVisibilityToggle) as GameObject;
 
-            MuscleGroupToggle muscleGroupToggle = newMuscleGroupToggle.GetComponent<MuscleGroupToggle>();
+            ToggleWrapper muscleGroupToggle = newMuscleGroupToggle.GetComponent<ToggleWrapper>();
             muscleGroupToggle.label.text = group.name;
             muscleGroupToggle.toggle.isOn = muscleMesh.visibility[group.index];
             muscleGroupToggle.toggle.onValueChanged.AddListener((enabled) => muscleMesh.SetVisibility(group, enabled));
 
             newMuscleGroupToggle.transform.SetParent(muscleVisibilityContentPanel);
         }
-        muscleVisibilityAllOn.onClick.AddListener(
-            () => 
-            {
-                for (int i = 0; i < muscleVisibilityContentPanel.childCount; i++)
-                {
-                    muscleVisibilityContentPanel.GetChild(i).GetComponent<MuscleGroupToggle>().toggle.isOn = true;
-                }
-            });
-        muscleVisibilityAllOff.onClick.AddListener(
-            () =>
-            {
-                for (int i = 0; i < muscleVisibilityContentPanel.childCount; i++)
-                {
-                    muscleVisibilityContentPanel.GetChild(i).GetComponent<MuscleGroupToggle>().toggle.isOn = false;
-                }
-            });
 
 #if UNITY_EDITOR
         //string defaultPath = "C:\\Users\\Justas\\SkyDrive\\FreeBodyVis\\For Justas\\" +
@@ -276,9 +261,7 @@ public class ModelController : MonoBehaviour {
         }
         #endregion
 
-        studyNameField.text = activeModel.studyName;
-        studySubjectField.text = activeModel.framesPerSecond + "Hz  |  " + activeModel.sex + " " +
-                activeModel.height + "m " + activeModel.mass + "kg";
+        UpdateUiAfterLoad();
 
         appendToLog("\n<color=green>Complete.</color>");
         yield return new WaitForSeconds(4);
@@ -339,5 +322,32 @@ public class ModelController : MonoBehaviour {
     {
         Debug.LogWarning(e);
         appendToLog(".. <color=red>Failed.</color>");
+    }
+
+    void UpdateUiAfterLoad()
+    {
+        studyNameField.text = activeModel.studyName;
+        studySubjectField.text = activeModel.framesPerSecond + "Hz  |  " + activeModel.sex + " " +
+                activeModel.height + "m " + activeModel.mass + "kg";
+
+        foreach (Transform child in boneVisibilityContentPanel)
+        {
+            Destroy(child.gameObject);
+        }
+        for (int i = 0; i < boneMeshes.Length; i++)
+        {
+            BoneMesh bone = boneMeshes[i];
+            if (boneMeshes[i].LoadedSuccessfully)
+            {
+                GameObject newBoneToggle = Instantiate(boneVisibilityToggle) as GameObject;
+
+                ToggleWrapper boneToggle = newBoneToggle.GetComponent<ToggleWrapper>();
+                boneToggle.label.text = bone.SelectedBone.ToString();
+                boneToggle.toggle.isOn = bone.gameObject.activeSelf;
+                boneToggle.toggle.onValueChanged.AddListener((enabled) => bone.gameObject.SetActive(enabled));
+
+                newBoneToggle.transform.SetParent(boneVisibilityContentPanel);
+            }
+        }
     }
 }

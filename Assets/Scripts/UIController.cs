@@ -18,6 +18,14 @@ public class UIController : MonoBehaviour {
     public GameObject muscleActivationControlPanel;
     public GameObject muscleControlPanel;
 
+    public Transform muscleVisibilityContentPanel;
+    public Button muscleVisibilityAllOn;
+    public Button muscleVisibilityAllOff;
+
+    public Transform boneVisibilityContentPanel;
+    public Button boneVisibilityAllOn;
+    public Button boneVisibilityAllOff;
+
     private class ToggleAction
     {
         public delegate void OnToggleValueChangedDelegate(Toggle toggle, bool on);
@@ -54,6 +62,40 @@ public class UIController : MonoBehaviour {
             });
         markerControlToggle.onValueChanged.AddListener((on) => markerControlPanel.SetActive(on));
         boneControlToggle.onValueChanged.AddListener((on) => boneControlPanel.SetActive(on));
+
+        muscleVisibilityAllOn.onClick.AddListener(
+            () =>
+            {
+                for (int i = 0; i < muscleVisibilityContentPanel.childCount; i++)
+                {
+                    muscleVisibilityContentPanel.GetChild(i).GetComponent<ToggleWrapper>().toggle.isOn = true;
+                }
+            });
+        muscleVisibilityAllOff.onClick.AddListener(
+            () =>
+            {
+                for (int i = 0; i < muscleVisibilityContentPanel.childCount; i++)
+                {
+                    muscleVisibilityContentPanel.GetChild(i).GetComponent<ToggleWrapper>().toggle.isOn = false;
+                }
+            });
+
+        boneVisibilityAllOn.onClick.AddListener(
+            () =>
+            {
+                for (int i = 0; i < boneVisibilityContentPanel.childCount; i++)
+                {
+                    boneVisibilityContentPanel.GetChild(i).GetComponent<ToggleWrapper>().toggle.isOn = true;
+                }
+            });
+        boneVisibilityAllOff.onClick.AddListener(
+            () =>
+            {
+                for (int i = 0; i < boneVisibilityContentPanel.childCount; i++)
+                {
+                    boneVisibilityContentPanel.GetChild(i).GetComponent<ToggleWrapper>().toggle.isOn = false;
+                }
+            });
     }
 
     void OnControlToggleChange(Toggle toggle, bool on)

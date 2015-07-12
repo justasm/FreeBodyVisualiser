@@ -27,6 +27,7 @@ public class BoneMesh : MonoBehaviour
     [SerializeField]
     private Bone bone;
     public Bone SelectedBone { get { return bone; } }
+    public bool LoadedSuccessfully { get; private set; }
     private int boneIndex;
     public BoneData boneData;
     public FrameController controller;
@@ -42,16 +43,26 @@ public class BoneMesh : MonoBehaviour
         material.color = new Color(1f, 1f, 1f, 0.1f);
 
         boneIndex = BoneToIndex(bone);
+        LoadedSuccessfully = false;
     }
 
     public void Reload()
     {
-        // TODO clean up existing meshes?
+        if (null != meshes)
+        {
+            foreach (Mesh mesh in meshes)
+            {
+                Destroy(mesh);
+            }
+            meshes = null;
+        }
+        LoadedSuccessfully = false;
         meshes = StlFileReader.LoadStlFile(DataPathUtils.getBoneModelFile(bone), ProcessVertex, GetTriangle);
         meshes[0].name = bone.ToString();
         meshFilter.mesh = meshes[0];
 
         transform.localScale = Vector3.one * modelScale;
+        LoadedSuccessfully = true;
     }
 
     Vector3 ProcessVertex(float x, float y, float z)
