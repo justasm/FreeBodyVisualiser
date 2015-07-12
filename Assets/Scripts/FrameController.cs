@@ -1,13 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class FrameController : MonoBehaviour {
-
-    public delegate void FrameChange(int frame);
-    public event FrameChange OnFrameChanged;
-
-    public delegate void SpeedChange(float alpha);
-    public event SpeedChange OnSpeedChanged;
 
     public int frame { get; private set; }
     public float frameAlpha { get; private set; }
@@ -19,17 +14,38 @@ public class FrameController : MonoBehaviour {
     public float speedAlpha = 0.5f;
     private float prevSpeedAlpha = 0f;
 
+    private int startFrame = 0;
     public int frameCount = 0;
+
+    public Text timeScaleField;
+    public Slider timeScaleSlider;
+    public Text frameValueField;
+    public Slider frameSlider;
 
 	void Start () {
         frame = 0;
         frameAlpha = 0;
         nextFrame = 1;
+
+        timeScaleSlider.onValueChanged.AddListener((alpha) => speedAlpha = alpha);
 	}
+
+    void OnFrameChanged()
+    {
+        frameValueField.text = (startFrame + frame) + " / " + (startFrame + frameCount);
+        frameSlider.value = startFrame + frame;
+    }
+
+    void OnSpeedChanged()
+    {
+        timeScaleField.text = (int)(100 * speedAlpha) + "%";
+        timeScaleSlider.value = speedAlpha;
+    }
 
     public void UpdateFrameData(FreeBodyModel model)
     {
         secondsPerFrame = 1f / model.framesPerSecond;
+        startFrame = model.startFrame - 1;
         SetFrameCount(model.endFrame - model.startFrame + 1);
     }
 
@@ -38,6 +54,9 @@ public class FrameController : MonoBehaviour {
         if (frameCount == newFrameCount) return;
         frameCount = newFrameCount;
         frame = 0;
+
+        frameSlider.minValue = startFrame;
+        frameSlider.maxValue = startFrame + frameCount;
     }
 	
 	void Update () {
@@ -47,7 +66,7 @@ public class FrameController : MonoBehaviour {
         {
             if (speedAlpha < -1) speedAlpha = -1;
             if (speedAlpha > 1) speedAlpha = 1;
-            if (null != OnSpeedChanged) OnSpeedChanged(speedAlpha);
+            OnSpeedChanged();
         }
         prevSpeedAlpha = speedAlpha;
 
@@ -59,7 +78,7 @@ public class FrameController : MonoBehaviour {
             frame = (frameCount + frame + (int)Mathf.Sign(accumulator)) % frameCount;
             accumulator += -Mathf.Sign(accumulator) * secondsPerFrame;
 
-            if (null != OnFrameChanged) OnFrameChanged(frame);
+            OnFrameChanged();
         }
         nextFrame = (frameCount + frame + (int)Mathf.Sign(accumulator)) % frameCount;
 

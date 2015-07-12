@@ -20,10 +20,7 @@ public class ModelController : MonoBehaviour {
     public Toggle muscleToggle;
     public Toggle forceToggle;
     public Toggle boneToggle;
-    public Text timeScaleField;
-    public Slider timeScaleSlider;
-    public Text frameValueField;
-    public Slider frameSlider;
+    public Toggle markerToggle;
     public GameObject muscleVisibilityToggle;
     public Transform muscleVisibilityContentPanel;
     public Button muscleVisibilityAllOn;
@@ -62,21 +59,7 @@ public class ModelController : MonoBehaviour {
         boneToggle.onValueChanged.AddListener((on) => {
             foreach (BoneMesh bone in boneMeshes) bone.gameObject.SetActive(on);
             });
-
-        frameController.OnFrameChanged +=
-            (frame) =>
-            {
-                frameValueField.text = frame + " / " + frameController.frameCount;
-                frameSlider.value = frame;
-            }; // TODO unsubscribe
-
-        timeScaleSlider.onValueChanged.AddListener((alpha) => frameController.speedAlpha = alpha);
-        frameController.OnSpeedChanged +=
-            (alpha) =>
-            {
-                timeScaleField.text = (int)(100 * alpha) + "%";
-                timeScaleSlider.value = alpha;
-            }; // TODO unsubscribe
+        markerToggle.onValueChanged.AddListener((on) => markerMesh.gameObject.SetActive(on));
 
         for (int i = 0; i < MuscleGroup.groups.Count; i++)
         {
@@ -296,8 +279,6 @@ public class ModelController : MonoBehaviour {
         studyNameField.text = activeModel.studyName;
         studySubjectField.text = activeModel.framesPerSecond + "Hz  |  " + activeModel.sex + " " +
                 activeModel.height + "m " + activeModel.mass + "kg";
-        frameSlider.minValue = activeModel.startFrame - 1;
-        frameSlider.maxValue = activeModel.endFrame;
 
         appendToLog("\n<color=green>Complete.</color>");
         yield return new WaitForSeconds(4);
