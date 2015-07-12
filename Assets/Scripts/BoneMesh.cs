@@ -28,6 +28,7 @@ public class BoneMesh : MonoBehaviour
     private Bone bone;
     public Bone SelectedBone { get { return bone; } }
     public bool LoadedSuccessfully { get; private set; }
+    public bool RenderGhost { get; set; }
     private int boneIndex;
     public BoneData boneData;
     public FrameController controller;
@@ -44,6 +45,7 @@ public class BoneMesh : MonoBehaviour
 
         boneIndex = BoneToIndex(bone);
         LoadedSuccessfully = false;
+        RenderGhost = true;
     }
 
     public void Reload()
@@ -91,6 +93,8 @@ public class BoneMesh : MonoBehaviour
             Graphics.DrawMesh(meshes[i], Matrix4x4.TRS(transform.position, transform.rotation, transform.localScale),
                 meshRenderer.sharedMaterial, 0, null, 0, null, true, false);
         }
+
+        if (!RenderGhost) return;
 
         for (int i = 0; i < controller.frameCount; i += (controller.frameCount - 1) / 2)
         {

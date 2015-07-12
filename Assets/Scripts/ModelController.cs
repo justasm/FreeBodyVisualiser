@@ -21,6 +21,7 @@ public class ModelController : MonoBehaviour {
     public Toggle forceToggle;
     public Toggle boneToggle;
     public Toggle markerToggle;
+    public Toggle boneGhostToggle;
 
     public GameObject bonesGroup;
 
@@ -61,6 +62,11 @@ public class ModelController : MonoBehaviour {
         forceToggle.onValueChanged.AddListener((on) => jointForceMesh.gameObject.SetActive(on));
         boneToggle.onValueChanged.AddListener((on) => bonesGroup.SetActive(on));
         markerToggle.onValueChanged.AddListener((on) => markerMesh.gameObject.SetActive(on));
+        boneGhostToggle.onValueChanged.AddListener(
+            (on) =>
+            {
+                foreach (BoneMesh boneMesh in boneMeshes) boneMesh.RenderGhost = on;
+            });
 
         for (int i = 0; i < MuscleGroup.groups.Count; i++)
         {

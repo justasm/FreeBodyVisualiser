@@ -188,7 +188,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &57460954
 RectTransform:
   m_ObjectHideFlags: 0
@@ -205,10 +205,10 @@ RectTransform:
   - {fileID: 1413443601}
   m_Father: {fileID: 114790286}
   m_RootOrder: 1
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 205, y: -12}
-  m_SizeDelta: {x: 134, y: 16}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &57460955
 MonoBehaviour:
@@ -459,6 +459,7 @@ MonoBehaviour:
   forceToggle: {fileID: 17238945}
   boneToggle: {fileID: 1157971382}
   markerToggle: {fileID: 1896794595}
+  boneGhostToggle: {fileID: 1312263914}
   bonesGroup: {fileID: 1386413383}
   muscleVisibilityToggle: {fileID: 193804, guid: db9f6c2736ab56947b655bd921c7b2a4,
     type: 2}
@@ -862,7 +863,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22417204, guid: 0dc8dcc043f359b4298eddf5b272dac6, type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -70
+      value: -80
       objectReference: {fileID: 0}
     - target: {fileID: 22417204, guid: 0dc8dcc043f359b4298eddf5b272dac6, type: 2}
       propertyPath: m_SizeDelta.x
@@ -1096,8 +1097,8 @@ RectTransform:
   m_RootOrder: 5
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -47}
-  m_SizeDelta: {x: 0, y: -94}
+  m_AnchoredPosition: {x: 0, y: -52}
+  m_SizeDelta: {x: 0, y: -104}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &433332898
 MonoBehaviour:
@@ -3421,7 +3422,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22406024, guid: ed8aad0421c734a45a59fd4dda7ddd6c, type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -50
+      value: -56
       objectReference: {fileID: 0}
     - target: {fileID: 22406024, guid: ed8aad0421c734a45a59fd4dda7ddd6c, type: 2}
       propertyPath: m_SizeDelta.x
@@ -3429,7 +3430,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22406024, guid: ed8aad0421c734a45a59fd4dda7ddd6c, type: 2}
       propertyPath: m_SizeDelta.y
-      value: 14
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 22406024, guid: ed8aad0421c734a45a59fd4dda7ddd6c, type: 2}
       propertyPath: m_AnchorMin.x
@@ -3645,7 +3646,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 146564, guid: 72a3da60b5a0c0c47bb8f9c33433efbd, type: 2}
       propertyPath: m_Name
-      value: Bone Shadow Toggle
+      value: Bone Ghost Toggle
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 72a3da60b5a0c0c47bb8f9c33433efbd, type: 2}
@@ -3661,6 +3662,12 @@ RectTransform:
   m_PrefabParentObject: {fileID: 22467310, guid: c89155aaad613e548aeeaf69ab1bd1da,
     type: 2}
   m_PrefabInternal: {fileID: 901895146}
+--- !u!114 &1312263914 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11457672, guid: 72a3da60b5a0c0c47bb8f9c33433efbd,
+    type: 2}
+  m_PrefabInternal: {fileID: 1293919143}
+  m_Script: {fileID: 2109663825, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
 --- !u!1 &1351444761
 GameObject:
   m_ObjectHideFlags: 0
@@ -3871,7 +3878,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22417204, guid: 0dc8dcc043f359b4298eddf5b272dac6, type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -70
+      value: -80
       objectReference: {fileID: 0}
     - target: {fileID: 22417204, guid: 0dc8dcc043f359b4298eddf5b272dac6, type: 2}
       propertyPath: m_SizeDelta.x
@@ -4107,7 +4114,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1413443601
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4126,10 +4133,10 @@ RectTransform:
   - {fileID: 433332897}
   m_Father: {fileID: 57460954}
   m_RootOrder: 3
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 8, y: -8}
-  m_SizeDelta: {x: 118, y: 272}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1413443602
 MonoBehaviour:
@@ -4144,9 +4151,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 272
+  m_MinHeight: 252
   m_PreferredWidth: -1
-  m_PreferredHeight: 272
+  m_PreferredHeight: 252
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
 --- !u!114 &1413443603
@@ -4624,7 +4631,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11409458, guid: ed8aad0421c734a45a59fd4dda7ddd6c, type: 2}
       propertyPath: m_Text
-      value: Shadow frames
+      value: Ghost frames
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ed8aad0421c734a45a59fd4dda7ddd6c, type: 2}
@@ -5445,7 +5452,7 @@ RectTransform:
   m_RootOrder: 1
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 67, y: -84}
+  m_AnchoredPosition: {x: 67, y: -28}
   m_SizeDelta: {x: 118, y: 40}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &1846135420
@@ -5752,7 +5759,7 @@ RectTransform:
   m_RootOrder: 2
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 8, y: -120}
+  m_AnchoredPosition: {x: 8, y: -64}
   m_SizeDelta: {x: 118, y: 252}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1924283814
