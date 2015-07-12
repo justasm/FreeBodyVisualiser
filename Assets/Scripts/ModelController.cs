@@ -22,6 +22,10 @@ public class ModelController : MonoBehaviour {
     public Toggle boneToggle;
     public Toggle markerToggle;
     public Toggle boneGhostToggle;
+    public Text markerSizeField;
+    public Slider markerSizeSlider;
+    public Toggle dynamicMarkerToggle;
+    public Toggle staticMarkerToggle;
 
     public GameObject bonesGroup;
 
@@ -67,6 +71,18 @@ public class ModelController : MonoBehaviour {
             {
                 foreach (BoneMesh boneMesh in boneMeshes) boneMesh.RenderGhost = on;
             });
+
+        markerSizeSlider.onValueChanged.AddListener(
+            (value) =>
+            {
+                markerMesh.SetSizeMultiplier(value);
+                markerSizeField.text = (int)(100 * value) + "%";
+            });
+
+        dynamicMarkerToggle.isOn = markerMesh.ShowDynamicMarkers;
+        staticMarkerToggle.isOn = markerMesh.ShowStaticMarkers;
+        dynamicMarkerToggle.onValueChanged.AddListener((on) => markerMesh.ShowDynamicMarkers = on);
+        staticMarkerToggle.onValueChanged.AddListener((on) => markerMesh.ShowStaticMarkers = on);
 
         for (int i = 0; i < MuscleGroup.groups.Count; i++)
         {

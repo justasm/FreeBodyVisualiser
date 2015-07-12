@@ -8,13 +8,14 @@ public class MarkerMesh : MonoBehaviour {
 
     public Shader shader;
     public FrameController controller;
-    public bool showDynamicMarkers;
-    public bool showStaticMarkers;
+    public bool ShowDynamicMarkers { get; set; }
+    public bool ShowStaticMarkers { get; set; }
 
     private Vector3[][] dynamicMarkerPositions;
     private Vector3[][] staticMarkerPositions;
 
     private float markerScale = 1 / 100f; // by default, if present uses that defined in XML parameter file
+    private float sizeMultiplier = 1f;
 
     void Awake()
     {
@@ -31,28 +32,33 @@ public class MarkerMesh : MonoBehaviour {
         if(0 != model.markerRadiusMetres) markerScale = model.markerRadiusMetres * 2;
     }
 
+    public void SetSizeMultiplier(float multiplier)
+    {
+        sizeMultiplier = multiplier;
+    }
+
     void Update()
     {
-        if (showDynamicMarkers && null != dynamicMarkerPositions)
+        if (ShowDynamicMarkers && null != dynamicMarkerPositions)
         {
             for (int i = 0; i < dynamicMarkerPositions[controller.frame].Length; i++)
             {
                 Vector3 v = Vector3.Lerp(dynamicMarkerPositions[controller.frame][i],
                     dynamicMarkerPositions[controller.nextFrame][i], controller.frameAlpha);
                 Graphics.DrawMesh(sphereMesh,
-                            Matrix4x4.TRS(v, Quaternion.identity, Vector3.one * markerScale),
+                            Matrix4x4.TRS(v, Quaternion.identity, Vector3.one * markerScale * sizeMultiplier),
                             material, 0, null, 0, null, false, false);
             }
         }
 
-        if (showStaticMarkers && null != staticMarkerPositions)
+        if (ShowStaticMarkers && null != staticMarkerPositions)
         {
             for (int i = 0; i < staticMarkerPositions[controller.frame].Length; i++)
             {
                 Vector3 v = Vector3.Lerp(staticMarkerPositions[controller.frame][i],
                     staticMarkerPositions[controller.nextFrame][i], controller.frameAlpha);
                 Graphics.DrawMesh(sphereMesh,
-                            Matrix4x4.TRS(v, Quaternion.identity, Vector3.one * markerScale),
+                            Matrix4x4.TRS(v, Quaternion.identity, Vector3.one * markerScale * sizeMultiplier),
                             material, 0, null, 0, null, false, false);
             }
         }
