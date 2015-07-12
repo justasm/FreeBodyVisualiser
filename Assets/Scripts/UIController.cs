@@ -21,6 +21,7 @@ public class UIController : MonoBehaviour {
     public Transform muscleVisibilityContentPanel;
     public Button muscleVisibilityAllOn;
     public Button muscleVisibilityAllOff;
+    public InputField muscleGroupSearch;
 
     public Transform boneVisibilityContentPanel;
     public Button boneVisibilityAllOn;
@@ -77,6 +78,16 @@ public class UIController : MonoBehaviour {
                 for (int i = 0; i < muscleVisibilityContentPanel.childCount; i++)
                 {
                     muscleVisibilityContentPanel.GetChild(i).GetComponent<ToggleWrapper>().toggle.isOn = false;
+                }
+            });
+        muscleGroupSearch.onValueChange.AddListener(
+            (query) =>
+            {
+                foreach (Transform group in muscleVisibilityContentPanel)
+                {
+                    ToggleWrapper groupToggle = group.GetComponent<ToggleWrapper>();
+                    group.gameObject.SetActive(
+                        groupToggle.label.text.ToLowerInvariant().Contains(query.ToLowerInvariant()));
                 }
             });
 
