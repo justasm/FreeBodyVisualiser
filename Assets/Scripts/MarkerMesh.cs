@@ -14,6 +14,8 @@ public class MarkerMesh : MonoBehaviour {
     private Vector3[][] dynamicMarkerPositions;
     private Vector3[][] staticMarkerPositions;
 
+    public Vector3 Centroid { get; private set; }
+
     private float markerScale = 1 / 100f; // by default, if present uses that defined in XML parameter file
     private float sizeMultiplier = 1f;
 
@@ -33,6 +35,18 @@ public class MarkerMesh : MonoBehaviour {
     {
         MarkerDataLoader.LoadMarkerPositions(out dynamicMarkerPositions, out staticMarkerPositions);
         if(0 != model.markerRadiusMetres) markerScale = model.markerRadiusMetres * 2;
+
+        Centroid = new Vector3();
+        int count = 0;
+        for (int i = 0; i < staticMarkerPositions.Length; i++)
+        {
+            for (int j = 0; j < staticMarkerPositions[i].Length; j++)
+            {
+                ++count;
+                Centroid += staticMarkerPositions[i][j];
+            }
+        }
+        Centroid /= count;
     }
 
     public void SetSizeMultiplier(float multiplier)

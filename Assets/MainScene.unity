@@ -3833,7 +3833,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11d48f00042a95d41ad7386b814c6dad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetMuscleMesh: {fileID: 978213309}
   distance: 1.5
   xSpeed: 960
   ySpeed: 480

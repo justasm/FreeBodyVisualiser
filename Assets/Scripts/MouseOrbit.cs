@@ -9,8 +9,6 @@ using System.Collections;
 [AddComponentMenu("Camera-Control/Mouse Orbit with zoom")]
 public class MouseOrbit : MonoBehaviour
 {
-    public MuscleMesh targetMuscleMesh;
-
     public float distance = 5.0f;
     public float xSpeed = 120.0f;
     public float ySpeed = 120.0f;
@@ -26,7 +24,15 @@ public class MouseOrbit : MonoBehaviour
     float x = 0.0f;
     float y = 0.0f;
 
-    // Use this for initialization
+    private MuscleMesh muscleMesh;
+    private MarkerMesh markerMesh;
+
+    void Awake()
+    {
+        muscleMesh = FindObjectOfType<MuscleMesh>();
+        markerMesh = FindObjectOfType<MarkerMesh>();
+    }
+
     void Start()
     {
         Vector3 angles = transform.eulerAngles;
@@ -36,26 +42,33 @@ public class MouseOrbit : MonoBehaviour
 
     void LateUpdate()
     {
-        if (targetMuscleMesh)
+        if (Input.GetMouseButton(0))
         {
-            if (Input.GetMouseButton(0))
-            {
-                x += Input.GetAxis("Mouse X") * xSpeed * 0.02f;
-                y -= Input.GetAxis("Mouse Y") * ySpeed * 0.02f;
-            }
-
-            y = ClampAngle(y, yMinLimit, yMaxLimit);
-
-            Quaternion rotation = Quaternion.Euler(y, x, 0);
-
-            distance = Mathf.Clamp(distance - Input.GetAxis("Mouse ScrollWheel") * 0.5f, distanceMin, distanceMax);
-
-            Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
-            Vector3 position = rotation * negDistance + targetMuscleMesh.Centroid + Vector3.up * yOffset;
-
-            transform.rotation = rotation;
-            transform.position = position;
+            x += Input.GetAxis("Mouse X") * xSpeed * 0.02f;
+            y -= Input.GetAxis("Mouse Y") * ySpeed * 0.02f;
         }
+
+        y = ClampAngle(y, yMinLimit, yMaxLimit);
+
+        Quaternion rotation = Quaternion.Euler(y, x, 0);
+
+        distance = Mathf.Clamp(distance - Input.GetAxis("Mouse ScrollWheel") * 0.5f, distanceMin, distanceMax);
+
+        Vector3 target = new Vector3();
+        if (muscleMesh.Centroid.sqrMagnitude != 0)
+        {
+            target = muscleMesh.Centroid;
+        }
+        else if (markerMesh.Centroid.sqrMagnitude != 0)
+        {
+            target = markerMesh.Centroid;
+        }
+
+        Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
+        Vector3 position = rotation * negDistance + target + Vector3.up * yOffset;
+
+        transform.rotation = rotation;
+        transform.position = position;
     }
 
     public static float ClampAngle(float angle, float min, float max)
