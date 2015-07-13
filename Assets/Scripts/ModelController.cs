@@ -17,10 +17,10 @@ public class ModelController : MonoBehaviour {
     public Button parameterLoadButton;
 
     public Text logField;
-    public Toggle muscleToggle;
-    public Toggle forceToggle;
-    public Toggle boneToggle;
-    public Toggle markerToggle;
+    public Toggle[] muscleToggle;
+    public Toggle[] forceToggle;
+    public Toggle[] boneToggle;
+    public Toggle[] markerToggle;
     public Toggle boneGhostToggle;
     public Text markerSizeField;
     public Slider markerSizeSlider;
@@ -68,10 +68,22 @@ public class ModelController : MonoBehaviour {
             StartCoroutine(LoadAndVisualiseModel(parameterFilenameField.text));
         });
 
-        muscleToggle.onValueChanged.AddListener((on) => muscleMesh.gameObject.SetActive(on));
-        forceToggle.onValueChanged.AddListener((on) => jointForceMesh.gameObject.SetActive(on));
-        boneToggle.onValueChanged.AddListener((on) => bonesGroup.SetActive(on));
-        markerToggle.onValueChanged.AddListener((on) => markerMesh.gameObject.SetActive(on));
+        foreach (Toggle toggle in muscleToggle)
+        {
+            toggle.onValueChanged.AddListener((on) => muscleMesh.gameObject.SetActive(on));
+        }
+        foreach (Toggle toggle in forceToggle)
+        {
+            toggle.onValueChanged.AddListener((on) => jointForceMesh.gameObject.SetActive(on));
+        }
+        foreach (Toggle toggle in boneToggle)
+        {
+            toggle.onValueChanged.AddListener((on) => bonesGroup.SetActive(on));
+        }
+        foreach (Toggle toggle in markerToggle)
+        {
+            toggle.onValueChanged.AddListener((on) => markerMesh.gameObject.SetActive(on));
+        }
         boneGhostToggle.onValueChanged.AddListener(
             (on) =>
             {
