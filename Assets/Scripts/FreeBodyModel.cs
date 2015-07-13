@@ -1,6 +1,7 @@
 ﻿public class FreeBodyModel {
     public string studyName;
     public string responsiblePerson;
+    public string rootPath;
     public string geometryOutputPath;
     public string optimisationOutputPath;
     public int framesPerSecond;

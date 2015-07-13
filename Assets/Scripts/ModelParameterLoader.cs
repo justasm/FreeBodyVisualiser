@@ -101,5 +101,7 @@ public class ModelParameterLoader {
                 }
             }
         }
+
+        model.rootPath = Path.GetDirectoryName(parameterFilePath);
     }
 }

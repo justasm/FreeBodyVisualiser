@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 public class DataPathUtils {
     private static string boneModelPath;
@@ -38,10 +39,26 @@ public class DataPathUtils {
 
     public static void UpdatePaths(FreeBodyModel model)
     {
-        geoPathPrefix = model.geometryOutputPath +
-            System.IO.Path.DirectorySeparatorChar + model.studyName;
-        string optPathPrefix = model.optimisationOutputPath +
-            System.IO.Path.DirectorySeparatorChar + model.studyName;
+        if (!Path.IsPathRooted(model.geometryOutputPath))
+        {
+            geoPathPrefix = Path.Combine(model.rootPath, model.geometryOutputPath) +
+                Path.DirectorySeparatorChar + model.studyName;
+        }
+        else
+        {
+            geoPathPrefix = model.geometryOutputPath + Path.DirectorySeparatorChar + model.studyName;
+        }
+
+        string optPathPrefix;
+        if (!Path.IsPathRooted(model.optimisationOutputPath))
+        {
+            optPathPrefix = Path.Combine(model.rootPath, model.optimisationOutputPath) +
+                Path.DirectorySeparatorChar + model.studyName;
+        }
+        else
+        {
+            optPathPrefix = model.optimisationOutputPath + Path.DirectorySeparatorChar + model.studyName;
+        }
 
         MuscleJointContactForceFile = optPathPrefix + "_force_gcs.csv";
         MuscleActivationMaxFile = optPathPrefix + "_force_ub.csv";
@@ -71,8 +88,16 @@ public class DataPathUtils {
         {
             boneFilePrefix = boneFilePrefix.Remove(boneFilePrefix.Length - anatomyFileTypeSuffix.Length);
         }
-        boneModelPath = model.anatomyDatasetPath + System.IO.Path.DirectorySeparatorChar +
-            boneFilePrefix + "_bones" + System.IO.Path.DirectorySeparatorChar;
+        if (!Path.IsPathRooted(model.anatomyDatasetPath))
+        {
+            boneModelPath = Path.Combine(model.rootPath, model.anatomyDatasetPath) +
+                Path.DirectorySeparatorChar + boneFilePrefix + "_bones" + Path.DirectorySeparatorChar;
+        }
+        else
+        {
+            boneModelPath = model.anatomyDatasetPath +
+                Path.DirectorySeparatorChar + boneFilePrefix + "_bones" + Path.DirectorySeparatorChar;
+        }
 
         boneToFilename = new Dictionary<BoneMesh.Bone, string>();
         boneToFilename[BoneMesh.Bone.Foot] = boneModelPath + boneFilePrefix + footModelSuffix;
