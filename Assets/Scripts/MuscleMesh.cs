@@ -18,8 +18,8 @@ public class MuscleMesh : MonoBehaviour {
 
     private int[] vertexToMuscle;
     private int[] vertexToGroup;
-    public bool[] visibility = new bool[MuscleGroup.groups.Count];
-    public Color[] groupColor = new Color[MuscleGroup.groups.Count];
+    private bool[] visibility = new bool[MuscleGroup.groups.Count];
+    private Color[] groupColor = new Color[MuscleGroup.groups.Count];
 
     public bool LoadedSuccessfully { get; private set; }
     public bool LoadedActivations { get; private set; }
@@ -192,6 +192,11 @@ public class MuscleMesh : MonoBehaviour {
     public void SetVisibility(MuscleGroup group, bool visible)
     {
         visibility[group.index] = visible;
+    }
+
+    public bool GetVisibility(int groupIndex)
+    {
+        return visibility[groupIndex];
     }
 
     public int GetFrameCount()

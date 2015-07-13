@@ -109,7 +109,7 @@ public class ModelController : MonoBehaviour {
 
             ToggleWrapper muscleGroupToggle = newMuscleGroupToggle.GetComponent<ToggleWrapper>();
             muscleGroupToggle.label.text = group.name;
-            muscleGroupToggle.toggle.isOn = muscleMesh.visibility[group.index];
+            muscleGroupToggle.toggle.isOn = muscleMesh.GetVisibility(group.index);
             muscleGroupToggle.toggle.onValueChanged.AddListener((enabled) => muscleMesh.SetVisibility(group, enabled));
 
             newMuscleGroupToggle.transform.SetParent(muscleVisibilityContentPanel);
