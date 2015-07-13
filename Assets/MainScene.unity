@@ -407,6 +407,7 @@ MonoBehaviour:
   secondsPerFrame: .0160000008
   speedAlpha: .25
   frameCount: 0
+  advanceAutomaticallyToggle: {fileID: 604347920}
   timeScaleField: {fileID: 1039629265}
   timeScaleSlider: {fileID: 1300877677}
   frameValueField: {fileID: 1017121264}
@@ -1726,6 +1727,12 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 549355267}
+--- !u!114 &604347920 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11457672, guid: 72a3da60b5a0c0c47bb8f9c33433efbd,
+    type: 2}
+  m_PrefabInternal: {fileID: 1032068866}
+  m_Script: {fileID: 2109663825, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
 --- !u!1001 &617945699
 Prefab:
   m_ObjectHideFlags: 0

@@ -17,17 +17,23 @@ public class FrameController : MonoBehaviour {
     private int startFrame = 0;
     public int frameCount = 0;
 
+    public Toggle advanceAutomaticallyToggle;
     public Text timeScaleField;
     public Slider timeScaleSlider;
     public Text frameValueField;
     public Slider frameSlider;
+
+    public bool AdvanceAutomatically { get; set; }
 
 	void Start () {
         frame = 0;
         frameAlpha = 0;
         nextFrame = 1;
 
+        AdvanceAutomatically = true;
         timeScaleSlider.onValueChanged.AddListener((alpha) => speedAlpha = alpha);
+        advanceAutomaticallyToggle.isOn = AdvanceAutomatically;
+        advanceAutomaticallyToggle.onValueChanged.AddListener((on) => AdvanceAutomatically = on);
 	}
 
     void OnFrameChanged()
@@ -61,18 +67,28 @@ public class FrameController : MonoBehaviour {
 	
 	void Update () {
 
-        speedAlpha += Input.GetAxis("Horizontal") * Time.deltaTime;
-        if (speedAlpha != prevSpeedAlpha)
+        float alpha;
+        if (AdvanceAutomatically)
         {
+            speedAlpha += Input.GetAxis("Horizontal") * Time.deltaTime;
             if (speedAlpha < -1) speedAlpha = -1;
             if (speedAlpha > 1) speedAlpha = 1;
+            alpha = speedAlpha;
+        }
+        else
+        {
+            alpha = Input.GetAxis("Horizontal");
+        }
+
+        if (speedAlpha != prevSpeedAlpha)
+        {
             OnSpeedChanged();
         }
         prevSpeedAlpha = speedAlpha;
 
         if (0 == frameCount) return;
 
-        accumulator += speedAlpha * Time.deltaTime;
+        accumulator += alpha * Time.deltaTime;
         while (Mathf.Abs(accumulator) >= secondsPerFrame)
         {
             frame = (frameCount + frame + (int)Mathf.Sign(accumulator)) % frameCount;
