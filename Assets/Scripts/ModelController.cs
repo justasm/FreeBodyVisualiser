@@ -29,6 +29,8 @@ public class ModelController : MonoBehaviour {
     public Text forceSizeField;
     public Slider forceSizeSlider;
     public Toggle muscleActivationToggle;
+    public Button reloadXmlButton;
+    public Toggle xmlPathVisibilityToggle;
 
     public GameObject bonesGroup;
 
@@ -96,6 +98,8 @@ public class ModelController : MonoBehaviour {
 
         muscleActivationToggle.isOn = muscleMesh.ShowActivations;
         muscleActivationToggle.onValueChanged.AddListener((on) => muscleMesh.ShowActivations = on);
+
+        reloadXmlButton.onClick.AddListener(() => StartCoroutine(LoadAndVisualiseModel(parameterFilenameField.text)));
 
         for (int i = 0; i < MuscleGroup.groups.Count; i++)
         {
@@ -174,6 +178,7 @@ public class ModelController : MonoBehaviour {
     IEnumerator LoadAndVisualiseModel(string parameterFilePath)
     {
         // TODO cancel any existing load
+        reloadXmlButton.gameObject.SetActive(false);
 
         logField.text = "Loading study XML file";
         logField.gameObject.SetActive(true);
@@ -361,6 +366,9 @@ public class ModelController : MonoBehaviour {
 
     void UpdateUiAfterLoad()
     {
+        reloadXmlButton.gameObject.SetActive(true);
+        xmlPathVisibilityToggle.isOn = false;
+
         studyNameField.text = activeModel.studyName;
         studySubjectField.text = activeModel.framesPerSecond + "Hz  |  " + activeModel.sex + " " +
                 activeModel.height + "m " + activeModel.mass + "kg";
