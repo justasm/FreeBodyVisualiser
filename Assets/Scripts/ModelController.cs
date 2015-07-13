@@ -33,6 +33,7 @@ public class ModelController : MonoBehaviour {
     public Toggle xmlPathVisibilityToggle;
 
     public GameObject bonesGroup;
+    public GameObject leftPanel;
 
     public GameObject muscleVisibilityToggle;
     public Transform muscleVisibilityContentPanel;
@@ -368,6 +369,7 @@ public class ModelController : MonoBehaviour {
     {
         reloadXmlButton.gameObject.SetActive(true);
         xmlPathVisibilityToggle.isOn = false;
+        leftPanel.SetActive(true);
 
         studyNameField.text = activeModel.studyName;
         studySubjectField.text = activeModel.framesPerSecond + "Hz  |  " + activeModel.sex + " " +
