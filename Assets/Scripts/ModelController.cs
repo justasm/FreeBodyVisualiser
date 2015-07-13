@@ -176,6 +176,11 @@ public class ModelController : MonoBehaviour {
         parameterLoadButton.enabled = true;
     }
 
+    public void Load(string parameterFilePath)
+    {
+        StartCoroutine(LoadAndVisualiseModel(parameterFilePath));
+    }
+
     IEnumerator LoadAndVisualiseModel(string parameterFilePath)
     {
         // TODO cancel any existing load

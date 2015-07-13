@@ -5,6 +5,13 @@ using System.Collections;
 
 public class AndroidTest : MonoBehaviour {
 
+    ModelController controller;
+
+    void Awake()
+    {
+        controller = FindObjectOfType<ModelController>();
+    }
+
     void Start()
     {
         Debug.Log("persistent path " + Application.persistentDataPath);
@@ -45,7 +52,7 @@ public class AndroidTest : MonoBehaviour {
         Debug.Log("writing END - - - - -");
     }
 
-    public void OnPathReceived(string path)
+    public void ReathFileAtPath(string path)
     {
         Debug.Log("Unity received path " + path);
         using (StreamReader reader = new StreamReader(path))
@@ -57,6 +64,12 @@ public class AndroidTest : MonoBehaviour {
                 line = reader.ReadLine();
             }
         }
+    }
+
+    public void OpenParameterFile(string path)
+    {
+        Debug.Log("Passing on to ModelController path " + path);
+        controller.Load(path);
     }
 
     void Update()

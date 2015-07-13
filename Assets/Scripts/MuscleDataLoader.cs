@@ -16,13 +16,8 @@ public class MuscleDataLoader {
 
         for (int i = 0; i < numMuscleElements; i++)
         {
-#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
             string path = DataPathUtils.GetMusclePositionFile(i);
             Vector3[][] musclePath = ReadMuscleDataFile(path);
-#else
-            string path = String.Format("c14_demo_{0}", i);
-            Vector3[][] musclePath = ReadMuscleDataFileResources(path);
-#endif
 
             for (int j = 0; j < musclePath.Length; j++)
             {
@@ -69,21 +64,6 @@ public class MuscleDataLoader {
         List<Vector3[]> frames = new List<Vector3[]>();
 
         using (StreamReader reader = new StreamReader(fileName, Encoding.Default))
-        {
-            ReadVertices(reader, frames);
-            reader.Close();
-        }
-
-        return frames.ToArray();
-    }
-
-    private static Vector3[][] ReadMuscleDataFileResources(string filename)
-    {
-        List<Vector3[]> frames = new List<Vector3[]>();
-
-        TextAsset file = Resources.Load(filename) as TextAsset;
-
-        using (StringReader reader = new StringReader(file.text))
         {
             ReadVertices(reader, frames);
             reader.Close();
