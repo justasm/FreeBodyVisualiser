@@ -473,6 +473,7 @@ MonoBehaviour:
   staticMarkerToggle: {fileID: 730389748}
   forceSizeField: {fileID: 1988493946}
   forceSizeSlider: {fileID: 705513893}
+  muscleActivationToggle: {fileID: 229171502}
   bonesGroup: {fileID: 1386413383}
   muscleVisibilityToggle: {fileID: 193804, guid: db9f6c2736ab56947b655bd921c7b2a4,
     type: 2}
@@ -734,6 +735,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
+--- !u!114 &229171502 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11457672, guid: 72a3da60b5a0c0c47bb8f9c33433efbd,
+    type: 2}
+  m_PrefabInternal: {fileID: 256110985}
+  m_Script: {fileID: 2109663825, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
 --- !u!1001 &256110985
 Prefab:
   m_ObjectHideFlags: 0

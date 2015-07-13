@@ -56,11 +56,12 @@ public class UIController : MonoBehaviour {
             controlToggles[i].onValueChanged.AddListener(toggleActions[i].OnValueChanged);
         }
 
+        MuscleMesh muscleMesh = FindObjectOfType<MuscleMesh>();
         muscleControlToggle.onValueChanged.AddListener(
             (on) =>
             {
                 muscleControlPanel.SetActive(on);
-                muscleActivationControlPanel.SetActive(on);
+                muscleActivationControlPanel.SetActive(muscleMesh.LoadedActivations && on);
             });
         forceControlToggle.onValueChanged.AddListener((on) => forceControlPanel.SetActive(on));
         markerControlToggle.onValueChanged.AddListener((on) => markerControlPanel.SetActive(on));

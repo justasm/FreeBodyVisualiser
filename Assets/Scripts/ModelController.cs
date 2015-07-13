@@ -28,6 +28,7 @@ public class ModelController : MonoBehaviour {
     public Toggle staticMarkerToggle;
     public Text forceSizeField;
     public Slider forceSizeSlider;
+    public Toggle muscleActivationToggle;
 
     public GameObject bonesGroup;
 
@@ -92,6 +93,9 @@ public class ModelController : MonoBehaviour {
         staticMarkerToggle.isOn = markerMesh.ShowStaticMarkers;
         dynamicMarkerToggle.onValueChanged.AddListener((on) => markerMesh.ShowDynamicMarkers = on);
         staticMarkerToggle.onValueChanged.AddListener((on) => markerMesh.ShowStaticMarkers = on);
+
+        muscleActivationToggle.isOn = muscleMesh.ShowActivations;
+        muscleActivationToggle.onValueChanged.AddListener((on) => muscleMesh.ShowActivations = on);
 
         for (int i = 0; i < MuscleGroup.groups.Count; i++)
         {

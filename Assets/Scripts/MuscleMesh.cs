@@ -13,11 +13,17 @@ public class MuscleMesh : MonoBehaviour {
     private Vector3[][] lines;
     private float[][] lineWeights;
     private Color[][] lineColors;
+    private float[][] lineActivationWeights;
+    private Color[][] lineActivationColors;
 
     private int[] vertexToMuscle;
     private int[] vertexToGroup;
     public bool[] visibility = new bool[MuscleGroup.groups.Count];
     public Color[] groupColor = new Color[MuscleGroup.groups.Count];
+
+    public bool LoadedSuccessfully { get; private set; }
+    public bool LoadedActivations { get; private set; }
+    public bool ShowActivations { get; set; }
 
     public Vector3 Centroid { get; private set; }
 
@@ -37,10 +43,15 @@ public class MuscleMesh : MonoBehaviour {
         meshRenderer.sharedMaterial = new Material(shader);
 
         for (int i = 0; i < visibility.Length; i++) visibility[i] = true;
+        LoadedSuccessfully = false;
+        LoadedActivations = false;
+        ShowActivations = true;
     }
 
     public void ReloadMusclePaths()
     {
+        mesh.Clear();
+        LoadedSuccessfully = false;
         MuscleDataLoader.LoadMusclePaths(out lines, out vertexToMuscle);
 
         int vertices = vertexToMuscle.Length;
@@ -68,25 +79,34 @@ public class MuscleMesh : MonoBehaviour {
             }
         }
         Centroid /= count;
+
+        LoadedSuccessfully = true;
     }
 
     // assumes lines[][] and vertexToMuscle[] are already populated
     public void ReloadMuscleActivations()
     {
+        LoadedActivations = false;
         float[][] muscleForce;
         MuscleDataLoader.LoadMuscleActivations(out muscleForce);
 
-        lineWeights = CalculateLineWeights(vertexToMuscle, muscleForce);
-        lineColors = CalculateLineColors(vertexToMuscle, muscleForce);
+        lineActivationWeights = CalculateLineWeights(vertexToMuscle, muscleForce);
+        lineActivationColors = CalculateLineColors(vertexToMuscle, muscleForce);
+        LoadedActivations = true;
     }
 	
     void Update()
     {
-        if (null == lines) return;
+        if (!LoadedSuccessfully) return;
+        bool activ = LoadedActivations && ShowActivations;
         UpdateLines(
             Lerp(lines[controller.frame], lines[controller.nextFrame], controller.frameAlpha),
-            Lerp(lineWeights[controller.frame], lineWeights[controller.nextFrame], controller.frameAlpha),
-            Lerp(lineColors[controller.frame], lineColors[controller.nextFrame], controller.frameAlpha));
+            Lerp(activ ? lineActivationWeights[controller.frame] : lineWeights[controller.frame],
+                activ ? lineActivationWeights[controller.nextFrame] : lineWeights[controller.nextFrame],
+                controller.frameAlpha),
+            Lerp(activ ? lineActivationColors[controller.frame] : lineColors[controller.frame],
+                activ ? lineActivationColors[controller.nextFrame] : lineColors[controller.nextFrame],
+                controller.frameAlpha));
 	}
 
     Vector3[] Lerp(Vector3[] v1, Vector3[] v2, float t)
