@@ -12,6 +12,12 @@ public class UIController : MonoBehaviour {
     private Toggle[] controlToggles;
     private ToggleAction[] toggleActions;
 
+    public GameObject mobileUi;
+
+    public Button loadMobileButton;
+
+    public GameObject desktopUi;
+
     public GameObject rightPanel;
     public GameObject markerControlPanel;
     public GameObject boneControlPanel;
@@ -44,6 +50,30 @@ public class UIController : MonoBehaviour {
         {
             deleg(toggle, on);
         }
+    }
+
+    void Awake()
+    {
+#if UNITY_IOS || UNITY_ANDROID
+        desktopUi.SetActive(false);
+        mobileUi.SetActive(true);
+
+        loadMobileButton.onClick.AddListener(() => LaunchMobileFilePicker());
+#else
+        desktopUi.SetActive(true);
+        mobileUi.SetActive(false);
+#endif
+    }
+
+    void LaunchMobileFilePicker()
+    {
+#if UNITY_ANDROID
+        AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
+        jo.Call("launchFilePicker");
+#else
+        Debug.LogWarning("File picker not implemented for this platform.");
+#endif
     }
 
     void Start()

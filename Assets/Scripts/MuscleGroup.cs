@@ -22,7 +22,7 @@ public class MuscleGroup {
         string color06 = "CEA262"; //Grayish Yellow
         string color07 = "817066"; //Medium Gray
 
-        //The following will not be good for people with defective color vision
+        // Below not great for people with defective color vision
         string color08 = "007D34"; //Vivid Green
         string color09 = "F6768E"; //Strong Purplish Pink
         string color10 = "00538A"; //Strong Blue

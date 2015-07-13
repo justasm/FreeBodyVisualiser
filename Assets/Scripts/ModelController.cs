@@ -176,7 +176,7 @@ public class ModelController : MonoBehaviour {
         parameterLoadButton.enabled = true;
     }
 
-    public void Load(string parameterFilePath)
+    public void LoadParameterFile(string parameterFilePath)
     {
         StartCoroutine(LoadAndVisualiseModel(parameterFilePath));
     }
