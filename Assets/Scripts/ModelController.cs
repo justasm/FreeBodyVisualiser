@@ -186,7 +186,13 @@ public class ModelController : MonoBehaviour {
         yield return 0;
 
         #region load xml parameters
-        LoadCatchErrors(() => ModelParameterLoader.LoadModel(parameterFilePath, out activeModel));
+        bool parametersLoaded = false;
+        LoadCatchErrors(() =>
+        {
+            ModelParameterLoader.LoadModel(parameterFilePath, out activeModel);
+            parametersLoaded = true;
+        });
+        if (!parametersLoaded) yield break;
         DataPathUtils.UpdatePaths(activeModel);
         frameController.UpdateFrameData(activeModel);
         #endregion
