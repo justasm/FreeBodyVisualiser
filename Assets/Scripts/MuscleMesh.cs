@@ -43,6 +43,10 @@ public class MuscleMesh : MonoBehaviour {
         meshRenderer.sharedMaterial = new Material(shader);
 
         for (int i = 0; i < visibility.Length; i++) visibility[i] = true;
+        for (int i = 0; i < groupColor.Length; i++)
+        {
+            groupColor[i] = MuscleGroup.groups[i].color;
+        }
         LoadedSuccessfully = false;
         LoadedActivations = false;
         ShowActivations = true;
