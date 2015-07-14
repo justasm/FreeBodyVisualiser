@@ -5,15 +5,14 @@ public class CameraOrbit : MonoBehaviour {
 
     private CardboardHead head;
     public float distanceMeters = 2;
-    public float zOffset = 0.2f;
-    private MuscleMesh muscleMesh;
-    private MarkerMesh markerMesh;
+    public float distanceMetersMin = 0.2f;
+    public float distanceMetersMax = 20;
 
-    void Awake()
-    {
-        muscleMesh = FindObjectOfType<MuscleMesh>();
-        markerMesh = FindObjectOfType<MarkerMesh>();
-    }
+    public float zOffset = 0.2f;
+    public MuscleMesh muscleMesh;
+    public MarkerMesh markerMesh;
+
+    public bool ScrollWheelEnabled { get; set; }
 
     void Start()
     {
@@ -31,10 +30,6 @@ public class CameraOrbit : MonoBehaviour {
         {
             target = markerMesh.Centroid;
         }
-
-        // Move Cardboard head appropriately
-        head.transform.position = target - (distanceMeters * head.Gaze.direction);
-        head.transform.Translate(Vector3.up * zOffset);
 
         //transform.rotation = Quaternion.Inverse(head.transform.rotation);
         //Vector3 eulers = head.transform.rotation.eulerAngles;
@@ -54,6 +49,17 @@ public class CameraOrbit : MonoBehaviour {
 
             distanceMeters *= (prevDistance / currentDistance);
         }
+
+        if (ScrollWheelEnabled)
+        {
+            distanceMeters -= Input.GetAxis("Mouse ScrollWheel");
+        }
+        
+        distanceMeters = Mathf.Clamp(distanceMeters, distanceMetersMin, distanceMetersMax);
+        
+        // Move Cardboard head appropriately
+        head.transform.position = target - (distanceMeters * head.Gaze.direction);
+        head.transform.Translate(Vector3.up * zOffset);
     }
 
 }
