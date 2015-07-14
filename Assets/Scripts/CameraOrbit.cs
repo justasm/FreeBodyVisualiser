@@ -5,8 +5,9 @@ public class CameraOrbit : MonoBehaviour {
 
     private CardboardHead head;
     public float distanceMeters = 2;
-    public float distanceMetersMin = 0.2f;
-    public float distanceMetersMax = 20;
+    public float distanceMetersMin = 0.4f;
+    public float distanceMetersMax = 10;
+    public float scrollSensitivity = 0.25f;
 
     public float zOffset = 0.2f;
     public MuscleMesh muscleMesh;
@@ -19,7 +20,7 @@ public class CameraOrbit : MonoBehaviour {
         head = Camera.main.GetComponent<CardboardHead>();
     }
 
-    void Update()
+    void LateUpdate()
     {
         Vector3 target = new Vector3();
         if (muscleMesh.Centroid.sqrMagnitude != 0)
@@ -52,7 +53,7 @@ public class CameraOrbit : MonoBehaviour {
 
         if (ScrollWheelEnabled)
         {
-            distanceMeters -= Input.GetAxis("Mouse ScrollWheel");
+            distanceMeters -= Input.GetAxis("Mouse ScrollWheel") * scrollSensitivity;
         }
         
         distanceMeters = Mathf.Clamp(distanceMeters, distanceMetersMin, distanceMetersMax);
