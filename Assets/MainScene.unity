@@ -4587,7 +4587,7 @@ MonoBehaviour:
   distanceMeters: 2
   distanceMetersMin: .400000006
   distanceMetersMax: 10
-  scrollSensitivity: .25
+  scrollSensitivity: .349999994
   zOffset: .200000003
   muscleMesh: {fileID: 978213309}
   markerMesh: {fileID: 223778881}

@@ -7,7 +7,7 @@ public class CameraOrbit : MonoBehaviour {
     public float distanceMeters = 2;
     public float distanceMetersMin = 0.4f;
     public float distanceMetersMax = 10;
-    public float scrollSensitivity = 0.25f;
+    public float scrollSensitivity = 0.35f;
 
     public float zOffset = 0.2f;
     public MuscleMesh muscleMesh;
