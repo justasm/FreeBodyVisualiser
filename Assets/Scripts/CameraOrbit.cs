@@ -14,10 +14,19 @@ public class CameraOrbit : MonoBehaviour {
     public MarkerMesh markerMesh;
 
     public bool ScrollWheelEnabled { get; set; }
+    public bool MouseDragEnabled { get; set; }
+
+    public float horizontalMouseSpeed = 20f;
+    public float verticalMouseSpeed = 15f;
+
+    private float xRotationOffset = 0;
+    private float yRotationOffset = 0;
 
     void Start()
     {
         head = Camera.main.GetComponent<CardboardHead>();
+        ScrollWheelEnabled = true;
+        MouseDragEnabled = true;
     }
 
     void LateUpdate()
@@ -39,6 +48,7 @@ public class CameraOrbit : MonoBehaviour {
         //eulers.z = 0;
         //head.transform.rotation = Quaternion.Euler(eulers);
 
+        // scaling / zooming
         if (Input.touchCount >= 2)
         {
             Vector2 current0 = Input.GetTouch(0).position;
@@ -57,10 +67,30 @@ public class CameraOrbit : MonoBehaviour {
         }
         
         distanceMeters = Mathf.Clamp(distanceMeters, distanceMetersMin, distanceMetersMax);
+
+        // panning
+#if (UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR
+        // don't support this yet, too sporradic
+#else
+        if (MouseDragEnabled && Input.GetMouseButton(0))
+        {
+            float xDelta = Input.GetAxis("Mouse X") * horizontalMouseSpeed;
+            float yDelta = -Input.GetAxis("Mouse Y") * verticalMouseSpeed;
+
+            xRotationOffset += xDelta;
+            yRotationOffset += yDelta;
+        }
+#endif
+
+        yRotationOffset = Mathf.Clamp(yRotationOffset, -40, 80);
+
+        Quaternion rotationOffset = Quaternion.Euler(yRotationOffset, xRotationOffset, 0);
         
-        // Move Cardboard head appropriately
-        head.transform.position = target - (distanceMeters * head.Gaze.direction);
+        // move Cardboard head appropriately
+        head.transform.position = target -
+            head.transform.rotation * rotationOffset * Vector3.forward * distanceMeters;
         head.transform.Translate(Vector3.up * zOffset);
+        head.transform.rotation *= rotationOffset;
     }
 
 }
