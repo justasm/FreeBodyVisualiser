@@ -117,6 +117,8 @@ public class UIController : MonoBehaviour {
                     muscleVisibilityContentPanel.GetChild(i).GetComponent<ToggleWrapper>().toggle.isOn = false;
                 }
             });
+
+        ScrollRect scrollView = muscleVisibilityContentPanel.parent.GetComponent<ScrollRect>();
         muscleGroupSearch.onValueChange.AddListener(
             (query) =>
             {
@@ -126,6 +128,7 @@ public class UIController : MonoBehaviour {
                     group.gameObject.SetActive(
                         groupToggle.label.text.ToLowerInvariant().Contains(query.ToLowerInvariant()));
                 }
+                scrollView.verticalNormalizedPosition = 1f;
             });
 
         boneVisibilityAllOn.onClick.AddListener(
