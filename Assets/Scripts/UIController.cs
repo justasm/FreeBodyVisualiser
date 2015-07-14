@@ -54,7 +54,7 @@ public class UIController : MonoBehaviour {
 
     void Awake()
     {
-#if UNITY_IOS || UNITY_ANDROID
+#if (UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR
         desktopUi.SetActive(false);
         mobileUi.SetActive(true);
 
