@@ -58,30 +58,22 @@ public class UIController : MonoBehaviour {
 #if (UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR
         desktopUi.SetActive(false);
         mobileUi.SetActive(true);
-
-        VRUtils vrUtils = GetComponent<VRUtils>();
-        loadMobileButton.onClick.AddListener(() => LaunchMobileFilePicker());
-        enableVrMobileButton.onClick.AddListener(() => vrUtils.EnableVR());
 #else
         desktopUi.SetActive(true);
         mobileUi.SetActive(false);
 #endif
     }
 
-    void LaunchMobileFilePicker()
-    {
-#if UNITY_ANDROID
-        AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-        AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
-        jo.Call("launchFilePicker");
-#else
-        Debug.LogWarning("File picker not implemented for this platform.");
-#endif
-    }
-
     void Start()
     {
-
+#if (UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR
+        loadMobileButton.onClick.AddListener(() => LaunchMobileFilePicker());
+        VRUtils vrUtils = GetComponent<VRUtils>();
+        enableVrMobileButton.onClick.AddListener(() => vrUtils.EnableVR());
+        
+        // nothing more to see here for mobile clients
+        return;
+#endif
         controlToggles = new Toggle[]{muscleControlToggle, forceControlToggle, boneControlToggle, markerControlToggle};
         toggleActions = new ToggleAction[controlToggles.Length];
         for (int i = 0; i < controlToggles.Length; i++)
@@ -165,6 +157,17 @@ public class UIController : MonoBehaviour {
 
         rightPanel.gameObject.SetActive(on);
         //rightPanel.gameObject.GetComponent<CanvasRenderer>().SetAlpha(on ? 1f : 0f);
+    }
+
+    void LaunchMobileFilePicker()
+    {
+#if UNITY_ANDROID
+        AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
+        jo.Call("launchFilePicker");
+#else
+        Debug.LogWarning("File picker not implemented for this platform.");
+#endif
     }
 
 }

@@ -61,13 +61,6 @@ public class ModelController : MonoBehaviour {
 
         logField.gameObject.SetActive(false);
 
-        parameterLoadButton.onClick.AddListener(() =>
-        {
-            if (0 == parameterFilenameField.text.Length) return;
-            StartCoroutine(PreventSpamClick());
-            StartCoroutine(LoadAndVisualiseModel(parameterFilenameField.text));
-        });
-
         foreach (Toggle toggle in muscleToggle)
         {
             toggle.onValueChanged.AddListener((on) => muscleMesh.gameObject.SetActive(on));
@@ -84,6 +77,19 @@ public class ModelController : MonoBehaviour {
         {
             toggle.onValueChanged.AddListener((on) => markerMesh.gameObject.SetActive(on));
         }
+
+#if (UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR
+        // nothing more to see here for mobile clients
+        return;
+#endif
+
+        parameterLoadButton.onClick.AddListener(() =>
+        {
+            if (0 == parameterFilenameField.text.Length) return;
+            StartCoroutine(PreventSpamClick());
+            StartCoroutine(LoadAndVisualiseModel(parameterFilenameField.text));
+        });
+
         boneGhostToggle.onValueChanged.AddListener(
             (on) =>
             {
