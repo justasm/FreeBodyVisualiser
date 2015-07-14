@@ -15,6 +15,7 @@ public class UIController : MonoBehaviour {
     public GameObject mobileUi;
 
     public Button loadMobileButton;
+    public Button enableVrMobileButton;
 
     public GameObject desktopUi;
 
@@ -58,7 +59,9 @@ public class UIController : MonoBehaviour {
         desktopUi.SetActive(false);
         mobileUi.SetActive(true);
 
+        VRUtils vrUtils = GetComponent<VRUtils>();
         loadMobileButton.onClick.AddListener(() => LaunchMobileFilePicker());
+        enableVrMobileButton.onClick.AddListener(() => vrUtils.EnableVR());
 #else
         desktopUi.SetActive(true);
         mobileUi.SetActive(false);
@@ -78,6 +81,7 @@ public class UIController : MonoBehaviour {
 
     void Start()
     {
+
         controlToggles = new Toggle[]{muscleControlToggle, forceControlToggle, boneControlToggle, markerControlToggle};
         toggleActions = new ToggleAction[controlToggles.Length];
         for (int i = 0; i < controlToggles.Length; i++)
