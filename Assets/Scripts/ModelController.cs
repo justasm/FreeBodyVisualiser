@@ -396,12 +396,12 @@ public class ModelController : MonoBehaviour {
         catch (DirectoryNotFoundException e)
         {
             Debug.LogWarning(e);
-            appendToLog(".. <color=red>Failed, directory missing.</color>");
+            appendToLog(".. <color=red>Failed, directory missing:\n" + e.Message +  "</color>");
         }
         catch (FileNotFoundException e)
         {
             Debug.LogWarning(e);
-            appendToLog(".. <color=red>Failed, file missing.</color>");
+            appendToLog(".. <color=red>Failed, file missing:\n" + e.FileName + "</color>");
         }
         catch (IOException e)
         {
