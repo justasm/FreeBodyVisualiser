@@ -79,18 +79,20 @@ public class CameraOrbit : MonoBehaviour {
 
             xRotationOffset += xDelta;
             yRotationOffset += yDelta;
+
+            yRotationOffset = Mathf.Clamp(yRotationOffset, -40, 80);
         }
 #endif
 
-        yRotationOffset = Mathf.Clamp(yRotationOffset, -40, 80);
-
-        Quaternion rotationOffset = Quaternion.Euler(yRotationOffset, xRotationOffset, 0);
-        
         // move Cardboard head appropriately
-        head.transform.position = target -
-            head.transform.rotation * rotationOffset * Vector3.forward * distanceMeters;
+#if (UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR
+        head.transform.position = target - head.transform.rotation * Vector3.forward * distanceMeters;
         head.transform.Translate(Vector3.up * zOffset);
-        head.transform.rotation *= rotationOffset;
+#else
+        head.transform.rotation = Quaternion.Euler(yRotationOffset, xRotationOffset, 0);
+        head.transform.position = target - head.transform.rotation * Vector3.forward * distanceMeters;
+        head.transform.Translate(Vector3.up * zOffset);
+#endif
     }
 
 }
