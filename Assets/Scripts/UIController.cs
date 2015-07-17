@@ -7,6 +7,7 @@ public class UIController : MonoBehaviour {
 
     public Toggle muscleControlToggle;
     public Toggle forceControlToggle;
+    public Toggle groundForceControlToggle;
     public Toggle boneControlToggle;
     public Toggle markerControlToggle;
     private Toggle[] controlToggles;
@@ -25,6 +26,7 @@ public class UIController : MonoBehaviour {
     public GameObject muscleActivationControlPanel;
     public GameObject muscleControlPanel;
     public GameObject forceControlPanel;
+    public GameObject groundForceControlPanel;
 
     public Transform muscleVisibilityContentPanel;
     public Button muscleVisibilityAllOn;
@@ -74,7 +76,7 @@ public class UIController : MonoBehaviour {
         // nothing more to see here for mobile clients
         return;
 #endif
-        controlToggles = new Toggle[]{muscleControlToggle, forceControlToggle, boneControlToggle, markerControlToggle};
+        controlToggles = new Toggle[]{muscleControlToggle, forceControlToggle, groundForceControlToggle, boneControlToggle, markerControlToggle};
         toggleActions = new ToggleAction[controlToggles.Length];
         for (int i = 0; i < controlToggles.Length; i++)
         {
@@ -90,6 +92,7 @@ public class UIController : MonoBehaviour {
                 muscleActivationControlPanel.SetActive(muscleMesh.LoadedActivations && on);
             });
         forceControlToggle.onValueChanged.AddListener((on) => forceControlPanel.SetActive(on));
+        groundForceControlToggle.onValueChanged.AddListener((on) => groundForceControlPanel.SetActive(on));
         markerControlToggle.onValueChanged.AddListener((on) => markerControlPanel.SetActive(on));
         boneControlToggle.onValueChanged.AddListener((on) => boneControlPanel.SetActive(on));
 

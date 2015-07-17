@@ -19,6 +19,7 @@ public class ModelController : MonoBehaviour {
     public Text logField;
     public Toggle[] muscleToggle;
     public Toggle[] forceToggle;
+    public Toggle[] groundForceToggle;
     public Toggle[] boneToggle;
     public Toggle[] markerToggle;
     public Toggle boneGhostToggle;
@@ -28,6 +29,8 @@ public class ModelController : MonoBehaviour {
     public Toggle staticMarkerToggle;
     public Text forceSizeField;
     public Slider forceSizeSlider;
+    public Text groundForceSizeField;
+    public Slider groundForceSizeSlider;
     public Toggle muscleActivationToggle;
     public Button reloadXmlButton;
     public Toggle xmlPathVisibilityToggle;
@@ -44,6 +47,7 @@ public class ModelController : MonoBehaviour {
     private BoneData boneData;
     private BoneMesh[] boneMeshes;
     private JointForceMesh jointForceMesh;
+    private GroundForceMesh groundForceMesh;
     private MuscleMesh muscleMesh;
     private MarkerMesh markerMesh;
 
@@ -53,6 +57,7 @@ public class ModelController : MonoBehaviour {
         boneData = GetComponent<BoneData>();
         boneMeshes = FindObjectsOfType<BoneMesh>();
         jointForceMesh = FindObjectOfType<JointForceMesh>();
+        groundForceMesh = FindObjectOfType<GroundForceMesh>();
         muscleMesh = FindObjectOfType<MuscleMesh>();
         markerMesh = FindObjectOfType<MarkerMesh>();
     }
@@ -68,6 +73,10 @@ public class ModelController : MonoBehaviour {
         foreach (Toggle toggle in forceToggle)
         {
             toggle.onValueChanged.AddListener((on) => jointForceMesh.gameObject.SetActive(on));
+        }
+        foreach (Toggle toggle in groundForceToggle)
+        {
+            toggle.onValueChanged.AddListener((on) => groundForceMesh.gameObject.SetActive(on));
         }
         foreach (Toggle toggle in boneToggle)
         {
@@ -108,6 +117,13 @@ public class ModelController : MonoBehaviour {
             {
                 jointForceMesh.SetSizeMultiplier(value);
                 forceSizeField.text = (int)(100 * value) + "%";
+            });
+
+        groundForceSizeSlider.onValueChanged.AddListener(
+            (value) =>
+            {
+                groundForceMesh.SetSizeMultiplier(value);
+                groundForceSizeField.text = (int)(100 * value) + "%";
             });
 
         dynamicMarkerToggle.isOn = markerMesh.ShowDynamicMarkers;
@@ -283,6 +299,25 @@ public class ModelController : MonoBehaviour {
             LoadCatchErrors(jointForceMesh.ReloadJointContactForces);
         }
         #endregion
+
+        #region load ground forces
+        appendToLog("\nLoading external forces");
+        yield return 0;
+        bool externalForcesLoaded = false;
+        LoadCatchErrors(
+            () =>
+            {
+                groundForceMesh.ReloadGroundForces();
+                externalForcesLoaded = true;
+            });
+        #endregion
+
+        if (externalForcesLoaded && groundForceMesh.GetFrameCount() != frameController.frameCount)
+        {
+            appendToLog("\n<color=blue>External force frame count (" + groundForceMesh.GetFrameCount() +
+                ") does not match frame count specified in XML file (" + frameController.frameCount + ").</color>");
+            frameController.SetFrameCount(Mathf.Min(groundForceMesh.GetFrameCount(), frameController.frameCount));
+        }
 
         #region load marker positions
         appendToLog("\nLoading marker positions");

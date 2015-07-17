@@ -89,6 +89,26 @@ public class ModelParameterLoader {
                                     }
                                 }
                                 break;
+                            /*case "universal_ex_force_file_parameters":
+                                while (reader.MoveToNextAttribute())
+                                {
+                                    switch (reader.Name)
+                                    {
+                                        case "scale_to_SI_units":
+                                            model.externalForceScale = int.Parse(reader.Value);
+                                            break;
+                                        case "ex_force_directory_name":
+                                            model.externalForcePath = reader.Value;
+                                            break;
+                                        case "ex_force_file_name":
+                                            model.externalForceFileName = reader.Value;
+                                            break;
+                                        case "ex_force_segment_name":
+                                            model.externalForceSegmentName = reader.Value;
+                                            break;
+                                    }
+                                }
+                                break;*/
                         }
                         //Debug.Log("<" + reader.Name + ">");
                         break;
