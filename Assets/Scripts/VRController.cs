@@ -12,9 +12,11 @@ public class VRController : MonoBehaviour {
     void Awake()
     {
         cardboard = GetComponent<Cardboard>();
-
+        
+#if UNITY_IOS || UNITY_ANDROID
         nonVRMobileUi.SetActive(!cardboard.VRModeEnabled);
         VRMobileUi.SetActive(cardboard.VRModeEnabled);
+#endif
     }
 
     void Update()
