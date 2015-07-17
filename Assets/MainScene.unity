@@ -3032,7 +3032,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11474794, guid: c89155aaad613e548aeeaf69ab1bd1da, type: 2}
       propertyPath: m_MinValue
-      value: .5
+      value: .100000001
       objectReference: {fileID: 0}
     - target: {fileID: 11474794, guid: c89155aaad613e548aeeaf69ab1bd1da, type: 2}
       propertyPath: m_MaxValue
