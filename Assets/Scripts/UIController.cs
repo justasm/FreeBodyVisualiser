@@ -68,8 +68,8 @@ public class UIController : MonoBehaviour {
     {
 #if (UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR
         loadMobileButton.onClick.AddListener(() => LaunchMobileFilePicker());
-        VRUtils vrUtils = GetComponent<VRUtils>();
-        enableVrMobileButton.onClick.AddListener(() => vrUtils.EnableVR());
+        VRController vrController = GetComponent<VRController>();
+        enableVrMobileButton.onClick.AddListener(() => vrController.EnableVR());
         
         // nothing more to see here for mobile clients
         return;
