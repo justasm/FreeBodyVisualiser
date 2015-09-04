@@ -17,9 +17,9 @@ public class MuscleMesh : MonoBehaviour {
     private Color[][] lineActivationColors;
 
     private int[] vertexToMuscle;
-    private int[] vertexToGroup;
-    private bool[] visibility = new bool[MuscleGroup.groups.Count];
-    private Color[] groupColor = new Color[MuscleGroup.groups.Count];
+    private int[] vertexToPart;
+    private bool[] visibility = new bool[MusclePart.parts.Count];
+    private Color[] partColor = new Color[MusclePart.parts.Count];
 
     public bool LoadedSuccessfully { get; private set; }
     public bool LoadedActivations { get; private set; }
@@ -43,9 +43,9 @@ public class MuscleMesh : MonoBehaviour {
         meshRenderer.sharedMaterial = new Material(shader);
 
         for (int i = 0; i < visibility.Length; i++) visibility[i] = true;
-        for (int i = 0; i < groupColor.Length; i++)
+        for (int i = 0; i < partColor.Length; i++)
         {
-            groupColor[i] = MuscleGroup.groups[i].color;
+            partColor[i] = MusclePart.parts[i].color;
         }
         LoadedSuccessfully = false;
         LoadedActivations = false;
@@ -61,14 +61,14 @@ public class MuscleMesh : MonoBehaviour {
         int vertices = vertexToMuscle.Length;
         int frames = lines.Length;
 
-        vertexToGroup = new int[vertices];
+        vertexToPart = new int[vertices];
         for (int i = 0; i < vertices; i++)
         {
-            vertexToGroup[i] = MuscleGroup.muscleToGroupId[vertexToMuscle[i]];
+            vertexToPart[i] = MusclePart.muscleToPartId[vertexToMuscle[i]];
         }
 
         lineWeights = GetLineWeights(vertices, frames);
-        lineColors = GetLineColors(vertexToGroup, frames);
+        lineColors = GetLineColors(vertexToPart, frames);
 
         AddLines(lines[controller.frame], lineWeights[controller.frame], lineColors[controller.frame]);
 
@@ -181,7 +181,7 @@ public class MuscleMesh : MonoBehaviour {
         for (int i = 0; i < lines.Length; i += 2)
         {
             int vi = (i / 2) * 4; // vertex start index for line quad
-            UpdateQuad(vertices, vi, lines[i], lines[i + (visibility[vertexToGroup[i]] ? 1 : 0)], lineWeights[i]);
+            UpdateQuad(vertices, vi, lines[i], lines[i + (visibility[vertexToPart[i]] ? 1 : 0)], lineWeights[i]);
             for (int j = 0; j < 4; j++)
             {
                 colors[vi + j] = lineColors[i];
@@ -193,14 +193,14 @@ public class MuscleMesh : MonoBehaviour {
         mesh.RecalculateBounds();
     }
 
-    public void SetVisibility(MuscleGroup group, bool visible)
+    public void SetVisibility(MusclePart part, bool visible)
     {
-        visibility[group.index] = visible;
+        visibility[part.index] = visible;
     }
 
-    public bool GetVisibility(int groupIndex)
+    public bool GetVisibility(int partIndex)
     {
-        return visibility[groupIndex];
+        return visibility[partIndex];
     }
 
     public int GetFrameCount()
@@ -237,16 +237,16 @@ public class MuscleMesh : MonoBehaviour {
         return lineWeights;
     }
 
-    Color[][] GetLineColors(int[] vertexToGroup, int frames)
+    Color[][] GetLineColors(int[] vertexToPart, int frames)
     {
         Color[][] lineColors = new Color[frames][];
 
         for (int i = 0; i < lineColors.Length; i++)
         {
-            lineColors[i] = new Color[vertexToGroup.Length];
-            for (int j = 0; j < vertexToGroup.Length; j++)
+            lineColors[i] = new Color[vertexToPart.Length];
+            for (int j = 0; j < vertexToPart.Length; j++)
             {
-                lineColors[i][j] = groupColor[vertexToGroup[j]];
+                lineColors[i][j] = partColor[vertexToPart[j]];
             }
         }
 

@@ -136,17 +136,17 @@ public class ModelController : MonoBehaviour {
 
         reloadXmlButton.onClick.AddListener(() => StartCoroutine(LoadAndVisualiseModel(parameterFilenameField.text)));
 
-        for (int i = 0; i < MuscleGroup.groups.Count; i++)
+        for (int i = 0; i < MusclePart.parts.Count; i++)
         {
-            MuscleGroup group = MuscleGroup.groups[i];
-            GameObject newMuscleGroupToggle = Instantiate(muscleVisibilityToggle) as GameObject;
+            MusclePart part = MusclePart.parts[i];
+            GameObject newMusclePartToggle = Instantiate(muscleVisibilityToggle) as GameObject;
 
-            ToggleWrapper muscleGroupToggle = newMuscleGroupToggle.GetComponent<ToggleWrapper>();
-            muscleGroupToggle.label.text = group.name;
-            muscleGroupToggle.toggle.isOn = muscleMesh.GetVisibility(group.index);
-            muscleGroupToggle.toggle.onValueChanged.AddListener((enabled) => muscleMesh.SetVisibility(group, enabled));
+            ToggleWrapper musclePartToggle = newMusclePartToggle.GetComponent<ToggleWrapper>();
+            musclePartToggle.label.text = part.name;
+            musclePartToggle.toggle.isOn = muscleMesh.GetVisibility(part.index);
+            musclePartToggle.toggle.onValueChanged.AddListener((enabled) => muscleMesh.SetVisibility(part, enabled));
 
-            newMuscleGroupToggle.transform.SetParent(muscleVisibilityContentPanel);
+            newMusclePartToggle.transform.SetParent(muscleVisibilityContentPanel);
         }
 
 #if UNITY_EDITOR

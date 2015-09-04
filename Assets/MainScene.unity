@@ -6641,7 +6641,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11409458, guid: ed8aad0421c734a45a59fd4dda7ddd6c, type: 2}
       propertyPath: m_Text
-      value: Muscle groups
+      value: Muscle parts
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ed8aad0421c734a45a59fd4dda7ddd6c, type: 2}
@@ -8351,7 +8351,7 @@ GameObject:
   - 114: {fileID: 1924283814}
   - 114: {fileID: 1924283816}
   m_Layer: 5
-  m_Name: Muscle Group Control Panel
+  m_Name: Muscle Part Control Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
