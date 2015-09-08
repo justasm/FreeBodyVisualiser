@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// TODO consolidate such that this and JointForceMesh extend same class; most logic is shared
 public class GroundForceMesh : MonoBehaviour {
 
     private const float arrowBodyScale = .02f;
@@ -42,7 +43,7 @@ public class GroundForceMesh : MonoBehaviour {
 	void Update () {
         // TODO visualise positions idependent of contact forces
         if (null == forces) return;
-        // draw contact forces for all joints for which data is available
+        // draw ground contact forces for which data is available
         
         Vector3 v = Vector3.Lerp(forces[controller.frame],
             forces[controller.nextFrame], controller.frameAlpha);
