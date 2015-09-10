@@ -4,7 +4,7 @@ using System.Collections;
 public class MarkerMesh : MonoBehaviour {
 
     private Mesh sphereMesh;
-    private Material material;
+    private Material materialStaticMarkers, materialDynamicMarkers;
 
     public Shader shader;
     public FrameController controller;
@@ -24,8 +24,11 @@ public class MarkerMesh : MonoBehaviour {
         sphereMesh = new Mesh();
         PrimitiveUtils.GenerateSphere(sphereMesh);
 
-        material = new Material(shader);
-        material.color = new Color(0f, 1f, 0f, .7f);
+        materialStaticMarkers = new Material(shader);
+        materialStaticMarkers.color = new Color(0f, 1f, 0f, .7f);
+
+        materialDynamicMarkers = new Material(shader);
+        materialDynamicMarkers.color = new Color(.8f, .1f, .7f, .7f);
 
         ShowStaticMarkers = true;
         ShowDynamicMarkers = false;
@@ -64,7 +67,7 @@ public class MarkerMesh : MonoBehaviour {
                     dynamicMarkerPositions[controller.nextFrame][i], controller.frameAlpha);
                 Graphics.DrawMesh(sphereMesh,
                             Matrix4x4.TRS(v, Quaternion.identity, Vector3.one * markerScale * sizeMultiplier),
-                            material, 0, null, 0, null, false, false);
+                            materialDynamicMarkers, 0, null, 0, null, false, false);
             }
         }
 
@@ -76,7 +79,7 @@ public class MarkerMesh : MonoBehaviour {
                     staticMarkerPositions[controller.nextFrame][i], controller.frameAlpha);
                 Graphics.DrawMesh(sphereMesh,
                             Matrix4x4.TRS(v, Quaternion.identity, Vector3.one * markerScale * sizeMultiplier),
-                            material, 0, null, 0, null, false, false);
+                            materialStaticMarkers, 0, null, 0, null, false, false);
             }
         }
     }
