@@ -215,6 +215,9 @@ public class ModelController : MonoBehaviour {
         StartCoroutine(LoadAndVisualiseModel(parameterFilePath));
     }
 
+    const int DEFAULT_LOG_PERSISTENCE_S = 4;
+    const int EXTRA_LOG_PERSISTENCE_S_PER_ERROR = 1;
+
     IEnumerator LoadAndVisualiseModel(string parameterFilePath)
     {
         // TODO cancel any existing load
@@ -236,16 +239,18 @@ public class ModelController : MonoBehaviour {
         frameController.UpdateFrameData(activeModel);
         #endregion
 
+        int extraLogPersistenceSeconds = 0;
+
         #region load muscle positions
         appendToLog("\nLoading muscle positions");
         yield return 0;
         bool musclePathsLoaded = false;
-        LoadCatchErrors(
+        if (!LoadCatchErrors(
             () =>
             {
                 muscleMesh.ReloadMusclePaths();
                 musclePathsLoaded = true;
-            });
+            })) extraLogPersistenceSeconds += EXTRA_LOG_PERSISTENCE_S_PER_ERROR;
         #endregion
 
         if (musclePathsLoaded && muscleMesh.GetFrameCount() != frameController.frameCount)
@@ -264,7 +269,10 @@ public class ModelController : MonoBehaviour {
         {
             appendToLog("\nLoading muscle activations");
             yield return 0;
-            LoadCatchErrors(muscleMesh.ReloadMuscleActivations);
+            if (!LoadCatchErrors(muscleMesh.ReloadMuscleActivations))
+            {
+                extraLogPersistenceSeconds += EXTRA_LOG_PERSISTENCE_S_PER_ERROR;
+            }
         }
         #endregion
 
@@ -272,12 +280,12 @@ public class ModelController : MonoBehaviour {
         appendToLog("\nLoading joint positions");
         yield return 0;
         bool jointPositionsLoaded = false;
-        LoadCatchErrors(
+        if(!LoadCatchErrors(
             () =>
             {
                 jointForceMesh.ReloadJointPositions();
                 jointPositionsLoaded = true;
-            });
+            })) extraLogPersistenceSeconds += EXTRA_LOG_PERSISTENCE_S_PER_ERROR;
         #endregion
 
         if (jointPositionsLoaded && jointForceMesh.GetFrameCount() != frameController.frameCount)
@@ -296,7 +304,10 @@ public class ModelController : MonoBehaviour {
         {
             appendToLog("\nLoading joint contact forces");
             yield return 0;
-            LoadCatchErrors(jointForceMesh.ReloadJointContactForces);
+            if (!LoadCatchErrors(jointForceMesh.ReloadJointContactForces))
+            {
+                extraLogPersistenceSeconds += EXTRA_LOG_PERSISTENCE_S_PER_ERROR;
+            }
         }
         #endregion
 
@@ -304,12 +315,12 @@ public class ModelController : MonoBehaviour {
         appendToLog("\nLoading external forces");
         yield return 0;
         bool externalForcesLoaded = false;
-        LoadCatchErrors(
+        if(!LoadCatchErrors(
             () =>
             {
                 groundForceMesh.ReloadGroundForces();
                 externalForcesLoaded = true;
-            });
+            })) extraLogPersistenceSeconds += EXTRA_LOG_PERSISTENCE_S_PER_ERROR;
         #endregion
 
         if (externalForcesLoaded && groundForceMesh.GetFrameCount() != frameController.frameCount)
@@ -323,12 +334,12 @@ public class ModelController : MonoBehaviour {
         appendToLog("\nLoading marker positions");
         yield return 0;
         bool markerPositionsLoaded = false;
-        LoadCatchErrors(
+        if(!LoadCatchErrors(
             () =>
             {
                 markerMesh.ReloadMarkers(activeModel);
                 markerPositionsLoaded = true;
-            });
+            })) extraLogPersistenceSeconds += EXTRA_LOG_PERSISTENCE_S_PER_ERROR;
         #endregion
 
         if (markerPositionsLoaded && markerMesh.GetFrameCount() != frameController.frameCount)
@@ -342,12 +353,12 @@ public class ModelController : MonoBehaviour {
         appendToLog("\nLoading bone data");
         yield return 0;
         bool boneDynamicsLoaded = false;
-        LoadCatchErrors(
+        if(!LoadCatchErrors(
             () =>
             {
                 boneData.Reload();
                 boneDynamicsLoaded = true;
-            });
+            })) extraLogPersistenceSeconds += EXTRA_LOG_PERSISTENCE_S_PER_ERROR;
         #endregion
 
         #region load bone geometry
@@ -361,7 +372,10 @@ public class ModelController : MonoBehaviour {
             {
                 appendToLog("\nLoading bone " + boneMeshes[i].SelectedBone);
                 yield return 0;
-                LoadCatchErrors(boneMeshes[i].Reload);
+                if (!LoadCatchErrors(boneMeshes[i].Reload))
+                {
+                    extraLogPersistenceSeconds += EXTRA_LOG_PERSISTENCE_S_PER_ERROR;
+                }
             }
         }
         #endregion
@@ -369,7 +383,7 @@ public class ModelController : MonoBehaviour {
         UpdateUiAfterLoad();
 
         appendToLog("\n<color=green>Complete.</color>");
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(DEFAULT_LOG_PERSISTENCE_S + extraLogPersistenceSeconds);
         /*float fadeOutDuration = 1f;
         for (float timer = 0; timer < fadeOutDuration; timer += Time.deltaTime)
         {
@@ -386,12 +400,13 @@ public class ModelController : MonoBehaviour {
     }
 
     delegate void LoadStuffDelegate();
-    void LoadCatchErrors(LoadStuffDelegate loadStuff)
+    bool LoadCatchErrors(LoadStuffDelegate loadStuff)
     {
         try
         {
             loadStuff();
             appendToLog(".. Done.");
+            return true;
         }
         catch (DirectoryNotFoundException e)
         {
@@ -408,20 +423,21 @@ public class ModelController : MonoBehaviour {
             Debug.LogWarning(e);
             appendToLog(".. <color=red>Failed.\n" + e.Message + "</color>");
         }
-        catch (IOException e)
-        {
-            OnGenericFailure(e);
-        }
         catch (FrameMismatchException e)
         {
             Debug.LogWarning(e);
             appendToLog(".. <color=red>Failed, frame count does not match (" +
                 e.frames1 + " vs " + e.frames2 + ").</color>");
         }
+        catch (IOException e)
+        {
+            OnGenericFailure(e);
+        }
         catch (Exception e)
         {
             OnGenericFailure(e);
         }
+        return false;
     }
 
     void OnGenericFailure(Exception e)
