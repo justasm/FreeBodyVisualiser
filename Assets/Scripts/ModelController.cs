@@ -403,11 +403,12 @@ public class ModelController : MonoBehaviour {
             Debug.LogWarning(e);
             appendToLog(".. <color=red>Failed, file missing:\n" + e.FileName + "</color>");
         }
-        catch (IOException e)
-        {
-            OnGenericFailure(e);
-        }
         catch (IsolatedStorageException e)
+        {
+            Debug.LogWarning(e);
+            appendToLog(".. <color=red>Failed.\n" + e.Message + "</color>");
+        }
+        catch (IOException e)
         {
             OnGenericFailure(e);
         }
